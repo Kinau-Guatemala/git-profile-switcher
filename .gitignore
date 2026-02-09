@@ -64,4 +64,6 @@ coverage/
 
 # Debug
 .vscode/launch.json
-/github
+
+# GitHub internal folder
+.github/
