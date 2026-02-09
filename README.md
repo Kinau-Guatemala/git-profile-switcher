@@ -432,7 +432,7 @@ Built to solve the real-world problem of managing multiple GitHub accounts. If y
 ---
 
 ## 📞 Support
-
+Test
 - **Issues**: [GitHub Issues](https://github.com/auyjos/GithubProfileSwitcher/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/auyjos/GithubProfileSwitcher/discussions)
 
