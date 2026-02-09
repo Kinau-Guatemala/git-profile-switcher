@@ -83,11 +83,8 @@ export default function Profiles() {
 
       try {
         const text = await file.text()
-        const blob = new Blob([text], { type: 'text/plain' })
-        const url = URL.createObjectURL(blob)
 
-        // For Electron, we need to read the actual file path
-        // For now, parse the content directly
+        // Parse the content directly
         const detected = await parseSSHConfigContent(text)
         setDetectedProfiles(detected)
         setShowImport(true)
@@ -198,11 +195,11 @@ export default function Profiles() {
     }
   }
 
-  if (loading) return <div style={{ padding: '20px' }}>Loading...</div>
+  if (loading) return <div className="loading-screen">LOADING...</div>
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'system-ui, sans-serif' }}>
-      <h1>Git Config Profiles</h1>
+    <div>
+      <h1 className="page-title">▸ GIT CONFIG PROFILES</h1>
 
       {showInputModal && selectedProfile && (
         <InputModal
@@ -215,39 +212,24 @@ export default function Profiles() {
         />
       )}
 
-      <div style={{ marginBottom: '20px' }}>
+      <div className="btn-row">
         <button
+          className={`btn ${showForm ? 'btn--ghost' : 'btn--primary'}`}
           onClick={() => setShowForm(!showForm)}
-          style={{ marginRight: '10px', padding: '8px 16px', cursor: 'pointer' }}
         >
-          {showForm ? 'Cancel' : 'Add Profile'}
+          {showForm ? '✕ Cancel' : '+ Add Profile'}
         </button>
         <button
+          className="btn btn--success"
           onClick={handleImportSSHConfig}
-          style={{
-            padding: '8px 16px',
-            background: '#28a745',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            marginRight: '10px'
-          }}
         >
-          Import SSH Config
+          ↑ Import SSH
         </button>
         <button
+          className="btn btn--info"
           onClick={handleDetectProfiles}
-          style={{
-            padding: '8px 16px',
-            background: '#17a2b8',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer'
-          }}
         >
-          Auto-Detect Git Config
+          ◎ Auto-Detect
         </button>
       </div>
 
@@ -259,100 +241,75 @@ export default function Profiles() {
       )}
 
       {showImport && (
-        <div style={{
-          border: '2px solid #28a745',
-          borderRadius: '4px',
-          padding: '16px',
-          marginBottom: '20px',
-          background: '#f0fff4'
-        }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-            <h3 style={{ margin: 0 }}>Detected Git Configurations</h3>
-            <button onClick={() => setShowImport(false)} style={{ padding: '4px 12px' }}>Close</button>
+        <div className="detected-box">
+          <div className="detected-box__header">
+            <h3 className="section-title m-0">◈ Detected Configs</h3>
+            <button className="btn btn--ghost btn--sm" onClick={() => setShowImport(false)}>Close</button>
           </div>
 
           {detectedProfiles.length === 0 ? (
             <p>No configurations detected in your .gitconfig file.</p>
           ) : (
             detectedProfiles.map((detected, index) => (
-              <div
-                key={index}
-                style={{
-                  border: '1px solid #28a745',
-                  borderRadius: '4px',
-                  padding: '12px',
-                  marginBottom: '8px',
-                  background: 'white'
-                }}
-              >
+              <div key={index} className="pixel-card pixel-card--detected">
                 {detected.comment && (
-                  <p style={{ fontWeight: 'bold', color: '#28a745', marginBottom: '8px' }}>
-                    {detected.comment}
-                  </p>
+                  <p className="pixel-card__label">{detected.comment}</p>
                 )}
-                <p><strong>Name:</strong> {detected.userName || 'Not set (will prompt)'}</p>
-                <p><strong>Email:</strong> {detected.userEmail || 'Not set (will prompt)'}</p>
-                {detected.sshHost && <p><strong>SSH Host:</strong> {detected.sshHost}</p>}
-                {detected.signingKey && <p><strong>Signing Key:</strong> {detected.signingKey}</p>}
-                {detected.sshCommand && <p><strong>SSH Command:</strong> {detected.sshCommand}</p>}
-                <button
-                  onClick={(e) => {
-                    e.preventDefault()
-                    e.stopPropagation()
-                    handleImportProfile(detected, index)
-                  }}
-                  style={{
-                    padding: '6px 16px',
-                    background: '#28a745',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: 'pointer'
-                  }}
-                >
-                  Import This Profile
-                </button>
+                <p className="pixel-card__info"><strong>Name:</strong> {detected.userName || 'Not set (will prompt)'}</p>
+                <p className="pixel-card__info"><strong>Email:</strong> {detected.userEmail || 'Not set (will prompt)'}</p>
+                {detected.sshHost && <p className="pixel-card__info"><strong>SSH Host:</strong> {detected.sshHost}</p>}
+                {detected.signingKey && <p className="pixel-card__info"><strong>Signing Key:</strong> {detected.signingKey}</p>}
+                {detected.sshCommand && <p className="pixel-card__info"><strong>SSH Cmd:</strong> {detected.sshCommand}</p>}
+                <div className="mt-md">
+                  <button
+                    className="btn btn--success btn--sm"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                      handleImportProfile(detected, index)
+                    }}
+                  >
+                    ★ Import
+                  </button>
+                </div>
               </div>
             ))
           )}
         </div>
       )}
 
+      <div className="pixel-divider" />
+
       <div>
         {profiles.length === 0 ? (
-          <p>No profiles yet. Create one to get started!</p>
+          <div className="empty-state">
+            <span className="empty-state__icon">👾</span>
+            No profiles yet. Create one to get started!
+          </div>
         ) : (
           profiles.map(profile => (
-            <div
-              key={profile.id}
-              style={{
-                border: '1px solid #ccc',
-                borderRadius: '4px',
-                padding: '12px',
-                marginBottom: '12px'
-              }}
-            >
-              <h3>{profile.label}</h3>
-              <p><strong>Name:</strong> {profile.userName}</p>
-              <p><strong>Email:</strong> {profile.userEmail}</p>
+            <div key={profile.id} className="pixel-card">
+              <h3 className="pixel-card__label">{profile.label}</h3>
+              <p className="pixel-card__info"><strong>Name:</strong> {profile.userName}</p>
+              <p className="pixel-card__info"><strong>Email:</strong> {profile.userEmail}</p>
               {profile.advanced?.sshHost && (
-                <p><strong>SSH Host:</strong> {profile.advanced.sshHost}</p>
+                <p className="pixel-card__info"><strong>SSH Host:</strong> {profile.advanced.sshHost}</p>
               )}
               {profile.advanced?.gpgSign && (
-                <p><strong>GPG Sign:</strong> Yes</p>
+                <p className="pixel-card__info"><strong>GPG Sign:</strong> Yes</p>
               )}
-              <div style={{ marginTop: '8px' }}>
+              <div className="btn-row mt-md mb-0">
                 <button
+                  className="btn btn--primary btn--sm"
                   onClick={() => handleApply(profile.id)}
-                  style={{ marginRight: '8px', padding: '4px 12px' }}
                 >
-                  Apply
+                  ▶ Apply
                 </button>
                 <button
+                  className="btn btn--danger btn--sm"
                   onClick={() => handleDelete(profile.id)}
-                  style={{ padding: '4px 12px', background: '#dc3545', color: 'white', border: 'none', borderRadius: '4px' }}
                 >
-                  Delete
+                  ✕ Delete
                 </button>
               </div>
             </div>

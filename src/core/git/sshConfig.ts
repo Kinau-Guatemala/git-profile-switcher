@@ -49,7 +49,7 @@ function parseSSHConfigContent(content: string): SSHHost[] {
       currentHost = {
         host: hostMatch[1].trim(),
         hostName: '',
-        comment: currentComment
+        comment: currentComment || undefined
       }
       currentComment = null
       continue
@@ -82,6 +82,6 @@ function parseSSHConfigContent(content: string): SSHHost[] {
   )
 }
 
-export function getSSHCommandForHost(host: string): string {
+export function getSSHCommandForHost(_host: string): string {
   return `ssh -F ~/.ssh/config`
 }

@@ -6,28 +6,31 @@ interface Props {
 
 export default function OriginTable({ origins }: Props) {
   if (origins.length === 0) {
-    return <p>No configuration origins found.</p>
+    return (
+      <div className="empty-state">
+        <span className="empty-state__icon">📭</span>
+        No configuration origins found.
+      </div>
+    )
   }
 
   return (
     <div>
-      <h2>Configuration Origins</h2>
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+      <h2 className="section-title">◈ Configuration Origins</h2>
+      <table className="pixel-table">
         <thead>
-          <tr style={{ background: '#f0f0f0' }}>
-            <th style={{ padding: '8px', border: '1px solid #ccc', textAlign: 'left' }}>Key</th>
-            <th style={{ padding: '8px', border: '1px solid #ccc', textAlign: 'left' }}>Value</th>
-            <th style={{ padding: '8px', border: '1px solid #ccc', textAlign: 'left' }}>Origin File</th>
+          <tr>
+            <th>Key</th>
+            <th>Value</th>
+            <th>Origin File</th>
           </tr>
         </thead>
         <tbody>
           {origins.map((entry, i) => (
             <tr key={i}>
-              <td style={{ padding: '8px', border: '1px solid #ccc' }}>{entry.key}</td>
-              <td style={{ padding: '8px', border: '1px solid #ccc' }}>{entry.value}</td>
-              <td style={{ padding: '8px', border: '1px solid #ccc', fontSize: '12px' }}>
-                {entry.originFile}
-              </td>
+              <td>{entry.key}</td>
+              <td>{entry.value}</td>
+              <td>{entry.originFile}</td>
             </tr>
           ))}
         </tbody>

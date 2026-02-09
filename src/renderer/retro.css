@@ -1,0 +1,598 @@
+/* ============================================================
+   GIT CONFIG SWITCHER — 8-BIT RETRO THEME
+   Palette:  Red #C40C0C · Orange #FF6500 · Gold #CC561E · Warm #F6CE71
+   ============================================================ */
+
+/* ── Google Fonts import (Press Start 2P for headings, VT323 for body) ── */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+
+/* ── CSS Custom Properties ── */
+:root {
+    /* palette */
+    --c-red: #C40C0C;
+    --c-orange: #FF6500;
+    --c-gold: #CC561E;
+    --c-warm: #F6CE71;
+    --c-warm-light: #FFF5DC;
+    --c-dark: #1A1A2E;
+    --c-darker: #0F0F1A;
+    --c-surface: #2A2A40;
+    --c-surface-2: #353550;
+    --c-text: #F6CE71;
+    --c-text-muted: #B8A060;
+    --c-border: #CC561E;
+
+    /* pixel border helper */
+    --pixel-border: 3px solid var(--c-border);
+
+    /* fonts */
+    --font-heading: 'Press Start 2P', monospace;
+    --font-body: 'VT323', monospace;
+}
+
+/* ── Reset & Base ── */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body,
+#root {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+body {
+    background: var(--c-darker);
+    color: var(--c-text);
+    font-family: var(--font-body);
+    font-size: 20px;
+    line-height: 1.5;
+    image-rendering: pixelated;
+}
+
+/* scanline overlay for extra retro feel */
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(0deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 0, 0, 0.08) 2px,
+            rgba(0, 0, 0, 0.08) 4px);
+    z-index: 9999;
+}
+
+/* scrollbar styling */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--c-darker);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--c-gold);
+    border: 2px solid var(--c-darker);
+}
+
+/* ── Layout Shell ── */
+.app-shell {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background: var(--c-darker);
+}
+
+/* ── Top Navigation Bar ── */
+.nav-bar {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: var(--c-dark);
+    border-bottom: 4px solid var(--c-orange);
+    padding: 0 12px;
+    min-height: 52px;
+    flex-shrink: 0;
+}
+
+.nav-bar__logo {
+    font-family: var(--font-heading);
+    font-size: 11px;
+    color: var(--c-orange);
+    margin-right: 24px;
+    white-space: nowrap;
+    text-shadow: 2px 2px 0 var(--c-red);
+    letter-spacing: 1px;
+}
+
+.nav-bar__link {
+    font-family: var(--font-heading);
+    font-size: 9px;
+    padding: 14px 18px;
+    color: var(--c-text-muted);
+    text-decoration: none;
+    border-bottom: 3px solid transparent;
+    transition: all 0.1s;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+}
+
+.nav-bar__link:hover {
+    color: var(--c-warm);
+    background: rgba(255, 101, 0, 0.08);
+}
+
+.nav-bar__link--active {
+    color: var(--c-orange);
+    border-bottom-color: var(--c-orange);
+    background: rgba(255, 101, 0, 0.12);
+}
+
+/* ── Main Content Area ── */
+.main-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 28px;
+}
+
+/* ── Typography ── */
+.page-title {
+    font-family: var(--font-heading);
+    font-size: 16px;
+    color: var(--c-orange);
+    text-shadow: 2px 2px 0 rgba(196, 12, 12, 0.5);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 3px dashed var(--c-gold);
+    letter-spacing: 1px;
+}
+
+.section-title {
+    font-family: var(--font-heading);
+    font-size: 11px;
+    color: var(--c-warm);
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
+}
+
+/* ── Pixel Card ── */
+.pixel-card {
+    background: var(--c-surface);
+    border: var(--pixel-border);
+    padding: 16px;
+    margin-bottom: 14px;
+    position: relative;
+    /* pixel corners via box-shadow trick */
+    box-shadow:
+        3px 3px 0 var(--c-dark),
+        inset 1px 1px 0 rgba(246, 206, 113, 0.08);
+}
+
+.pixel-card--highlight {
+    border-color: var(--c-orange);
+    box-shadow:
+        3px 3px 0 var(--c-red),
+        inset 1px 1px 0 rgba(255, 101, 0, 0.1);
+}
+
+.pixel-card--detected {
+    border-color: var(--c-warm);
+    background: var(--c-surface-2);
+    box-shadow:
+        3px 3px 0 var(--c-gold),
+        inset 1px 1px 0 rgba(246, 206, 113, 0.06);
+}
+
+.pixel-card__label {
+    font-family: var(--font-heading);
+    font-size: 11px;
+    color: var(--c-orange);
+    margin-bottom: 8px;
+}
+
+.pixel-card__info {
+    font-size: 20px;
+    color: var(--c-text);
+    margin-bottom: 4px;
+}
+
+.pixel-card__info strong {
+    color: var(--c-warm);
+    margin-right: 6px;
+}
+
+/* ── Buttons ── */
+.btn {
+    font-family: var(--font-heading);
+    font-size: 9px;
+    padding: 10px 18px;
+    border: 3px solid;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: all 0.08s;
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.4);
+    text-transform: uppercase;
+    position: relative;
+    top: 0;
+    background: none;
+}
+
+.btn:active {
+    box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.4);
+    top: 2px;
+}
+
+.btn--primary {
+    background: var(--c-orange);
+    color: var(--c-darker);
+    border-color: var(--c-red);
+}
+
+.btn--primary:hover {
+    background: #FF7A22;
+}
+
+.btn--success {
+    background: var(--c-gold);
+    color: var(--c-darker);
+    border-color: #A04518;
+}
+
+.btn--success:hover {
+    background: #D96B28;
+}
+
+.btn--danger {
+    background: var(--c-red);
+    color: var(--c-warm-light);
+    border-color: #8B0000;
+}
+
+.btn--danger:hover {
+    background: #E01010;
+}
+
+.btn--ghost {
+    background: transparent;
+    color: var(--c-text-muted);
+    border-color: var(--c-text-muted);
+}
+
+.btn--ghost:hover {
+    color: var(--c-warm);
+    border-color: var(--c-warm);
+    background: rgba(246, 206, 113, 0.06);
+}
+
+.btn--info {
+    background: var(--c-warm);
+    color: var(--c-darker);
+    border-color: var(--c-gold);
+}
+
+.btn--info:hover {
+    background: #F9D98A;
+}
+
+.btn--sm {
+    font-size: 8px;
+    padding: 6px 12px;
+}
+
+/* button row */
+.btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+/* ── Form Elements ── */
+.form-group {
+    margin-bottom: 14px;
+}
+
+.form-label {
+    font-family: var(--font-heading);
+    font-size: 9px;
+    color: var(--c-warm);
+    display: block;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 8px 10px;
+    font-family: var(--font-body);
+    font-size: 20px;
+    background: var(--c-darker);
+    color: var(--c-text);
+    border: 2px solid var(--c-gold);
+    outline: none;
+    box-shadow: inset 2px 2px 0 rgba(0, 0, 0, 0.3);
+    transition: border-color 0.1s;
+}
+
+.form-input:focus {
+    border-color: var(--c-orange);
+    box-shadow:
+        inset 2px 2px 0 rgba(0, 0, 0, 0.3),
+        0 0 0 1px var(--c-orange);
+}
+
+.form-input::placeholder {
+    color: var(--c-text-muted);
+    opacity: 0.5;
+}
+
+.form-hint {
+    font-size: 16px;
+    color: var(--c-text-muted);
+    margin-top: 4px;
+}
+
+.form-textarea {
+    width: 100%;
+    padding: 8px 10px;
+    font-family: var(--font-body);
+    font-size: 18px;
+    background: var(--c-darker);
+    color: var(--c-warm);
+    border: 2px solid var(--c-gold);
+    outline: none;
+    resize: vertical;
+    min-height: 80px;
+    box-shadow: inset 2px 2px 0 rgba(0, 0, 0, 0.3);
+}
+
+.form-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.form-checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--c-orange);
+    cursor: pointer;
+}
+
+/* ── Warning / Info Banner ── */
+.alert {
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    border: 3px solid;
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
+}
+
+.alert--warn {
+    background: rgba(246, 206, 113, 0.1);
+    border-color: var(--c-warm);
+    color: var(--c-warm);
+}
+
+.alert--warn ul {
+    margin: 6px 0 0 20px;
+}
+
+/* ── Pixel Table ── */
+.pixel-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: var(--pixel-border);
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.pixel-table th {
+    font-family: var(--font-heading);
+    font-size: 9px;
+    padding: 10px 12px;
+    text-align: left;
+    background: var(--c-surface-2);
+    color: var(--c-orange);
+    border-bottom: 3px solid var(--c-gold);
+    letter-spacing: 0.5px;
+}
+
+.pixel-table td {
+    padding: 8px 12px;
+    font-size: 18px;
+    border-bottom: 1px solid var(--c-surface-2);
+    color: var(--c-text);
+}
+
+.pixel-table tr:nth-child(even) td {
+    background: rgba(246, 206, 113, 0.03);
+}
+
+.pixel-table tr:hover td {
+    background: rgba(255, 101, 0, 0.06);
+}
+
+.pixel-table td:last-child {
+    font-size: 15px;
+    color: var(--c-text-muted);
+}
+
+/* ── Modal Overlay ── */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 15, 26, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-box {
+    background: var(--c-surface);
+    border: 4px solid var(--c-orange);
+    padding: 24px;
+    min-width: 420px;
+    max-width: 520px;
+    box-shadow:
+        5px 5px 0 var(--c-red),
+        inset 1px 1px 0 rgba(246, 206, 113, 0.1);
+}
+
+.modal-box__title {
+    font-family: var(--font-heading);
+    font-size: 12px;
+    color: var(--c-orange);
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 2px dashed var(--c-gold);
+    line-height: 1.6;
+}
+
+/* ── Detected Config Box ── */
+.detected-box {
+    border: 3px solid var(--c-warm);
+    padding: 16px;
+    margin-bottom: 18px;
+    background: rgba(246, 206, 113, 0.04);
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.2);
+}
+
+.detected-box__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+/* ── Loading State ── */
+.loading-screen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    font-family: var(--font-heading);
+    font-size: 12px;
+    color: var(--c-orange);
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+/* ── Advanced toggle ── */
+.advanced-toggle {
+    font-family: var(--font-heading);
+    font-size: 9px;
+    color: var(--c-text-muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px 0;
+    letter-spacing: 0.5px;
+}
+
+.advanced-toggle:hover {
+    color: var(--c-warm);
+}
+
+.advanced-panel {
+    margin-left: 16px;
+    padding-left: 12px;
+    border-left: 3px solid var(--c-surface-2);
+    margin-bottom: 14px;
+}
+
+/* ── Public Key Box ── */
+.pubkey-box {
+    background: rgba(255, 101, 0, 0.08);
+    border: 2px solid var(--c-orange);
+    padding: 12px;
+    margin-bottom: 14px;
+}
+
+.pubkey-box a {
+    color: var(--c-orange);
+    font-size: 16px;
+}
+
+.pubkey-box a:hover {
+    color: var(--c-warm);
+}
+
+/* ── Empty state ── */
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--c-text-muted);
+    font-size: 22px;
+}
+
+.empty-state__icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+    display: block;
+}
+
+/* ── Pixel art decorations ── */
+.pixel-divider {
+    height: 4px;
+    background: repeating-linear-gradient(90deg,
+            var(--c-red) 0px,
+            var(--c-red) 8px,
+            var(--c-orange) 8px,
+            var(--c-orange) 16px,
+            var(--c-gold) 16px,
+            var(--c-gold) 24px,
+            var(--c-warm) 24px,
+            var(--c-warm) 32px);
+    margin: 20px 0;
+}
+
+/* ── Utility spacing ── */
+.mt-md {
+    margin-top: 10px;
+}
+
+.mt-lg {
+    margin-top: 20px;
+}
+
+.mb-0 {
+    margin-bottom: 0 !important;
+}
+
+.mb-md {
+    margin-bottom: 20px;
+}
+
+.m-0 {
+    margin: 0 !important;
+}
+
+.justify-end {
+    justify-content: flex-end;
+}
+
+.ssh-host-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+}

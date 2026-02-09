@@ -21,23 +21,23 @@ export default function Verify() {
     }
   }
 
-  if (loading) return <div style={{ padding: '20px' }}>Loading...</div>
+  if (loading) return <div className="loading-screen">LOADING...</div>
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'system-ui, sans-serif' }}>
-      <h1>Verify Git Configuration</h1>
+    <div>
+      <h1 className="page-title">▸ VERIFY GIT CONFIG</h1>
 
       {result && (
         <>
-          <div style={{ marginBottom: '20px' }}>
-            <h2>Effective Configuration</h2>
-            <p><strong>Name:</strong> {result.effectiveName || 'Not set'}</p>
-            <p><strong>Email:</strong> {result.effectiveEmail || 'Not set'}</p>
+          <div className="pixel-card pixel-card--highlight mb-md">
+            <h2 className="section-title">◈ Effective Configuration</h2>
+            <p className="pixel-card__info"><strong>Name:</strong> {result.effectiveName || 'Not set'}</p>
+            <p className="pixel-card__info"><strong>Email:</strong> {result.effectiveEmail || 'Not set'}</p>
           </div>
 
           {result.warnings.length > 0 && (
-            <div style={{ marginBottom: '20px', padding: '12px', background: '#fff3cd', borderRadius: '4px' }}>
-              <h3>Warnings</h3>
+            <div className="alert alert--warn">
+              <h3 className="section-title">⚠ Warnings</h3>
               <ul>
                 {result.warnings.map((warning, i) => (
                   <li key={i}>{warning}</li>
@@ -50,12 +50,11 @@ export default function Verify() {
         </>
       )}
 
-      <button
-        onClick={loadVerify}
-        style={{ marginTop: '20px', padding: '8px 16px' }}
-      >
-        Refresh
-      </button>
+      <div className="mt-lg">
+        <button className="btn btn--primary" onClick={loadVerify}>
+          ↻ Refresh
+        </button>
+      </div>
     </div>
   )
 }

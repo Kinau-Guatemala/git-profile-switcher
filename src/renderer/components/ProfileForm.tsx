@@ -67,87 +67,62 @@ export default function ProfileForm({ onSave, onCancel }: Props) {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{
-        border: '1px solid #ccc',
-        borderRadius: '4px',
-        padding: '16px',
-        marginBottom: '20px',
-        background: '#f9f9f9'
-      }}
-    >
-      <div style={{ marginBottom: '12px' }}>
-        <label style={{ display: 'block', marginBottom: '4px' }}>
-          Profile Label *
-        </label>
+    <form onSubmit={handleSubmit} className="pixel-card pixel-card--highlight mb-md">
+      <div className="form-group">
+        <label className="form-label">Profile Label *</label>
         <input
           type="text"
           value={label}
           onChange={e => setLabel(e.target.value)}
           required
-          style={{ width: '100%', padding: '6px' }}
+          className="form-input"
         />
       </div>
 
-      <div style={{ marginBottom: '12px' }}>
-        <label style={{ display: 'block', marginBottom: '4px' }}>
-          User Name *
-        </label>
+      <div className="form-group">
+        <label className="form-label">User Name *</label>
         <input
           type="text"
           value={userName}
           onChange={e => setUserName(e.target.value)}
           required
-          style={{ width: '100%', padding: '6px' }}
+          className="form-input"
         />
       </div>
 
-      <div style={{ marginBottom: '12px' }}>
-        <label style={{ display: 'block', marginBottom: '4px' }}>
-          User Email *
-        </label>
+      <div className="form-group">
+        <label className="form-label">User Email *</label>
         <input
           type="email"
           value={userEmail}
           onChange={e => setUserEmail(e.target.value)}
           required
-          style={{ width: '100%', padding: '6px' }}
+          className="form-input"
         />
       </div>
 
-      <div style={{ marginBottom: '12px' }}>
+      <div className="form-group">
         <button
           type="button"
+          className="advanced-toggle"
           onClick={() => setShowAdvanced(!showAdvanced)}
-          style={{ padding: '4px 8px', fontSize: '14px' }}
         >
-          {showAdvanced ? '▼' : '▶'} Advanced Options
+          {showAdvanced ? '▼' : '▶'} ADVANCED OPTIONS
         </button>
       </div>
 
       {showAdvanced && (
-        <div style={{ marginLeft: '20px', marginBottom: '12px' }}>
-          <div style={{ marginBottom: '12px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-              <label style={{ fontWeight: 'bold' }}>
-                SSH Host (for multiple GitHub accounts)
-              </label>
+        <div className="advanced-panel">
+          <div className="form-group">
+            <div className="ssh-host-row">
+              <label className="form-label m-0">SSH Host</label>
               <button
                 type="button"
                 onClick={handleGenerateSSHKey}
                 disabled={generating}
-                style={{
-                  padding: '4px 12px',
-                  background: '#007bff',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '4px',
-                  cursor: generating ? 'not-allowed' : 'pointer',
-                  fontSize: '12px'
-                }}
+                className="btn btn--info btn--sm"
               >
-                {generating ? 'Generating...' : '🔑 Generate New SSH Key'}
+                {generating ? 'Generating...' : '🔑 Gen SSH Key'}
               </button>
             </div>
             <input
@@ -155,90 +130,61 @@ export default function ProfileForm({ onSave, onCancel }: Props) {
               value={sshHost}
               onChange={e => setSSHHost(e.target.value)}
               placeholder="e.g., github.com-personal"
-              style={{ width: '100%', padding: '6px', marginBottom: '4px' }}
+              className="form-input"
             />
-            <small style={{ color: '#666' }}>
-              Use SSH host alias from your ~/.ssh/config or generate a new SSH key above
-            </small>
+            <p className="form-hint">Use SSH host alias from ~/.ssh/config or generate above</p>
           </div>
 
           {generatedKey && (
-            <div style={{
-              marginBottom: '12px',
-              padding: '12px',
-              background: '#e7f3ff',
-              borderRadius: '4px',
-              border: '1px solid #007bff'
-            }}>
-              <label style={{ display: 'block', marginBottom: '4px', fontWeight: 'bold' }}>
-                📋 Public Key (Add this to GitHub)
-              </label>
+            <div className="pubkey-box">
+              <label className="form-label">📋 Public Key (Add to GitHub)</label>
               <textarea
                 value={generatedKey}
                 readOnly
                 onClick={(e) => e.currentTarget.select()}
-                style={{
-                  width: '100%',
-                  padding: '8px',
-                  fontFamily: 'monospace',
-                  fontSize: '11px',
-                  minHeight: '80px',
-                  resize: 'vertical'
-                }}
+                className="form-textarea"
               />
               <a
                 href="https://github.com/settings/ssh/new"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ color: '#007bff', fontSize: '12px' }}
               >
                 → Open GitHub SSH Settings
               </a>
             </div>
           )}
 
-          <div style={{ marginBottom: '8px' }}>
-            <label>
+          <div className="form-group">
+            <label className="form-checkbox">
               <input
                 type="checkbox"
                 checked={gpgSign}
                 onChange={e => setGpgSign(e.target.checked)}
               />
-              {' '}Enable GPG Signing
+              Enable GPG Signing
             </label>
           </div>
 
-          <div>
-            <label style={{ display: 'block', marginBottom: '4px' }}>
-              Signing Key (optional)
-            </label>
+          <div className="form-group">
+            <label className="form-label">Signing Key (optional)</label>
             <input
               type="text"
               value={signingKey}
               onChange={e => setSigningKey(e.target.value)}
               placeholder="Leave empty if you don't use GPG"
-              style={{ width: '100%', padding: '6px', marginBottom: '4px' }}
+              className="form-input"
             />
-            <small style={{ color: '#666' }}>
-              Only needed if you sign commits with GPG. Most users can leave this empty.
-            </small>
+            <p className="form-hint">Only needed if you sign commits with GPG.</p>
           </div>
         </div>
       )}
 
-      <div>
-        <button
-          type="submit"
-          style={{ marginRight: '8px', padding: '8px 16px' }}
-        >
-          Save
+      <div className="btn-row">
+        <button type="submit" className="btn btn--primary">
+          ✓ Save
         </button>
-        <button
-          type="button"
-          onClick={onCancel}
-          style={{ padding: '8px 16px' }}
-        >
-          Cancel
+        <button type="button" className="btn btn--ghost" onClick={onCancel}>
+          ✕ Cancel
         </button>
       </div>
     </form>

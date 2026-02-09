@@ -13,6 +13,7 @@ export async function ensureManagedIncludeInstalled(): Promise<ManagedIncludeRes
   const managedPath = join(home, '.gitconfig-switcher')
   const gitconfigPath = join(home, '.gitconfig')
 
+  // Ensure managed file exists
   try {
     await access(managedPath, constants.F_OK)
   } catch {
@@ -30,16 +31,19 @@ export async function ensureManagedIncludeInstalled(): Promise<ManagedIncludeRes
     }
   }
 
-  const includeLine = 'path = ~/.gitconfig-switcher'
-  const includeLineAlt = 'path = .gitconfig-switcher'
-  const includeLineWin = `path = ${managedPath.replace(/\\/g, '/')}`
+  // Use absolute path with forward slashes for Windows compatibility
+  const absolutePath = managedPath.replace(/\\/g, '/')
+  const includeLine = `path = ${absolutePath}`
+  const includeLineTilde = 'path = ~/.gitconfig-switcher'
+  const includeLineRelative = 'path = .gitconfig-switcher'
 
   const hasInclude = gitconfigContent.includes(includeLine) ||
-    gitconfigContent.includes(includeLineAlt) ||
-    gitconfigContent.includes(includeLineWin)
+    gitconfigContent.includes(includeLineTilde) ||
+    gitconfigContent.includes(includeLineRelative)
 
   if (!hasInclude) {
-    const includeBlock = `\n[include]\n  path = ~/.gitconfig-switcher\n`
+    // Use absolute path for Windows compatibility
+    const includeBlock = `\n[include]\n\tpath = ${absolutePath}\n`
     const newContent = gitconfigContent + includeBlock
     await writeFile(gitconfigPath, newContent, 'utf-8')
   }

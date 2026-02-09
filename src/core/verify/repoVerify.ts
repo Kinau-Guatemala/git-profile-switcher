@@ -1,6 +1,6 @@
 import { runGit } from '../git/gitRunner'
 import { parseShowOrigin } from './originParser'
-import { VerifyResult } from './types'
+import { VerifyResult, OriginEntry } from './types'
 
 export async function verifyInRepo(repoPath: string): Promise<VerifyResult> {
   let effectiveName: string | null = null
@@ -21,7 +21,7 @@ export async function verifyInRepo(repoPath: string): Promise<VerifyResult> {
     warnings.push('No user.email configured in this repo')
   }
 
-  let origins = []
+  let origins: OriginEntry[] = []
   try {
     const originsResult = await runGit(['config', '--list', '--show-origin'], { cwd: repoPath })
     origins = parseShowOrigin(originsResult.stdout).filter(
