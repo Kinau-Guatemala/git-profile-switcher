@@ -1,0 +1,41 @@
+pkgbase=git-profile-switcher
+pkgname=git-profile-switcher-git
+pkgver=1.0.0.r0.g0000000
+pkgrel=1
+pkgdesc="Cross-platform desktop tray app for managing multiple Git identities"
+arch=('x86_64')
+url="https://github.com/auyjos/GithubProfileSwitcher"
+license=('MIT')
+depends=('fuse2')
+makedepends=('git' 'nodejs' 'npm')
+provides=('git-profile-switcher')
+conflicts=('git-profile-switcher')
+source=("git+https://github.com/auyjos/GithubProfileSwitcher.git"
+        "git-profile-switcher.desktop")
+sha256sums=('SKIP'
+            'SKIP')
+
+pkgver() {
+  cd "$srcdir/$pkgbase"
+  git describe --long --tags --always | sed 's/^v//;s/-/./g'
+}
+
+build() {
+  cd "$srcdir/$pkgbase"
+  npm install
+  npm run build:appimage
+}
+
+package() {
+  cd "$srcdir/$pkgbase"
+
+  install -Dm755 dist/*.AppImage "$pkgdir/opt/$pkgbase/$pkgbase.AppImage"
+
+  install -Dm755 /dev/stdin "$pkgdir/usr/bin/$pkgbase" <<'EOF'
+#!/usr/bin/env bash
+exec /opt/git-profile-switcher/git-profile-switcher.AppImage "$@"
+EOF
+
+  install -Dm644 "$srcdir/git-profile-switcher.desktop" \
+    "$pkgdir/usr/share/applications/$pkgbase.desktop"
+}

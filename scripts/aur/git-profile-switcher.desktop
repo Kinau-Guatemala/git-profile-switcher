@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Git Config Switcher
+Comment=Manage multiple Git identities
+Exec=git-profile-switcher
+Terminal=false
+Categories=Utility;Development;
