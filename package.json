@@ -22,6 +22,11 @@
   "build": {
     "appId": "com.gitconfigswitcher.app",
     "productName": "Git Config Switcher",
+    "files": [
+      "dist-electron/**/*",
+      "dist-renderer/**/*",
+      "package.json"
+    ],
     "win": {
       "target": "portable"
     },

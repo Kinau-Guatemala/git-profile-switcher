@@ -25,7 +25,7 @@ export function openProfilesWindow(): void {
   if (process.env.VITE_DEV_SERVER_URL) {
     profilesWindow.loadURL(`${process.env.VITE_DEV_SERVER_URL}#/profiles`)
   } else {
-    profilesWindow.loadFile(join(__dirname, '../../dist/index.html'), { hash: '/profiles' })
+    profilesWindow.loadFile(join(__dirname, '../../dist-renderer/index.html'), { hash: '/profiles' })
   }
 
   profilesWindow.on('closed', () => {
@@ -52,7 +52,7 @@ export function openVerifyWindow(): void {
   if (process.env.VITE_DEV_SERVER_URL) {
     verifyWindow.loadURL(`${process.env.VITE_DEV_SERVER_URL}#/verify`)
   } else {
-    verifyWindow.loadFile(join(__dirname, '../../dist/index.html'), { hash: '/verify' })
+    verifyWindow.loadFile(join(__dirname, '../../dist-renderer/index.html'), { hash: '/verify' })
   }
 
   verifyWindow.on('closed', () => {
