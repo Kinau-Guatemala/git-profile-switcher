@@ -6,15 +6,27 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build && electron-builder --win --config.win.sign=null",
+    "build:arch": "tsc && vite build && electron-builder --linux pacman",
+    "build:appimage": "tsc && vite build && electron-builder --linux AppImage",
     "preview": "vite preview",
     "test": "vitest"
   },
   "keywords": ["electron", "git", "config", "switcher"],
-  "author": "",
+  "author": "Jose Andres Auyon <auyon.joseandres@gmail.com>",
+  "homepage": "https://github.com/auyjos/GithubProfileSwitcher",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/auyjos/GithubProfileSwitcher.git"
+  },
   "license": "MIT",
   "build": {
     "appId": "com.gitconfigswitcher.app",
     "productName": "Git Config Switcher",
+    "files": [
+      "dist-electron/**/*",
+      "dist-renderer/**/*",
+      "package.json"
+    ],
     "win": {
       "target": "portable"
     },
@@ -22,7 +34,8 @@
       "target": "dmg"
     },
     "linux": {
-      "target": "AppImage"
+      "target": "AppImage",
+      "maintainer": "Jose Andres Auyon <auyon.joseandres@gmail.com>"
     }
   },
   "devDependencies": {

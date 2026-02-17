@@ -9,7 +9,7 @@ dist/
 dist-electron/
 out/
 build/
-
+dist-renderer/
 # TypeScript
 *.tsbuildinfo
 
