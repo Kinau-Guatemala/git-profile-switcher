@@ -1,5 +1,4 @@
-import { ipcMain } from 'electron'
-import { app } from 'electron'
+import { ipcMain, app, shell } from 'electron'
 import { v4 as uuidv4 } from 'uuid'
 import { loadProfiles, saveProfiles } from '../core/profiles/storage'
 import { loadState, saveState } from '../core/profiles/state'
@@ -10,7 +9,9 @@ import { verifyGlobal } from '../core/verify/globalVerify'
 import { verifyInRepo } from '../core/verify/repoVerify'
 import { detectExistingProfiles } from '../core/git/detectProfiles'
 import { generateSSHKey, addToSSHConfig } from '../core/git/sshKeyGen'
+import { parseSSHConfig } from '../core/git/sshConfig'
 import { openProfilesWindow, openVerifyWindow } from './windows'
+import { execa } from 'execa'
 
 const userDataPath = app.getPath('userData')
 
@@ -127,7 +128,7 @@ export function setupIpcHandlers(rebuildTray: () => void): void {
 
   ipcMain.handle('profiles:detectSSH', async (_event, sshConfigPath: string) => {
     try {
-      const { readFile } = await import('fs/promises')
+      const { readFile } = await import('node:fs/promises')
       const content = await readFile(sshConfigPath, 'utf-8')
 
       // Parse SSH config
@@ -146,7 +147,7 @@ export function setupIpcHandlers(rebuildTray: () => void): void {
           continue
         }
 
-        const hostMatch = trimmed.match(/^Host\s+github\.com-(\w+)$/i)
+        const hostMatch = /^Host\s+github\.com-(\w+)$/i.exec(trimmed)
         if (hostMatch) {
           if (currentHost && identityFile) {
             profiles.push({
@@ -161,10 +162,9 @@ export function setupIpcHandlers(rebuildTray: () => void): void {
           continue
         }
 
-        const identityMatch = trimmed.match(/^IdentityFile\s+(.+)$/i)
+        const identityMatch = /^IdentityFile\s+(.+)$/i.exec(trimmed)
         if (identityMatch && currentHost) {
           identityFile = identityMatch[1].trim()
-          continue
         }
       }
 
@@ -190,12 +190,40 @@ export function setupIpcHandlers(rebuildTray: () => void): void {
     }
   })
 
+  ipcMain.handle('shell:openExternal', async (_event, url: string) => {
+    await shell.openExternal(url)
+  })
+
   ipcMain.handle('ssh:addToConfig', async (_event, host: string, privateKeyPath: string, comment: string) => {
     try {
       await addToSSHConfig(host, privateKeyPath, comment)
       return { success: true }
     } catch (error: any) {
       throw new Error(error.message)
+    }
+  })
+
+  ipcMain.handle('ssh:listHosts', async () => {
+    try {
+      return await parseSSHConfig()
+    } catch (error: any) {
+      throw new Error(error.message)
+    }
+  })
+
+  ipcMain.handle('ssh:test', async (_event, host: string) => {
+    try {
+      // ssh -T exits with code 1 even on success, so we capture stderr
+      const result = await execa('ssh', ['-T', '-o', 'StrictHostKeyChecking=no', `git@${host}`], {
+        reject: false,
+        timeout: 10000
+      })
+      const output = (result.stderr || result.stdout || '').trim()
+      const success = output.toLowerCase().includes("you've successfully authenticated")
+        || output.toLowerCase().includes('successfully authenticated')
+      return { success, message: output || 'No response from server.' }
+    } catch (error: any) {
+      return { success: false, message: error.message }
     }
   })
 }

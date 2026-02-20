@@ -1,6 +1,7 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { Profile, ProfileInput } from '../core/profiles/schema'
 import { VerifyResult } from '../core/verify/types'
+import { SSHHost } from '../core/git/sshConfig'
 
 export interface DetectedProfile {
   userName?: string
@@ -29,7 +30,12 @@ const api = {
   },
   ssh: {
     generate: (email: string, accountName: string): Promise<any> => ipcRenderer.invoke('ssh:generate', email, accountName),
-    addToConfig: (host: string, privateKeyPath: string, comment: string): Promise<any> => ipcRenderer.invoke('ssh:addToConfig', host, privateKeyPath, comment)
+    addToConfig: (host: string, privateKeyPath: string, comment: string): Promise<any> => ipcRenderer.invoke('ssh:addToConfig', host, privateKeyPath, comment),
+    listHosts: (): Promise<SSHHost[]> => ipcRenderer.invoke('ssh:listHosts'),
+    test: (host: string): Promise<{ success: boolean; message: string }> => ipcRenderer.invoke('ssh:test', host)
+  },
+  shell: {
+    openExternal: (url: string): Promise<void> => ipcRenderer.invoke('shell:openExternal', url)
   }
 }
 

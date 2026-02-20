@@ -564,6 +564,116 @@ body::after {
     margin: 20px 0;
 }
 
+/* ── SSH Keys Screen ── */
+
+.ssh-host-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.ssh-host-card {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    background: var(--c-surface-2);
+    border: 2px solid var(--c-border);
+    padding: 10px 14px;
+}
+
+.ssh-host-card__info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+}
+
+.ssh-host-card__name {
+    font-family: var(--font-heading);
+    font-size: 10px;
+    color: var(--c-orange);
+    letter-spacing: 0.5px;
+}
+
+.ssh-host-card__comment {
+    font-size: 16px;
+    color: var(--c-text-muted);
+}
+
+.ssh-host-card__path {
+    font-size: 15px;
+    color: var(--c-text-muted);
+    opacity: 0.7;
+    word-break: break-all;
+}
+
+.ssh-host-card__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+/* full-width message row inside a host card */
+.ssh-test-msg {
+    width: 100%;
+    font-size: 16px;
+    padding: 4px 0 2px;
+    word-break: break-all;
+}
+
+.ssh-test-msg--ok {
+    color: var(--c-gold);
+}
+
+.ssh-test-msg--fail {
+    color: var(--c-red);
+}
+
+/* inline badge beside test button */
+.ssh-test-badge {
+    font-family: var(--font-heading);
+    font-size: 8px;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.ssh-test-badge--ok {
+    color: var(--c-gold);
+}
+
+.ssh-test-badge--fail {
+    color: var(--c-red);
+}
+
+/* generated key result area */
+.ssh-generated-box {
+    margin-top: 6px;
+}
+
+.ssh-generated-meta {
+    margin: 12px 0;
+}
+
+.ssh-verify-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 14px;
+}
+
+.ssh-github-link {
+    text-decoration: none;
+}
+
+.ssh-loading {
+    font-size: 18px;
+    color: var(--c-text-muted);
+    padding: 12px 0;
+}
+
 /* ── Settings Screen — Palette Grid ── */
 
 .settings-hint {
