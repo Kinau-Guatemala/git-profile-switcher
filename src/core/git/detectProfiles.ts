@@ -35,7 +35,7 @@ export async function detectExistingProfiles(): Promise<DetectedProfile[]> {
 
   // Parse SSH config for GitHub accounts
   try {
-    const sshProfiles = await parseSSHConfigForGitHub()
+    const sshProfiles = await parseSSHConfigForGitHosts()
     profiles.push(...sshProfiles)
   } catch (error) {
     console.error('Failed to parse SSH config:', error)
@@ -139,7 +139,23 @@ function parseConfigContent(content: string): DetectedProfile {
   return profile
 }
 
-async function parseSSHConfigForGitHub(): Promise<DetectedProfile[]> {
+const GIT_HOSTING_DOMAINS = new Set([
+  'github.com',
+  'gitlab.com',
+  'bitbucket.org',
+  'codeberg.org',
+  'ssh.dev.azure.com',
+  'vs-ssh.visualstudio.com',
+  'gitea.com',
+  'sourcehut.org',
+  'sr.ht',
+])
+
+function isGitHostingDomain(hostname: string): boolean {
+  return GIT_HOSTING_DOMAINS.has(hostname.toLowerCase())
+}
+
+async function parseSSHConfigForGitHosts(): Promise<DetectedProfile[]> {
   const profiles: DetectedProfile[] = []
   const home = homedir()
   const sshConfigPath = join(home, '.ssh', 'config')
@@ -150,50 +166,64 @@ async function parseSSHConfigForGitHub(): Promise<DetectedProfile[]> {
 
     let currentComment: string | null = null
     let currentHost: string | null = null
+    let hostComment: string | null = null
     let identityFile: string | null = null
+    let hostName: string | null = null
+
+    const saveCurrentHost = () => {
+      if (currentHost && identityFile && hostName && isGitHostingDomain(hostName)) {
+        profiles.push({
+          sshHost: currentHost,
+          comment: hostComment || `Git account (${currentHost})`,
+          sshCommand: `ssh -F ~/.ssh/config`
+        })
+      }
+    }
 
     for (const line of lines) {
       const trimmed = line.trim()
 
-      // Capture comments
-      if (trimmed.startsWith('#')) {
-        currentComment = trimmed.substring(1).trim()
+      if (trimmed === '' || trimmed.startsWith('#')) {
+        if (trimmed.startsWith('#')) {
+          currentComment = trimmed.substring(1).trim()
+        }
         continue
       }
 
-      // Match Host directive for GitHub
-      const hostMatch = trimmed.match(/^Host\s+github\.com-(\w+)$/i)
-      if (hostMatch) {
-        // Save previous host if exists
-        if (currentHost && identityFile) {
-          profiles.push({
-            sshHost: currentHost,
-            comment: currentComment || `GitHub account (${currentHost})`,
-            sshCommand: `ssh -F ~/.ssh/config`
-          })
-        }
+      // Match any Host directive (but not Host *)
+      const hostMatch = /^Host\s+(\S+)$/i.exec(trimmed)
+      if (hostMatch && hostMatch[1] !== '*') {
+        // Save previous host block
+        saveCurrentHost()
 
-        currentHost = `github.com-${hostMatch[1]}`
+        currentHost = hostMatch[1]
+        hostComment = currentComment
         identityFile = null
+        hostName = null
+        currentComment = null
+        continue
+      }
+
+      // Match HostName (tells us what the alias actually points to)
+      const hostNameMatch = /^HostName\s+(.+)$/i.exec(trimmed)
+      if (hostNameMatch && currentHost) {
+        hostName = hostNameMatch[1].trim()
         continue
       }
 
       // Match IdentityFile
-      const identityMatch = trimmed.match(/^IdentityFile\s+(.+)$/i)
+      const identityMatch = /^IdentityFile\s+(.+)$/i.exec(trimmed)
       if (identityMatch && currentHost) {
         identityFile = identityMatch[1].trim()
         continue
       }
+
+      // Any other directive resets comment tracking
+      currentComment = null
     }
 
-    // Save last host
-    if (currentHost && identityFile) {
-      profiles.push({
-        sshHost: currentHost,
-        comment: currentComment || `GitHub account (${currentHost})`,
-        sshCommand: `ssh -F ~/.ssh/config`
-      })
-    }
+    // Save last host block
+    saveCurrentHost()
   } catch (error: any) {
     if (error.code !== 'ENOENT') {
       throw error
