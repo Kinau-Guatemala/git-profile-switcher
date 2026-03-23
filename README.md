@@ -250,7 +250,9 @@ The app detects SSH profiles by reading `~/.ssh/config` and looking for any `Hos
 | GitLab | `gitlab.com` |
 | Bitbucket | `bitbucket.org` |
 | Codeberg | `codeberg.org` |
-| Any self-hosted | Any host with an `IdentityFile` configured |
+| Azure DevOps | `ssh.dev.azure.com` |
+| Gitea | `gitea.com` |
+| SourceHut | `sourcehut.org`, `sr.ht` |
 
 This means **any naming convention** works:
 

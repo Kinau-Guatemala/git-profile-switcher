@@ -1,8 +1,8 @@
 import { execa } from 'execa'
-import { homedir } from 'os'
-import { join } from 'path'
-import { writeFile, readFile, mkdir, access } from 'fs/promises'
-import { constants } from 'fs'
+import { homedir } from 'node:os'
+import { join } from 'node:path'
+import { writeFile, readFile, mkdir, access } from 'node:fs/promises'
+import { constants } from 'node:fs'
 
 export interface SSHKeyResult {
   privateKeyPath: string
@@ -17,7 +17,7 @@ export async function generateSSHKey(
 ): Promise<SSHKeyResult> {
   const home = homedir()
   const sshDir = join(home, '.ssh')
-  const keyName = `id_ed25519_${accountName.toLowerCase().replace(/[^a-z0-9]/g, '_')}`
+  const keyName = `id_ed25519_${accountName.toLowerCase().replaceAll(/[^a-z0-9]/g, '_')}`
   const privateKeyPath = join(sshDir, keyName)
   const publicKeyPath = `${privateKeyPath}.pub`
 
@@ -55,7 +55,7 @@ export async function generateSSHKey(
   const publicKey = await readFile(publicKeyPath, 'utf-8')
 
   // Generate host alias
-  const host = `github.com-${accountName.toLowerCase().replace(/[^a-z0-9]/g, '_')}`
+  const host = `github.com-${accountName.toLowerCase().replaceAll(/[^a-z0-9]/g, '_')}`
 
   return {
     privateKeyPath,
@@ -91,7 +91,7 @@ export async function addToSSHConfig(
 Host ${host}
     HostName github.com
     User git
-    IdentityFile ${privateKeyPath.replace(/\\/g, '/')}
+    IdentityFile ${privateKeyPath.replaceAll('\\', '/')}
     IdentitiesOnly yes
 
 `
@@ -101,7 +101,7 @@ Host ${host}
 
 export async function testSSHConnection(host: string): Promise<{ success: boolean; message: string }> {
   try {
-    const result = await execa('ssh', ['-T', `git@${host}`], {
+    const result = await execa('ssh', ['-T', '-o', 'BatchMode=yes', `git@${host}`], {
       timeout: 10000,
       reject: false
     })

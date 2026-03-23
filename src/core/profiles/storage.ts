@@ -1,5 +1,5 @@
-import { readFile, writeFile, mkdir } from 'fs/promises'
-import { join } from 'path'
+import { readFile, writeFile, mkdir } from 'node:fs/promises'
+import { join } from 'node:path'
 import { Profile, ProfileSchema } from './schema'
 import { z } from 'zod'
 

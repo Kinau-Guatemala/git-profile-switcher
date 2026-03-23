@@ -3,6 +3,7 @@ import { Profile, ProfileInput } from '../../core/profiles/schema'
 import { DetectedProfile } from '../../preload/index'
 import ProfileForm from '../components/ProfileForm'
 import InputModal from '../components/InputModal'
+import { GIT_HOSTING_DOMAINS } from '../../core/constants'
 
 export default function Profiles() {
   const [profiles, setProfiles] = useState<Profile[]>([])
@@ -96,12 +97,6 @@ export default function Profiles() {
 
     input.click()
   }
-
-  const GIT_HOSTING_DOMAINS = new Set([
-    'github.com', 'gitlab.com', 'bitbucket.org', 'codeberg.org',
-    'ssh.dev.azure.com', 'vs-ssh.visualstudio.com', 'gitea.com',
-    'sourcehut.org', 'sr.ht',
-  ])
 
   const parseSSHConfigContent = (content: string): DetectedProfile[] => {
     const profiles: DetectedProfile[] = []

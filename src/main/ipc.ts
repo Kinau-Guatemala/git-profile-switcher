@@ -8,10 +8,9 @@ import { applyProfile } from '../core/git/identity'
 import { verifyGlobal } from '../core/verify/globalVerify'
 import { verifyInRepo } from '../core/verify/repoVerify'
 import { detectExistingProfiles } from '../core/git/detectProfiles'
-import { generateSSHKey, addToSSHConfig } from '../core/git/sshKeyGen'
+import { generateSSHKey, addToSSHConfig, testSSHConnection } from '../core/git/sshKeyGen'
 import { parseSSHConfig } from '../core/git/sshConfig'
 import { openProfilesWindow, openVerifyWindow } from './windows'
-import { execa } from 'execa'
 
 const userDataPath = app.getPath('userData')
 
@@ -126,62 +125,6 @@ export function setupIpcHandlers(rebuildTray: () => void): void {
     }
   })
 
-  ipcMain.handle('profiles:detectSSH', async (_event, sshConfigPath: string) => {
-    try {
-      const { readFile } = await import('node:fs/promises')
-      const content = await readFile(sshConfigPath, 'utf-8')
-
-      // Parse SSH config
-      const lines = content.split('\n')
-      const profiles: any[] = []
-
-      let currentComment: string | null = null
-      let currentHost: string | null = null
-      let identityFile: string | null = null
-
-      for (const line of lines) {
-        const trimmed = line.trim()
-
-        if (trimmed.startsWith('#')) {
-          currentComment = trimmed.substring(1).trim()
-          continue
-        }
-
-        const hostMatch = /^Host\s+github\.com-(\w+)$/i.exec(trimmed)
-        if (hostMatch) {
-          if (currentHost && identityFile) {
-            profiles.push({
-              sshHost: currentHost,
-              comment: currentComment || `GitHub account (${currentHost})`,
-              sshCommand: `ssh -F ~/.ssh/config`
-            })
-          }
-
-          currentHost = `github.com-${hostMatch[1]}`
-          identityFile = null
-          continue
-        }
-
-        const identityMatch = /^IdentityFile\s+(.+)$/i.exec(trimmed)
-        if (identityMatch && currentHost) {
-          identityFile = identityMatch[1].trim()
-        }
-      }
-
-      if (currentHost && identityFile) {
-        profiles.push({
-          sshHost: currentHost,
-          comment: currentComment || `GitHub account (${currentHost})`,
-          sshCommand: `ssh -F ~/.ssh/config`
-        })
-      }
-
-      return profiles
-    } catch (error: any) {
-      throw new Error(error.message)
-    }
-  })
-
   ipcMain.handle('ssh:generate', async (_event, email: string, accountName: string) => {
     try {
       return await generateSSHKey(email, accountName)
@@ -190,7 +133,16 @@ export function setupIpcHandlers(rebuildTray: () => void): void {
     }
   })
 
-  ipcMain.handle('shell:openExternal', async (_event, url: string) => {
+  ipcMain.handle('shell:openExternal', async (event, url: string) => {
+    // Validate IPC sender origin
+    if (!event.senderFrame || new URL(event.senderFrame.url).protocol !== 'file:') {
+      throw new Error('Unauthorized IPC sender')
+    }
+    // Only allow http/https URLs to prevent arbitrary protocol execution
+    const parsed = new URL(url)
+    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+      throw new Error(`Disallowed URL protocol: ${parsed.protocol}`)
+    }
     await shell.openExternal(url)
   })
 
@@ -205,25 +157,15 @@ export function setupIpcHandlers(rebuildTray: () => void): void {
 
   ipcMain.handle('ssh:listHosts', async () => {
     try {
-      return await parseSSHConfig()
+      const hosts = await parseSSHConfig()
+      // Filter out wildcard patterns and split multi-pattern Host entries
+      return hosts.filter(h => !h.host.includes('*') && !h.host.includes('?'))
     } catch (error: any) {
       throw new Error(error.message)
     }
   })
 
   ipcMain.handle('ssh:test', async (_event, host: string) => {
-    try {
-      // ssh -T exits with code 1 even on success, so we capture stderr
-      const result = await execa('ssh', ['-T', '-o', 'StrictHostKeyChecking=no', `git@${host}`], {
-        reject: false,
-        timeout: 10000
-      })
-      const output = (result.stderr || result.stdout || '').trim()
-      const success = output.toLowerCase().includes("you've successfully authenticated")
-        || output.toLowerCase().includes('successfully authenticated')
-      return { success, message: output || 'No response from server.' }
-    } catch (error: any) {
-      return { success: false, message: error.message }
-    }
+    return await testSSHConnection(host)
   })
 }
