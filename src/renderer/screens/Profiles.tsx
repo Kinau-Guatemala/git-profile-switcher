@@ -97,52 +97,69 @@ export default function Profiles() {
     input.click()
   }
 
+  const GIT_HOSTING_DOMAINS = new Set([
+    'github.com', 'gitlab.com', 'bitbucket.org', 'codeberg.org',
+    'ssh.dev.azure.com', 'vs-ssh.visualstudio.com', 'gitea.com',
+    'sourcehut.org', 'sr.ht',
+  ])
+
   const parseSSHConfigContent = (content: string): DetectedProfile[] => {
     const profiles: DetectedProfile[] = []
     const lines = content.split('\n')
 
     let currentComment: string | null = null
     let currentHost: string | null = null
+    let hostComment: string | null = null
     let identityFile: string | null = null
+    let hostName: string | null = null
+
+    const saveCurrentHost = () => {
+      if (currentHost && identityFile && hostName && GIT_HOSTING_DOMAINS.has(hostName.toLowerCase())) {
+        profiles.push({
+          sshHost: currentHost,
+          comment: hostComment || `Git account (${currentHost})`,
+          sshCommand: `ssh -F ~/.ssh/config`
+        })
+      }
+    }
 
     for (const line of lines) {
       const trimmed = line.trim()
 
-      if (trimmed.startsWith('#')) {
-        currentComment = trimmed.substring(1).trim()
-        continue
-      }
-
-      const hostMatch = trimmed.match(/^Host\s+github\.com-(\w+)$/i)
-      if (hostMatch) {
-        if (currentHost && identityFile) {
-          profiles.push({
-            sshHost: currentHost,
-            comment: currentComment || `GitHub account (${currentHost})`,
-            sshCommand: `ssh -F ~/.ssh/config`
-          })
+      if (trimmed === '' || trimmed.startsWith('#')) {
+        if (trimmed.startsWith('#')) {
+          currentComment = trimmed.substring(1).trim()
         }
-
-        currentHost = `github.com-${hostMatch[1]}`
-        identityFile = null
         continue
       }
 
-      const identityMatch = trimmed.match(/^IdentityFile\s+(.+)$/i)
+      const hostMatch = /^Host\s+(\S+)$/i.exec(trimmed)
+      if (hostMatch && hostMatch[1] !== '*') {
+        saveCurrentHost()
+        currentHost = hostMatch[1]
+        hostComment = currentComment
+        identityFile = null
+        hostName = null
+        currentComment = null
+        continue
+      }
+
+      const hostNameMatch = /^HostName\s+(.+)$/i.exec(trimmed)
+      if (hostNameMatch && currentHost) {
+        hostName = hostNameMatch[1].trim()
+        continue
+      }
+
+      const identityMatch = /^IdentityFile\s+(.+)$/i.exec(trimmed)
       if (identityMatch && currentHost) {
         identityFile = identityMatch[1].trim()
         continue
       }
+
+      currentComment = null
     }
 
-    if (currentHost && identityFile) {
-      profiles.push({
-        sshHost: currentHost,
-        comment: currentComment || `GitHub account (${currentHost})`,
-        sshCommand: `ssh -F ~/.ssh/config`
-      })
-    }
-
+    saveCurrentHost()
     return profiles
   }
 
