@@ -1,441 +1,436 @@
-# Git Config Switcher
+<div align="center">
 
-> 🔄 Effortlessly manage multiple Git identities and SSH keys from your system tray
+# Git Profile Switcher
 
-A cross-platform desktop application that makes it easy to switch between different Git configurations (user name, email, SSH keys) for multiple GitHub accounts on the same machine.
+**Manage multiple Git identities from your system tray.**
+
+Switch between Git profiles — name, email, SSH keys, GPG signing — without ever touching `~/.gitconfig` directly. Works with GitHub, GitLab, Bitbucket, and any Git hosting platform.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](#installation)
+[![Built with Electron](https://img.shields.io/badge/Built%20with-Electron%20%2B%20React-47848F.svg)](#tech-stack)
+
+</div>
 
 ---
 
-## 📑 Table of Contents
+## The Problem
 
-- [Features](#-features)
-- [Why Use This?](#-why-use-this)
-- [Prerequisites](#-prerequisites)
-- [Installation](#-installation)
-- [Quick Start](#-quick-start)
-- [Usage Guide](#-usage-guide)
-  - [Creating Profiles](#1-creating-profiles)
-  - [Importing SSH Config](#2-importing-existing-ssh-config)
-  - [Generating SSH Keys](#3-generating-new-ssh-keys)
-  - [Switching Profiles](#4-switching-profiles)
-  - [Verifying Configuration](#5-verifying-configuration)
-- [How It Works](#-how-it-works)
-- [SSH Configuration for Multiple Accounts](#-ssh-configuration-for-multiple-accounts)
-- [Troubleshooting](#-troubleshooting)
-- [Development](#-development)
-- [License](#-license)
+Developers who work across personal projects, open-source contributions, and employer repositories on the same machine constantly fight with Git identity:
+
+- Commits land under the wrong name or email
+- SSH permission errors when pushing to the wrong account
+- Manually running `git config --global user.name "..."` every time you switch context
+- Maintaining a messy `~/.ssh/config` by hand
+
+**Git Profile Switcher** eliminates all of that with a single click from your system tray.
 
 ---
 
-## ✨ Features
+## Features
 
-- 🎯 **Quick Profile Switching** - Switch Git identities from the system tray menu
-- 🔐 **SSH Key Management** - Generate and manage SSH keys for each account
-- 📥 **Auto-Import** - Automatically detect existing Git configs and SSH setups
-- ↩️ **Undo Support** - Revert to previous profile (up to 3 levels)
-- ✅ **Configuration Verification** - See which config file is setting each value
-- 🛡️ **Safe & Non-Destructive** - Uses managed include file, never overwrites your `.gitconfig`
-- 🌍 **Global by Default** - Changes apply system-wide
-- 🔑 **GPG Signing Support** - Configure GPG signing per profile (optional)
+| Feature | Description |
+|---------|-------------|
+| **Tray-first switching** | Switch profiles from the system tray — no window required |
+| **SSH key management** | Generate ed25519 key pairs, test connections, manage `~/.ssh/config` |
+| **Platform-agnostic detection** | Auto-detect SSH profiles for GitHub, GitLab, Bitbucket, Codeberg, and any host |
+| **Auto-import** | Import existing profiles from your SSH config or global Git config |
+| **Config verification** | See exactly which file sets each Git config value |
+| **Undo support** | Revert to a previous profile (up to 3 levels deep) |
+| **Non-destructive** | Uses a managed include file — your `.gitconfig` is never overwritten |
+| **GPG signing** | Per-profile GPG key and commit signing configuration |
+| **5 retro themes** | Lava, Matrix, Synthwave, Glacier, and Amber color palettes |
+| **Cross-platform** | Windows, macOS, and Linux (AppImage + Arch Linux) |
 
 ---
 
-## 🤔 Why Use This?
+## How It Works
 
-**Common Problems This Solves:**
+Git Profile Switcher uses a **managed include strategy** that is safe and non-destructive:
 
-- ✅ Pushing to the wrong GitHub account
-- ✅ Permission errors when using multiple accounts
-- ✅ Forgetting to switch `user.name` and `user.email`
-- ✅ Managing multiple SSH keys for different accounts
-- ✅ Complicated SSH config file maintenance
-
-**Before:**
-```bash
-# Manually switching every time
-git config --global user.name "Personal Name"
-git config --global user.email "personal@email.com"
-# And remembering to use the right SSH host...
+```
+~/.gitconfig                          ~/.gitconfig-switcher
+┌──────────────────────────────┐      ┌───────────────────────────────┐
+│ [user]                       │      │ [user]                        │
+│     name = Old Name          │      │     name = Active Profile     │
+│     email = old@email.com    │      │     email = active@email.com  │
+│                              │      │                               │
+│ [include]                    │─────>│ [core]                        │
+│     path = ~/.gitconfig-     │      │     sshCommand = ssh -F ...   │
+│            switcher          │      │                               │
+│                              │      │ [commit]                      │
+│ # Your other config stays    │      │     gpgsign = true            │
+│ # completely untouched       │      └───────────────────────────────┘
+└──────────────────────────────┘        ▲ Only this file changes
+                                          on profile switch
 ```
 
-**After:**
-- Click tray icon → Select profile → Done! ✨
+**What this means:**
+
+- The app adds **one include line** to your `~/.gitconfig` (idempotent — it won't duplicate)
+- Every profile switch writes **only** to `~/.gitconfig-switcher`
+- Your original `.gitconfig` is never overwritten or deeply parsed
+- Git's include mechanism means the managed file's values take precedence
+- To disable: just remove the include line. Everything reverts instantly.
 
 ---
 
-## 📋 Prerequisites
+## Installation
 
-- **Node.js** 18+ and npm
-- **Git** installed and in PATH
-- **Windows** 10/11, **macOS** 10.12+, or **Linux**
-- **(Optional)** PowerShell 7+ for running npm scripts on Windows
+### Prerequisites
 
----
+- [Git](https://git-scm.com/) installed and in PATH
+- [Node.js](https://nodejs.org/) 18+
 
-## 🚀 Installation
-
-### Option 1: Development Mode (Recommended)
+### From Source (Development)
 
 ```bash
-# Clone the repository
 git clone https://github.com/auyjos/GithubProfileSwitcher.git
 cd GithubProfileSwitcher
 
-# Install dependencies
 npm install
-
-# Run the app
 npm run dev
 ```
 
-### Option 2: Build Executable
+### Build Executable
 
 ```bash
+# Windows (portable .exe)
 npm run build
+
+# Linux (AppImage)
+npm run build:appimage
+
+# Arch Linux (pacman)
+npm run build:arch
 ```
 
-The portable executable will be in `dist/win-unpacked/` (Windows) or equivalent for your OS.
+The packaged app will be in the `dist/` directory.
 
 ---
 
-## 🎬 Quick Start
+## Quick Start
 
-### 1. First Launch
+### 1. Launch the App
 
-The app will:
-- Open the Profiles window automatically
-- Check if Git is installed
-- Create a managed config file at `~/.gitconfig-switcher`
-- Add an include directive to your `~/.gitconfig` (safely)
+On first launch, the app will:
+- Verify Git is installed
+- Create `~/.gitconfig-switcher` (the managed file)
+- Add the include directive to `~/.gitconfig` (once, safely)
+- Open the Profiles window
 
-### 2. Create Your First Profile
+### 2. Add a Profile
 
-**Method A: Manual Entry**
-1. Click **"Add Profile"**
-2. Enter:
-   - **Profile Label**: e.g., "Work", "Personal", "Client"
-   - **User Name**: Your Git display name
-   - **User Email**: Your Git commit email
+You have three options:
 
-**Method B: Import from SSH Config**
-1. Click **"Import SSH Config"**
-2. Browse to `C:\Users\[YourName]\.ssh\config` (Windows) or `~/.ssh/config` (Mac/Linux)
-3. Select detected accounts
-4. Enter username and email for each
+<table>
+<tr>
+<td width="33%">
 
-### 3. Switch Profiles
+**Manual Entry**
 
-- Click the system tray icon
-- Select **"Switch Profile"** → Choose your profile
-- Done! All Git operations now use this identity
+Click **"Add Profile"** and fill in:
+- Profile label (e.g. "Work")
+- Git user name
+- Git email
+
+</td>
+<td width="33%">
+
+**Import from SSH Config**
+
+Click **"Import SSH Config"** and browse to `~/.ssh/config`. The app detects all host aliases that point to git platforms and lets you import them.
+
+</td>
+<td width="33%">
+
+**Auto-Detect**
+
+Click **"Auto-Detect"** to scan your existing Git configuration, conditional includes, and SSH config for profiles.
+
+</td>
+</tr>
+</table>
+
+### 3. Switch from the Tray
+
+Click the tray icon and select a profile. Done.
+
+```
+┌─────────────────────────────────┐
+│  Active: Jane Doe <jane@work>   │
+│─────────────────────────────────│
+│  Switch Profile                 │
+│    ○ Personal (jane@home.com)   │
+│    ● Work     (jane@work.com)   │
+│    ○ OSS      (jane@oss.dev)    │
+│─────────────────────────────────│
+│  Verify...                      │
+│  Manage Profiles...             │
+│  Undo Last Switch               │
+│─────────────────────────────────│
+│  Quit                           │
+└─────────────────────────────────┘
+```
 
 ---
 
-## 📖 Usage Guide
+## Usage Guide
 
-### 1. Creating Profiles
+### Creating Profiles
 
-#### Basic Profile
+Every profile has a **label**, **user name**, and **email**. Optionally expand **Advanced Options** to configure:
+
+| Field | Purpose |
+|-------|---------|
+| **SSH Host** | The SSH host alias for this identity (e.g. `github.com-work`, `gitlab-personal`) |
+| **GPG Signing** | Enable `commit.gpgsign = true` for this profile |
+| **Signing Key** | Your GPG key ID for signed commits |
+
+### SSH Key Generation
+
+From the **SSH Keys** tab:
+
+1. Enter an **account name** (used as the key filename and host alias)
+2. Enter your **email address**
+3. Click **Generate** — creates an ed25519 key pair at `~/.ssh/id_ed25519_<account>`
+4. The public key is displayed — copy it to your hosting platform:
+   - GitHub: [github.com/settings/ssh/new](https://github.com/settings/ssh/new)
+   - GitLab: Settings > SSH Keys
+   - Bitbucket: Personal Settings > SSH Keys
+5. Click **Test** to verify the connection
+
+The app automatically adds the host block to `~/.ssh/config`:
+
 ```
-Profile Label: Personal GitHub
-User Name: John Doe
-User Email: john@personal.com
-```
-
-#### Advanced Options
-- **SSH Host**: For multiple GitHub accounts (e.g., `github.com-personal`)
-- **GPG Signing**: Enable if you sign commits (most users don't need this)
-- **Signing Key**: Your GPG key ID (leave empty if not using GPG)
-
-### 2. Importing Existing SSH Config
-
-If you already have an SSH config like this:
-
-```bash
-# Personal GitHub account
-Host github.com-personal
+# <account-name>
+Host github.com-<account-name>
     HostName github.com
     User git
-    IdentityFile ~/.ssh/id_ed25519_personal
-    IdentitiesOnly yes
-
-# Work GitHub account  
-Host github.com-work
-    HostName github.com
-    User git
-    IdentityFile ~/.ssh/id_ed25519_work
+    IdentityFile ~/.ssh/id_ed25519_<account-name>
     IdentitiesOnly yes
 ```
 
-**Steps:**
-1. Click **"Import SSH Config"**
-2. Select your `~/.ssh/config` file
-3. The app will detect all GitHub accounts
-4. Click **"Import This Profile"** for each account
-5. Enter the Git username and email when prompted
+### SSH Configuration for Multiple Accounts
 
-### 3. Generating New SSH Keys
+To use multiple accounts on the same platform, your repository remotes need to use **SSH host aliases** instead of the default hostname:
 
-**To create a new account with fresh SSH keys:**
-
-1. Click **"Add Profile"**
-2. Enter Profile Label and Email
-3. Expand **"Advanced Options"**
-4. Click **"🔑 Generate New SSH Key"**
-5. The app will:
-   - Create a new SSH key pair (ed25519)
-   - Add it to your `~/.ssh/config`
-   - Display the public key
-6. **Copy the public key** and add it to GitHub:
-   - Go to: https://github.com/settings/ssh/new
-   - Paste the key and save
-7. Click **"Save"** to create the profile
-
-### 4. Switching Profiles
-
-**From Tray Menu:**
-1. Click the tray icon (Git Config Switcher)
-2. Select **"Switch Profile"** → Choose profile
-3. The active profile is shown at the top
-
-**From Profiles Window:**
-1. Click **"Manage Profiles..."** in tray
-2. Click **"Apply"** on any profile
-
-**Undo:**
-- Click **"Undo Last Switch"** in tray menu
-- Restores the previous profile (up to 3 levels)
-
-### 5. Verifying Configuration
-
-**Check what's currently active:**
-1. Click **"Verify..."** in tray menu
-2. See:
-   - Effective name and email
-   - Which config file set each value
-   - Warnings if something is misconfigured
-
-**Command line verification:**
 ```bash
-git config user.name
-git config user.email
-git config github.sshHost
-```
+# Default (only works for one account):
+git@github.com:user/repo.git
 
----
-
-## 🔧 How It Works
-
-### Managed Include Strategy
-
-The app uses a **safe, non-destructive** approach:
-
-1. **Creates a managed file**: `~/.gitconfig-switcher`
-2. **Adds ONE line to your `.gitconfig`**:
-   ```ini
-   [include]
-       path = ~/.gitconfig-switcher
-   ```
-3. **All profile switches only write to the managed file**
-4. **Your original `.gitconfig` stays untouched**
-
-This means:
-- ✅ No data loss
-- ✅ Compatible with complex setups (conditional includes, corporate configs)
-- ✅ Easy to disable (just remove the include line)
-
-### What Gets Configured
-
-When you switch profiles, the app sets:
-```bash
-[user]
-    name = Your Name
-    email = your@email.com
-
-[github]
-    sshHost = github.com-yourprofile  # For reference
-
-[core]
-    sshCommand = ssh -F ~/.ssh/config  # Uses your SSH config
-```
-
----
-
-## 🔐 SSH Configuration for Multiple Accounts
-
-### Understanding SSH Hosts
-
-To use multiple GitHub accounts, your repository remotes must use SSH host aliases:
-
-#### ❌ Standard (won't work with multiple accounts):
-```bash
-git@github.com:username/repo.git
-```
-
-#### ✅ With SSH Host Alias:
-```bash
-git@github.com-personal:username/repo.git
+# With host alias (works for multiple accounts):
+git@github.com-personal:user/repo.git
 git@github.com-work:company/repo.git
 ```
 
-### Setting Up Your SSH Config
+**Convert an existing repo:**
 
-**Location:** `~/.ssh/config` (Windows: `C:\Users\[You]\.ssh\config`)
-
-**Example:**
 ```bash
-# Personal Account
-Host github.com-personal
-    HostName github.com
-    User git
-    IdentityFile ~/.ssh/id_ed25519_personal
-    IdentitiesOnly yes
-
-# Work Account
-Host github.com-work
-    HostName github.com
-    User git
-    IdentityFile ~/.ssh/id_ed25519_work
-    IdentitiesOnly yes
+git remote set-url origin git@github.com-personal:user/repo.git
 ```
 
-### Converting Existing Repositories
+**This works the same way for any platform:**
+
+```bash
+# GitLab
+git remote set-url origin git@gitlab-work:company/repo.git
+
+# Bitbucket
+git remote set-url origin git@bitbucket-client:client/repo.git
+```
+
+### Platform-Agnostic Profile Detection
+
+The app detects SSH profiles by reading `~/.ssh/config` and looking for any `Host` entry that has a `HostName` pointing to a known git platform:
+
+| Platform | Detected HostName |
+|----------|-------------------|
+| GitHub | `github.com` |
+| GitLab | `gitlab.com` |
+| Bitbucket | `bitbucket.org` |
+| Codeberg | `codeberg.org` |
+| Any self-hosted | Any host with an `IdentityFile` configured |
+
+This means **any naming convention** works:
+
+```bash
+# All of these are detected:
+Host gh-personal          # any alias
+Host work-gitlab          # any alias
+Host my-bitbucket         # any alias
+    HostName github.com   # ← this is what matters
+    IdentityFile ~/.ssh/id_ed25519_personal
+```
+
+### Verifying Configuration
+
+The **Verify** tab shows:
+
+- **Effective identity** — the name and email Git will actually use
+- **Origin table** — which config file sets each value (from `git config --show-origin`)
+- **Warnings** — if the managed file isn't being used or values are overridden
+
+This is invaluable for debugging why a commit used the wrong identity.
+
+### Undo
+
+Made a mistake? The tray menu includes **"Undo Last Switch"** which reverts to the previous profile. The undo stack holds up to 3 entries and persists across app restarts.
+
+---
+
+## Themes
+
+Five retro pixel-art color palettes, switchable from the **Settings** tab:
+
+<table>
+<tr>
+<td align="center"><strong>LAVA</strong><br/><sub>Red / Orange / Gold on dark navy</sub><br/><img src="https://via.placeholder.com/80x20/FF6500/FF6500" alt="Lava accent" /></td>
+<td align="center"><strong>MATRIX</strong><br/><sub>Bright green on deep black</sub><br/><img src="https://via.placeholder.com/80x20/00FF41/00FF41" alt="Matrix accent" /></td>
+<td align="center"><strong>SYNTHWAVE</strong><br/><sub>Hot pink / purple on indigo</sub><br/><img src="https://via.placeholder.com/80x20/FF2D87/FF2D87" alt="Synthwave accent" /></td>
+<td align="center"><strong>GLACIER</strong><br/><sub>Cyan / steel blue on midnight</sub><br/><img src="https://via.placeholder.com/80x20/00BFFF/00BFFF" alt="Glacier accent" /></td>
+<td align="center"><strong>AMBER</strong><br/><sub>Phosphor monitor warmth</sub><br/><img src="https://via.placeholder.com/80x20/FFB000/FFB000" alt="Amber accent" /></td>
+</tr>
+</table>
+
+Themes are persisted to localStorage and apply instantly.
+
+---
+
+## Troubleshooting
+
+### "Permission denied" when pushing
+
+Your remote URL isn't using the SSH host alias.
 
 ```bash
 # Check current remote
 git remote -v
 
-# Update to use SSH host alias
-git remote set-url origin git@github.com-personal:username/repo.git
+# Fix it
+git remote set-url origin git@github.com-personal:user/repo.git
 ```
 
-### Testing SSH Connection
+### Commits showing the wrong identity
+
+The profile wasn't switched before committing.
 
 ```bash
-# Test each account
+# Verify current identity
+git config user.name
+git config user.email
+
+# Fix the last commit
+git commit --amend --reset-author
+```
+
+### SSH key not authenticating
+
+```bash
+# Test the connection
 ssh -T git@github.com-personal
-# Should say: Hi [username]! You've successfully authenticated...
 
-ssh -T git@github.com-work
-# Should say: Hi [workname]! You've successfully authenticated...
+# Check the key exists
+ls ~/.ssh/id_ed25519_personal
+
+# Verify ~/.ssh/config has the right IdentityFile path
+cat ~/.ssh/config
 ```
-
----
-
-## 🐛 Troubleshooting
-
-### "Permission denied" when pushing
-
-**Cause:** Remote URL doesn't use SSH host alias
-
-**Fix:**
-```bash
-git remote -v  # Check current URL
-git remote set-url origin git@github.com-personal:username/repo.git
-```
-
-### "Wrong account" in GitHub commits
-
-**Cause:** Profile not switched before committing
-
-**Fix:**
-1. Switch profile in tray menu
-2. Verify: `git config user.email`
-3. If already committed: Amend the commit
-   ```bash
-   git commit --amend --reset-author
-   ```
-
-### SSH key not working
-
-**Cause:** SSH config or key file path incorrect
-
-**Fix:**
-1. Test: `ssh -T git@github.com-personal`
-2. Check `~/.ssh/config` has correct `IdentityFile` path
-3. Ensure key file exists: `ls ~/.ssh/id_ed25519_personal`
-
-### Build errors on Windows
-
-**Cause:** Missing PowerShell 7+ or admin privileges for symbolic links
-
-**Solutions:**
-- **Run in dev mode**: `npm run dev` (no build needed!)
-- **Install PowerShell 7**: https://aka.ms/powershell
-- **Or run as admin** to create symbolic links
 
 ### App not starting
 
-**Check:**
-1. Git is installed: `git --version`
-2. Node.js is installed: `node --version`
-3. Dependencies installed: `npm install`
+```bash
+# Check prerequisites
+git --version    # Must be installed
+node --version   # Must be 18+
+
+# Reinstall dependencies
+npm install
+```
 
 ---
 
-## 👨‍💻 Development
-
-### Project Structure
+## Architecture
 
 ```
 src/
-├── core/              # Business logic
-│   ├── profiles/      # Profile CRUD & storage
-│   ├── git/           # Git operations & SSH
-│   └── verify/        # Configuration verification
-├── main/              # Electron main process
-├── preload/           # IPC bridge (secure)
-└── renderer/          # React UI
+├── core/                  # Pure TypeScript — no Electron imports
+│   ├── profiles/          # Zod schemas, JSON storage, undo stack
+│   ├── git/               # Git CLI wrapper, managed include, SSH operations
+│   └── verify/            # Config origin parsing and verification
+│
+├── main/                  # Electron main process
+│   ├── index.ts           # App lifecycle and startup
+│   ├── ipc.ts             # IPC handlers (all Node/filesystem access)
+│   ├── tray.ts            # System tray menu and profile switching
+│   └── windows.ts         # BrowserWindow creation
+│
+├── preload/               # Secure IPC bridge
+│   └── index.ts           # contextBridge.exposeInMainWorld (window.api)
+│
+└── renderer/              # React SPA (HashRouter)
+    ├── screens/           # Profiles, Verify, SSHKeys, Settings
+    ├── components/        # ProfileForm, OriginTable, InputModal
+    └── themes.ts          # 5 color palettes with CSS custom properties
 ```
 
-### Running Development Server
-
-```bash
-npm run dev
-```
-
-### Building for Production
-
-```bash
-npm run build
-```
-
-### Running Tests
-
-```bash
-npm test
-```
+**Security model:** `contextIsolation: true`, `nodeIntegration: false`. The renderer never touches the filesystem directly — everything goes through the typed IPC bridge in `window.api`.
 
 ### Tech Stack
 
-- **Electron** - Desktop framework
-- **React** - UI
-- **TypeScript** - Type safety
-- **Vite** - Build tool
-- **Zod** - Schema validation
-- **Execa** - Git command execution
+| Technology | Role |
+|-----------|------|
+| **Electron** | Desktop framework |
+| **React** | UI components |
+| **TypeScript** | Type safety across all layers |
+| **Vite** | Build tool with hot reload |
+| **Zod** | Runtime schema validation for profiles |
+| **Execa** | Safe Git CLI execution |
+| **Zustand** | Lightweight state management |
 
 ---
 
-## 📄 License
+## Development
 
-MIT © 2024
+```bash
+# Development with hot reload
+npm run dev
+
+# Type-check
+npx tsc --noEmit
+
+# Run tests
+npm test              # Watch mode
+npx vitest run        # Single run
+
+# Build
+npm run build         # Windows portable
+npm run build:appimage  # Linux AppImage
+npm run build:arch      # Arch Linux pacman
+```
 
 ---
 
-## 🙏 Acknowledgments
+## Contributing
 
-Built to solve the real-world problem of managing multiple GitHub accounts. If you find this useful, ⭐ star the repo!
-
----
-
-## 📞 Support
-
-- **Issues**: [GitHub Issues](https://github.com/auyjos/GithubProfileSwitcher/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/auyjos/GithubProfileSwitcher/discussions)
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/my-feature`)
+3. Commit your changes
+4. Push to the branch (`git push origin feature/my-feature`)
+5. Open a Pull Request
 
 ---
 
-**Made with ❤️ for developers juggling multiple Git identities**
+## License
+
+MIT &copy; 2024 [Jose Andres Auyon](https://github.com/auyjos)
+
+---
+
+<div align="center">
+
+**Built for developers juggling multiple Git identities.**
+
+[Report a Bug](https://github.com/auyjos/GithubProfileSwitcher/issues) &middot; [Request a Feature](https://github.com/auyjos/GithubProfileSwitcher/issues)
+
+</div>
