@@ -18,8 +18,7 @@ const api = {
     save: (profile: ProfileInput): Promise<Profile> => ipcRenderer.invoke('profiles:save', profile),
     delete: (profileId: string): Promise<void> => ipcRenderer.invoke('profiles:delete', profileId),
     apply: (profileId: string): Promise<{ ok: true }> => ipcRenderer.invoke('profiles:apply', profileId),
-    detect: (): Promise<DetectedProfile[]> => ipcRenderer.invoke('profiles:detect'),
-    detectSSH: (sshConfigPath: string): Promise<DetectedProfile[]> => ipcRenderer.invoke('profiles:detectSSH', sshConfigPath)
+    detect: (): Promise<DetectedProfile[]> => ipcRenderer.invoke('profiles:detect')
   },
   verify: {
     global: (): Promise<VerifyResult> => ipcRenderer.invoke('verify:global'),

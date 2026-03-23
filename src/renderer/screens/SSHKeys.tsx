@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, type FormEvent } from 'react'
 
 type TestStatus = 'idle' | 'testing' | 'ok' | 'fail'
 
@@ -98,7 +98,7 @@ export default function SSHKeys() {
     useEffect(() => { loadHosts() }, [loadHosts])
 
     /* ── Generate ──────────────────────────────────────────────── */
-    const handleGenerate = async (e: React.FormEvent) => {
+    const handleGenerate = async (e: FormEvent) => {
         e.preventDefault()
         if (!email || !accountName) return
         setGenerating(true)
@@ -123,9 +123,13 @@ export default function SSHKeys() {
     /* ── Copy public key ───────────────────────────────────────── */
     const handleCopy = async () => {
         if (!generated) return
-        await navigator.clipboard.writeText(generated.publicKey)
-        setCopied(true)
-        setTimeout(() => setCopied(false), 2000)
+        try {
+            await navigator.clipboard.writeText(generated.publicKey)
+            setCopied(true)
+            setTimeout(() => setCopied(false), 2000)
+        } catch {
+            alert('Failed to copy public key to clipboard.')
+        }
     }
 
     /* ── Test new key ──────────────────────────────────────────── */

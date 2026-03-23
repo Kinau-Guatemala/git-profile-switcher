@@ -1,7 +1,7 @@
-import { homedir } from 'os'
-import { join } from 'path'
-import { readFile, writeFile, access } from 'fs/promises'
-import { constants } from 'fs'
+import { homedir } from 'node:os'
+import { join } from 'node:path'
+import { readFile, writeFile, access } from 'node:fs/promises'
+import { constants } from 'node:fs'
 
 export interface ManagedIncludeResult {
   managedPath: string
@@ -32,7 +32,7 @@ export async function ensureManagedIncludeInstalled(): Promise<ManagedIncludeRes
   }
 
   // Use absolute path with forward slashes for Windows compatibility
-  const absolutePath = managedPath.replace(/\\/g, '/')
+  const absolutePath = managedPath.replaceAll('\\', '/')
   const includeLine = `path = ${absolutePath}`
   const includeLineTilde = 'path = ~/.gitconfig-switcher'
   const includeLineRelative = 'path = .gitconfig-switcher'

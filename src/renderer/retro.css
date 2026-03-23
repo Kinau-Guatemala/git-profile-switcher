@@ -664,10 +664,6 @@ body::after {
     margin-top: 14px;
 }
 
-.ssh-github-link {
-    text-decoration: none;
-}
-
 .ssh-loading {
     font-size: 18px;
     color: var(--c-text-muted);

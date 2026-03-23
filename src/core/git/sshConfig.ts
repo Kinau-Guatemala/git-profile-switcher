@@ -1,6 +1,7 @@
-import { homedir } from 'os'
-import { readFile } from 'fs/promises'
-import { join } from 'path'
+import { homedir } from 'node:os'
+import { readFile } from 'node:fs/promises'
+import { join } from 'node:path'
+import { GIT_HOSTING_DOMAINS } from '../constants'
 
 export interface SSHHost {
   host: string
@@ -76,9 +77,9 @@ function parseSSHConfigContent(content: string): SSHHost[] {
     hosts.push(currentHost)
   }
 
-  // Filter to only GitHub hosts
+  // Filter to known git hosting platforms
   return hosts.filter(h =>
-    h.hostName.includes('github.com') || h.host.includes('github')
+    GIT_HOSTING_DOMAINS.has(h.hostName.toLowerCase())
   )
 }
 

@@ -1,7 +1,8 @@
 import { runGit } from './gitRunner'
-import { homedir } from 'os'
-import { readFile } from 'fs/promises'
-import { join } from 'path'
+import { homedir } from 'node:os'
+import { readFile } from 'node:fs/promises'
+import { join } from 'node:path'
+import { GIT_HOSTING_DOMAINS } from '../constants'
 
 export interface DetectedProfile {
   userName?: string
@@ -138,18 +139,6 @@ function parseConfigContent(content: string): DetectedProfile {
 
   return profile
 }
-
-const GIT_HOSTING_DOMAINS = new Set([
-  'github.com',
-  'gitlab.com',
-  'bitbucket.org',
-  'codeberg.org',
-  'ssh.dev.azure.com',
-  'vs-ssh.visualstudio.com',
-  'gitea.com',
-  'sourcehut.org',
-  'sr.ht',
-])
 
 function isGitHostingDomain(hostname: string): boolean {
   return GIT_HOSTING_DOMAINS.has(hostname.toLowerCase())
