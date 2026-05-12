@@ -73,6 +73,7 @@ function HostRow({ host, onTest }: HostRowProps) {
 export default function SSHKeys() {
     const [email, setEmail] = useState('')
     const [accountName, setAccountName] = useState('')
+    const [passphrase, setPassphrase] = useState('')
     const [generating, setGenerating] = useState(false)
     const [generated, setGenerated] = useState<GeneratedKey | null>(null)
     const [copied, setCopied] = useState(false)
@@ -105,7 +106,7 @@ export default function SSHKeys() {
         setGenerated(null)
         setNewKeyTest({ status: 'idle', message: '' })
         try {
-            const result = await globalThis.api.ssh.generate(email, accountName)
+            const result = await globalThis.api.ssh.generate(email, accountName, passphrase)
             await globalThis.api.ssh.addToConfig(
                 result.host,
                 result.privateKeyPath,
@@ -202,6 +203,22 @@ export default function SSHKeys() {
                             required
                             className="form-input"
                         />
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="ssh-passphrase" className="form-label">Passphrase (optional)</label>
+                        <input
+                            id="ssh-passphrase"
+                            type="password"
+                            value={passphrase}
+                            onChange={e => setPassphrase(e.target.value)}
+                            placeholder="Leave blank for no passphrase"
+                            autoComplete="new-password"
+                            className="form-input"
+                        />
+                        <p className="form-hint">
+                            Recommended if you want the private key encrypted. Leave it blank only if you accept an unprotected key on disk.
+                        </p>
                     </div>
 
                     <div className="btn-row">

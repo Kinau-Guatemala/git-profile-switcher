@@ -14,6 +14,7 @@ export default function ProfileForm({ onSave, onCancel }: Props) {
   const [gpgSign, setGpgSign] = useState(false)
   const [signingKey, setSigningKey] = useState('')
   const [sshHost, setSSHHost] = useState('')
+  const [sshPassphrase, setSSHPassphrase] = useState('')
   const [generating, setGenerating] = useState(false)
   const [generatedKey, setGeneratedKey] = useState<string | null>(null)
 
@@ -42,7 +43,7 @@ export default function ProfileForm({ onSave, onCancel }: Props) {
 
     setGenerating(true)
     try {
-      const result = await window.api.ssh.generate(userEmail, label)
+      const result = await window.api.ssh.generate(userEmail, label, sshPassphrase)
 
       // Update SSH host field
       setSSHHost(result.host)
@@ -69,8 +70,9 @@ export default function ProfileForm({ onSave, onCancel }: Props) {
   return (
     <form onSubmit={handleSubmit} className="pixel-card pixel-card--highlight mb-md">
       <div className="form-group">
-        <label className="form-label">Profile Label *</label>
+        <label htmlFor="profile-label" className="form-label">Profile Label *</label>
         <input
+          id="profile-label"
           type="text"
           value={label}
           onChange={e => setLabel(e.target.value)}
@@ -80,8 +82,9 @@ export default function ProfileForm({ onSave, onCancel }: Props) {
       </div>
 
       <div className="form-group">
-        <label className="form-label">User Name *</label>
+        <label htmlFor="profile-user-name" className="form-label">User Name *</label>
         <input
+          id="profile-user-name"
           type="text"
           value={userName}
           onChange={e => setUserName(e.target.value)}
@@ -91,8 +94,9 @@ export default function ProfileForm({ onSave, onCancel }: Props) {
       </div>
 
       <div className="form-group">
-        <label className="form-label">User Email *</label>
+        <label htmlFor="profile-user-email" className="form-label">User Email *</label>
         <input
+          id="profile-user-email"
           type="email"
           value={userEmail}
           onChange={e => setUserEmail(e.target.value)}
@@ -114,8 +118,24 @@ export default function ProfileForm({ onSave, onCancel }: Props) {
       {showAdvanced && (
         <div className="advanced-panel">
           <div className="form-group">
+            <label htmlFor="profile-ssh-passphrase" className="form-label">SSH Key Passphrase (optional)</label>
+            <input
+              id="profile-ssh-passphrase"
+              type="password"
+              value={sshPassphrase}
+              onChange={e => setSSHPassphrase(e.target.value)}
+              placeholder="Leave blank for no passphrase"
+              autoComplete="new-password"
+              className="form-input"
+            />
+            <p className="form-hint">
+              Recommended if you want the generated private key encrypted.
+            </p>
+          </div>
+
+          <div className="form-group">
             <div className="ssh-host-row">
-              <label className="form-label m-0">SSH Host</label>
+              <label htmlFor="profile-ssh-host" className="form-label m-0">SSH Host</label>
               <button
                 type="button"
                 onClick={handleGenerateSSHKey}
@@ -126,6 +146,7 @@ export default function ProfileForm({ onSave, onCancel }: Props) {
               </button>
             </div>
             <input
+              id="profile-ssh-host"
               type="text"
               value={sshHost}
               onChange={e => setSSHHost(e.target.value)}
@@ -137,8 +158,9 @@ export default function ProfileForm({ onSave, onCancel }: Props) {
 
           {generatedKey && (
             <div className="pubkey-box">
-              <label className="form-label">📋 Public Key (Add to GitHub)</label>
+              <label htmlFor="profile-generated-pubkey" className="form-label">📋 Public Key (Add to GitHub)</label>
               <textarea
+                id="profile-generated-pubkey"
                 value={generatedKey}
                 readOnly
                 onClick={(e) => e.currentTarget.select()}
@@ -166,8 +188,9 @@ export default function ProfileForm({ onSave, onCancel }: Props) {
           </div>
 
           <div className="form-group">
-            <label className="form-label">Signing Key (optional)</label>
+            <label htmlFor="profile-signing-key" className="form-label">Signing Key (optional)</label>
             <input
+              id="profile-signing-key"
               type="text"
               value={signingKey}
               onChange={e => setSigningKey(e.target.value)}

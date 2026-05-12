@@ -11,13 +11,19 @@ export interface SSHKeyResult {
   host: string
 }
 
+function toKeyToken(value: string): string {
+  return value.toLowerCase().replaceAll(/[^a-z0-9]/g, '_')
+}
+
 export async function generateSSHKey(
   email: string,
-  accountName: string
+  accountName: string,
+  passphrase = ''
 ): Promise<SSHKeyResult> {
   const home = homedir()
   const sshDir = join(home, '.ssh')
-  const keyName = `id_ed25519_${accountName.toLowerCase().replaceAll(/[^a-z0-9]/g, '_')}`
+  const accountToken = toKeyToken(accountName)
+  const keyName = `id_ed25519_${accountToken}`
   const privateKeyPath = join(sshDir, keyName)
   const publicKeyPath = `${privateKeyPath}.pub`
 
@@ -45,7 +51,7 @@ export async function generateSSHKey(
       '-t', 'ed25519',
       '-C', email,
       '-f', privateKeyPath,
-      '-N', '' // No passphrase for convenience
+      '-N', passphrase
     ])
   } catch (error: any) {
     throw new Error(`Failed to generate SSH key: ${error.message}`)
@@ -55,7 +61,7 @@ export async function generateSSHKey(
   const publicKey = await readFile(publicKeyPath, 'utf-8')
 
   // Generate host alias
-  const host = `github.com-${accountName.toLowerCase().replaceAll(/[^a-z0-9]/g, '_')}`
+  const host = `github.com-${accountToken}`
 
   return {
     privateKeyPath,
