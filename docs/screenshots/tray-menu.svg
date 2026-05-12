@@ -1,0 +1,32 @@
+<svg width="640" height="760" viewBox="0 0 640 760" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="640" height="760" fill="#0F0F1A"/>
+  <rect x="140" y="60" width="360" height="640" rx="22" fill="#1A1A2E" stroke="#CC561E" stroke-width="4"/>
+  <rect x="140" y="60" width="360" height="72" rx="22" fill="#2A2A40"/>
+  <text x="178" y="104" fill="#FFF5DC" font-family="'Courier New', monospace" font-size="24" font-weight="700">Tray Switcher</text>
+
+  <text x="176" y="164" fill="#F6CE71" font-family="'Courier New', monospace" font-size="16">Active: Work &lt;jane@company.dev&gt;</text>
+  <line x1="176" y1="188" x2="464" y2="188" stroke="#353550" stroke-width="2"/>
+
+  <text x="176" y="228" fill="#FFF5DC" font-family="'Courier New', monospace" font-size="18" font-weight="700">Switch Profile</text>
+
+  <circle cx="198" cy="270" r="10" fill="#1A1A2E" stroke="#B8A060" stroke-width="2"/>
+  <text x="224" y="276" fill="#B8A060" font-family="'Courier New', monospace" font-size="17">Personal</text>
+
+  <circle cx="198" cy="318" r="10" fill="#FF6500" stroke="#F6CE71" stroke-width="2"/>
+  <text x="224" y="324" fill="#FFF5DC" font-family="'Courier New', monospace" font-size="17">Work</text>
+
+  <circle cx="198" cy="366" r="10" fill="#1A1A2E" stroke="#B8A060" stroke-width="2"/>
+  <text x="224" y="372" fill="#B8A060" font-family="'Courier New', monospace" font-size="17">OSS</text>
+
+  <line x1="176" y1="410" x2="464" y2="410" stroke="#353550" stroke-width="2"/>
+
+  <text x="176" y="454" fill="#F6CE71" font-family="'Courier New', monospace" font-size="17">Verify configuration</text>
+  <text x="176" y="496" fill="#F6CE71" font-family="'Courier New', monospace" font-size="17">Manage profiles</text>
+  <text x="176" y="538" fill="#F6CE71" font-family="'Courier New', monospace" font-size="17">Undo last switch</text>
+
+  <rect x="176" y="574" width="288" height="70" rx="14" fill="#2A2A40" stroke="#353550"/>
+  <text x="198" y="606" fill="#FFF5DC" font-family="'Courier New', monospace" font-size="16" font-weight="700">Managed include</text>
+  <text x="198" y="632" fill="#B8A060" font-family="'Courier New', monospace" font-size="13">Writes only to ~/.gitconfig-switcher</text>
+
+  <text x="176" y="680" fill="#B8A060" font-family="'Courier New', monospace" font-size="17">Quit</text>
+</svg>

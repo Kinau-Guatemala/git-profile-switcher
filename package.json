@@ -5,18 +5,25 @@
   "main": "dist-electron/main/index.js",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && electron-builder --win --config.win.sign=null",
-    "build:arch": "tsc && vite build && electron-builder --linux pacman",
-    "build:appimage": "tsc && vite build && electron-builder --linux AppImage",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc && vite build && electron-builder --win --config.win.sign=null --publish never",
+    "build:arch": "tsc && vite build && electron-builder --linux pacman --publish never",
+    "build:appimage": "tsc && vite build && electron-builder --linux AppImage --publish never",
+    "build:mac": "tsc && vite build && electron-builder --mac dmg --publish never",
+    "build:ci": "tsc && vite build",
     "preview": "vite preview",
-    "test": "vitest"
+    "test": "vitest",
+    "test:run": "vitest run"
   },
-  "keywords": ["electron", "git", "config", "switcher"],
+  "keywords": ["electron", "git", "profile", "identity", "ssh", "tray", "switcher"],
   "author": "Jose Andres Auyon <auyon.joseandres@gmail.com>",
-  "homepage": "https://github.com/auyjos/GithubProfileSwitcher",
+  "homepage": "https://github.com/Kinau-Guatemala/git-profile-switcher",
+  "bugs": {
+    "url": "https://github.com/Kinau-Guatemala/git-profile-switcher/issues"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/auyjos/GithubProfileSwitcher.git"
+    "url": "https://github.com/Kinau-Guatemala/git-profile-switcher.git"
   },
   "license": "MIT",
   "build": {

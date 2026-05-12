@@ -2,110 +2,157 @@
 
 # Git Profile Switcher
 
-**Manage multiple Git identities from your system tray.**
+**Manage multiple Git identities from your system tray without taking ownership of your Git config.**
 
-Switch between Git profiles — name, email, SSH keys, GPG signing — without ever touching `~/.gitconfig` directly. Works with GitHub, GitLab, Bitbucket, and any Git hosting platform.
+Switch between Git profiles — name, email, SSH keys, and GPG signing — with a managed include file instead of rewriting `~/.gitconfig`. Works with GitHub, GitLab, Bitbucket, Codeberg, and any Git hosting platform.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+[![CI](https://github.com/Kinau-Guatemala/git-profile-switcher/actions/workflows/ci.yml/badge.svg)](https://github.com/Kinau-Guatemala/git-profile-switcher/actions/workflows/ci.yml)
+[![Latest Release](https://img.shields.io/github/v/release/Kinau-Guatemala/git-profile-switcher?display_name=tag)](https://github.com/Kinau-Guatemala/git-profile-switcher/releases)
 [![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](#installation)
-[![Built with Electron](https://img.shields.io/badge/Built%20with-Electron%20%2B%20React-47848F.svg)](#tech-stack)
+[![Built with Electron](https://img.shields.io/badge/Built%20with-Electron%20%2B%20React-47848F.svg)](#architecture)
 
 </div>
 
 ---
 
-## The Problem
+## Screenshots
+
+<p align="center">
+  <img src="./docs/screenshots/app-overview.svg" alt="App overview showing profiles, SSH generation, and verification panels" width="900" />
+</p>
+
+<p align="center">
+  <img src="./docs/screenshots/tray-menu.svg" alt="Tray menu preview showing profile switching and undo actions" width="360" />
+</p>
+
+---
+
+## Why This Exists
 
 Developers who work across personal projects, open-source contributions, and employer repositories on the same machine constantly fight with Git identity:
 
-- Commits land under the wrong name or email
-- SSH permission errors when pushing to the wrong account
-- Manually running `git config --global user.name "..."` every time you switch context
-- Maintaining a messy `~/.ssh/config` by hand
+- Commits land under the wrong name or email.
+- SSH permission errors happen because the wrong account answers first.
+- Switching context means remembering a pile of `git config --global ...` commands.
+- `~/.ssh/config` turns into an unmaintainable set of aliases and comments.
 
-**Git Profile Switcher** eliminates all of that with a single click from your system tray.
-
----
+Git Profile Switcher turns that into a tray-first workflow with undo, verification, and a managed include file that does not take over your existing config.
 
 ## Features
 
 | Feature | Description |
 |---------|-------------|
-| **Tray-first switching** | Switch profiles from the system tray — no window required |
-| **SSH key management** | Generate ed25519 key pairs, test connections, manage `~/.ssh/config` |
-| **Platform-agnostic detection** | Auto-detect SSH profiles for GitHub, GitLab, Bitbucket, Codeberg, and any host |
-| **Auto-import** | Import existing profiles from your SSH config or global Git config |
-| **Config verification** | See exactly which file sets each Git config value |
-| **Undo support** | Revert to a previous profile (up to 3 levels deep) |
-| **Non-destructive** | Uses a managed include file — your `.gitconfig` is never overwritten |
-| **GPG signing** | Per-profile GPG key and commit signing configuration |
-| **5 retro themes** | Lava, Matrix, Synthwave, Glacier, and Amber color palettes |
-| **Cross-platform** | Windows, macOS, and Linux (AppImage + Arch Linux) |
-
----
-
-## How It Works
-
-Git Profile Switcher uses a **managed include strategy** that is safe and non-destructive:
-
-```
-~/.gitconfig                          ~/.gitconfig-switcher
-┌──────────────────────────────┐      ┌───────────────────────────────┐
-│ [user]                       │      │ [user]                        │
-│     name = Old Name          │      │     name = Active Profile     │
-│     email = old@email.com    │      │     email = active@email.com  │
-│                              │      │                               │
-│ [include]                    │─────>│ [core]                        │
-│     path = ~/.gitconfig-     │      │     sshCommand = ssh -F ...   │
-│            switcher          │      │                               │
-│                              │      │ [commit]                      │
-│ # Your other config stays    │      │     gpgsign = true            │
-│ # completely untouched       │      └───────────────────────────────┘
-└──────────────────────────────┘        ▲ Only this file changes
-                                          on profile switch
-```
-
-**What this means:**
-
-- The app adds **one include line** to your `~/.gitconfig` (idempotent — it won't duplicate)
-- Every profile switch writes **only** to `~/.gitconfig-switcher`
-- Your original `.gitconfig` is never overwritten or deeply parsed
-- Git's include mechanism means the managed file's values take precedence
-- To disable: just remove the include line. Everything reverts instantly.
+| **Tray-first switching** | Switch profiles from the system tray without keeping the main window open. |
+| **Managed include strategy** | Writes only to `~/.gitconfig-switcher`, not your full `~/.gitconfig`. |
+| **SSH key management** | Generate ed25519 keys, add host aliases, and test connections from the app. |
+| **Optional passphrase support** | Leave passphrases blank for convenience, or set one when you want the private key encrypted. |
+| **Config verification** | See the effective Git identity and which file set every value. |
+| **Undo support** | Revert the last profile switch from the tray. |
+| **Platform-agnostic detection** | Detect aliases for GitHub, GitLab, Bitbucket, Codeberg, Azure DevOps, and more. |
+| **Auto-import** | Import existing profiles from your Git config or SSH config. |
+| **Per-profile signing** | Store GPG signing settings alongside the profile. |
+| **Retro themes** | Five built-in palettes: Lava, Matrix, Synthwave, Glacier, and Amber. |
 
 ---
 
 ## Installation
 
+### Prebuilt Downloads
+
+When a GitHub Release is published, download the latest asset that matches your platform from [Releases](https://github.com/Kinau-Guatemala/git-profile-switcher/releases):
+
+- Windows: portable `.exe`
+- Linux: `.AppImage`
+- macOS: `.dmg`
+
+Release packaging is automated. Pushing a `v*` tag runs `.github/workflows/release.yml`, builds the three platform artifacts, and attaches them to a GitHub Release with generated notes.
+
 ### Prerequisites
 
-- [Git](https://git-scm.com/) installed and in PATH
-- [Node.js](https://nodejs.org/) 18+
+- [Git](https://git-scm.com/) installed and available in `PATH`
+- [Node.js](https://nodejs.org/) 18+ if you are running from source
 
-### From Source (Development)
+### From Source
 
 ```bash
-git clone https://github.com/auyjos/GithubProfileSwitcher.git
-cd GithubProfileSwitcher
+git clone https://github.com/Kinau-Guatemala/git-profile-switcher.git
+cd git-profile-switcher
 
-npm install
+npm ci
 npm run dev
 ```
 
-### Build Executable
+### Build Packages Locally
 
 ```bash
-# Windows (portable .exe)
+# Windows portable .exe
 npm run build
 
-# Linux (AppImage)
+# Linux AppImage
 npm run build:appimage
 
-# Arch Linux (pacman)
+# macOS dmg
+npm run build:mac
+
+# Arch Linux pacman package
 npm run build:arch
 ```
 
-The packaged app will be in the `dist/` directory.
+Packaged artifacts are written to `dist/`.
+
+---
+
+## How It Works
+
+Git Profile Switcher uses a managed include strategy that is safe and non-destructive:
+
+```text
+~/.gitconfig                          ~/.gitconfig-switcher
+┌──────────────────────────────┐      ┌───────────────────────────────┐
+│ [user]                       │      │ [user]                        │
+│     name = Existing Name     │      │     name = Active Profile     │
+│     email = existing@site    │      │     email = active@site       │
+│                              │      │                               │
+│ [include]                    │─────>│ [core]                        │
+│     path = ~/.gitconfig-     │      │     sshCommand = ssh -F ...   │
+│            switcher          │      │                               │
+│                              │      │ [commit]                      │
+│ # Everything else stays      │      │     gpgsign = true            │
+│ # in place                   │      └───────────────────────────────┘
+└──────────────────────────────┘        ▲ Only this file changes
+                                          when you switch profiles
+```
+
+### What This Means
+
+- The app installs one include line into `~/.gitconfig` if it is missing.
+- Every profile switch writes only to `~/.gitconfig-switcher`.
+- Your existing `.gitconfig` is not deeply parsed or rewritten.
+- Disabling the app is simple: remove the include line and Git falls back to your original config.
+
+---
+
+## Security Notes
+
+Git Profile Switcher is opinionated about staying out of the way.
+
+### Files it touches
+
+- `~/.gitconfig`: only to add one idempotent include entry.
+- `~/.gitconfig-switcher`: rewritten when you apply or undo a profile switch.
+- `~/.ssh/config`: appended only when you explicitly add or generate an SSH host alias.
+- `~/.ssh/id_ed25519_<account>` and `.pub`: created only when you explicitly generate a key.
+- Electron user data: `profiles.json` and `state.json` store profile metadata and undo state.
+
+### Files it does not manage
+
+- It does not rewrite repository remotes for you.
+- It does not automatically modify repo-local `.git/config` files.
+- It does not upload SSH keys or passphrases anywhere.
+- It does not take over your full `~/.gitconfig`.
+
+For a concise version of the same rules, see [SECURITY.md](./SECURITY.md).
 
 ---
 
@@ -113,11 +160,12 @@ The packaged app will be in the `dist/` directory.
 
 ### 1. Launch the App
 
-On first launch, the app will:
-- Verify Git is installed
-- Create `~/.gitconfig-switcher` (the managed file)
-- Add the include directive to `~/.gitconfig` (once, safely)
-- Open the Profiles window
+On first launch the app will:
+
+- Verify Git is installed.
+- Create `~/.gitconfig-switcher` if it does not exist.
+- Install the include directive into `~/.gitconfig` once.
+- Open the Profiles window.
 
 ### 2. Add a Profile
 
@@ -127,26 +175,23 @@ You have three options:
 <tr>
 <td width="33%">
 
-**Manual Entry**
+**Manual entry**
 
-Click **"Add Profile"** and fill in:
-- Profile label (e.g. "Work")
-- Git user name
-- Git email
+Create a profile with a label, user name, and email.
 
 </td>
 <td width="33%">
 
-**Import from SSH Config**
+**Import from SSH config**
 
-Click **"Import SSH Config"** and browse to `~/.ssh/config`. The app detects all host aliases that point to git platforms and lets you import them.
+Read aliases from `~/.ssh/config` and map them to Git identities.
 
 </td>
 <td width="33%">
 
-**Auto-Detect**
+**Auto-detect**
 
-Click **"Auto-Detect"** to scan your existing Git configuration, conditional includes, and SSH config for profiles.
+Scan your global Git config, includes, and SSH config for existing profiles.
 
 </td>
 </tr>
@@ -154,9 +199,9 @@ Click **"Auto-Detect"** to scan your existing Git configuration, conditional inc
 
 ### 3. Switch from the Tray
 
-Click the tray icon and select a profile. Done.
+Click the tray icon, choose the profile you want, and Git immediately starts using the managed identity.
 
-```
+```text
 ┌─────────────────────────────────┐
 │  Active: Jane Doe <jane@work>   │
 │─────────────────────────────────│
@@ -179,73 +224,61 @@ Click the tray icon and select a profile. Done.
 
 ### Creating Profiles
 
-Every profile has a **label**, **user name**, and **email**. Optionally expand **Advanced Options** to configure:
+Every profile has a **label**, **user name**, and **email**. Expand **Advanced Options** to configure:
 
 | Field | Purpose |
 |-------|---------|
-| **SSH Host** | The SSH host alias for this identity (e.g. `github.com-work`, `gitlab-personal`) |
-| **GPG Signing** | Enable `commit.gpgsign = true` for this profile |
-| **Signing Key** | Your GPG key ID for signed commits |
+| **SSH Host** | Host alias for the identity, for example `github.com-work`. |
+| **GPG Signing** | Enables `commit.gpgsign = true` for the active profile. |
+| **Signing Key** | Your GPG key ID for signed commits. |
 
 ### SSH Key Generation
 
 From the **SSH Keys** tab:
 
-1. Enter an **account name** (used as the key filename and host alias)
-2. Enter your **email address**
-3. Click **Generate** — creates an ed25519 key pair at `~/.ssh/id_ed25519_<account>`
-4. The public key is displayed — copy it to your hosting platform:
-   - GitHub: [github.com/settings/ssh/new](https://github.com/settings/ssh/new)
-   - GitLab: Settings > SSH Keys
-   - Bitbucket: Personal Settings > SSH Keys
-5. Click **Test** to verify the connection
+1. Enter an account name. This becomes the key filename and host alias suffix.
+2. Enter your Git hosting email.
+3. Optionally enter a passphrase. It is recommended when you want the private key encrypted at rest.
+4. Click **Generate** to create `~/.ssh/id_ed25519_<account>` and the public key.
+5. Copy the public key into your hosting platform.
+6. Click **Verify Connection** to confirm the alias works.
 
-The app automatically adds the host block to `~/.ssh/config`:
+The app adds a host block like this when you opt in:
 
-```
-# <account-name>
-Host github.com-<account-name>
+```text
+# work GitHub account
+Host github.com-work
     HostName github.com
     User git
-    IdentityFile ~/.ssh/id_ed25519_<account-name>
+    IdentityFile ~/.ssh/id_ed25519_work
     IdentitiesOnly yes
 ```
 
 ### SSH Configuration for Multiple Accounts
 
-To use multiple accounts on the same platform, your repository remotes need to use **SSH host aliases** instead of the default hostname:
+To use multiple accounts on the same platform, your repository remote must use the host alias instead of the default hostname:
 
 ```bash
-# Default (only works for one account):
+# Default single-account form
 git@github.com:user/repo.git
 
-# With host alias (works for multiple accounts):
+# Alias-based form
 git@github.com-personal:user/repo.git
 git@github.com-work:company/repo.git
 ```
 
-**Convert an existing repo:**
+To update an existing repository:
 
 ```bash
-git remote set-url origin git@github.com-personal:user/repo.git
-```
-
-**This works the same way for any platform:**
-
-```bash
-# GitLab
-git remote set-url origin git@gitlab-work:company/repo.git
-
-# Bitbucket
-git remote set-url origin git@bitbucket-client:client/repo.git
+git remote set-url origin git@github.com-work:company/repo.git
 ```
 
 ### Platform-Agnostic Profile Detection
 
-The app detects SSH profiles by reading `~/.ssh/config` and looking for any `Host` entry that has a `HostName` pointing to a known git platform:
+The app detects aliases by scanning `HostName` values in `~/.ssh/config`:
 
-| Platform | Detected HostName |
-|----------|-------------------|
+| Platform | Detected `HostName` |
+|----------|---------------------|
 | GitHub | `github.com` |
 | GitLab | `gitlab.com` |
 | Bitbucket | `bitbucket.org` |
@@ -254,14 +287,13 @@ The app detects SSH profiles by reading `~/.ssh/config` and looking for any `Hos
 | Gitea | `gitea.com` |
 | SourceHut | `sourcehut.org`, `sr.ht` |
 
-This means **any naming convention** works:
+That means your alias naming scheme is up to you:
 
-```bash
-# All of these are detected:
-Host gh-personal          # any alias
-Host work-gitlab          # any alias
-Host my-bitbucket         # any alias
-    HostName github.com   # ← this is what matters
+```text
+Host gh-personal
+Host work-gitlab
+Host my-bitbucket
+    HostName github.com
     IdentityFile ~/.ssh/id_ed25519_personal
 ```
 
@@ -269,126 +301,126 @@ Host my-bitbucket         # any alias
 
 The **Verify** tab shows:
 
-- **Effective identity** — the name and email Git will actually use
-- **Origin table** — which config file sets each value (from `git config --show-origin`)
-- **Warnings** — if the managed file isn't being used or values are overridden
-
-This is invaluable for debugging why a commit used the wrong identity.
+- The effective name and email Git will use.
+- The config origin table from `git config --show-origin`.
+- Warnings when the managed include is missing or being overridden.
 
 ### Undo
 
-Made a mistake? The tray menu includes **"Undo Last Switch"** which reverts to the previous profile. The undo stack holds up to 3 entries and persists across app restarts.
+The tray menu includes **Undo Last Switch**. The app stores up to three prior active profiles and persists them across restarts.
+
+---
+
+## Comparison vs Manual Setup
+
+| Task | Manual setup | Git Profile Switcher |
+|------|--------------|----------------------|
+| Switch global identity | Re-run `git config --global` commands | One click from the tray |
+| Keep existing Git config intact | Easy to accidentally overwrite | Uses a managed include file |
+| Maintain multiple SSH aliases | Hand-edit `~/.ssh/config` | Generate alias and key from the app |
+| Recover from mistakes | Manually remember the previous state | Undo from the tray |
+| Debug config precedence | Inspect multiple config files manually | Verify screen shows origin and effective value |
 
 ---
 
 ## Themes
 
-Five retro pixel-art color palettes, switchable from the **Settings** tab:
+Five retro pixel-art palettes are available from the **Settings** tab:
 
 <table>
 <tr>
-<td align="center"><strong>LAVA</strong><br/><sub>Red / Orange / Gold on dark navy</sub><br/><img src="https://via.placeholder.com/80x20/FF6500/FF6500" alt="Lava accent" /></td>
+<td align="center"><strong>LAVA</strong><br/><sub>Red / orange / gold on dark navy</sub><br/><img src="https://via.placeholder.com/80x20/FF6500/FF6500" alt="Lava accent" /></td>
 <td align="center"><strong>MATRIX</strong><br/><sub>Bright green on deep black</sub><br/><img src="https://via.placeholder.com/80x20/00FF41/00FF41" alt="Matrix accent" /></td>
-<td align="center"><strong>SYNTHWAVE</strong><br/><sub>Hot pink / purple on indigo</sub><br/><img src="https://via.placeholder.com/80x20/FF2D87/FF2D87" alt="Synthwave accent" /></td>
-<td align="center"><strong>GLACIER</strong><br/><sub>Cyan / steel blue on midnight</sub><br/><img src="https://via.placeholder.com/80x20/00BFFF/00BFFF" alt="Glacier accent" /></td>
+<td align="center"><strong>SYNTHWAVE</strong><br/><sub>Hot pink and purple on indigo</sub><br/><img src="https://via.placeholder.com/80x20/FF2D87/FF2D87" alt="Synthwave accent" /></td>
+<td align="center"><strong>GLACIER</strong><br/><sub>Cyan and steel blue on midnight</sub><br/><img src="https://via.placeholder.com/80x20/00BFFF/00BFFF" alt="Glacier accent" /></td>
 <td align="center"><strong>AMBER</strong><br/><sub>Phosphor monitor warmth</sub><br/><img src="https://via.placeholder.com/80x20/FFB000/FFB000" alt="Amber accent" /></td>
 </tr>
 </table>
 
-Themes are persisted to localStorage and apply instantly.
+Theme preference is stored locally and applied instantly.
 
 ---
 
 ## Troubleshooting
 
-### "Permission denied" when pushing
+### Permission denied when pushing
 
-Your remote URL isn't using the SSH host alias.
+Your remote is probably still using the default host name instead of the alias.
 
 ```bash
-# Check current remote
 git remote -v
-
-# Fix it
-git remote set-url origin git@github.com-personal:user/repo.git
+git remote set-url origin git@github.com-work:company/repo.git
 ```
 
-### Commits showing the wrong identity
+### Commits show the wrong identity
 
-The profile wasn't switched before committing.
+Verify the active profile and then repair the most recent commit if needed.
 
 ```bash
-# Verify current identity
 git config user.name
 git config user.email
-
-# Fix the last commit
 git commit --amend --reset-author
 ```
 
-### SSH key not authenticating
+### SSH key does not authenticate
 
 ```bash
-# Test the connection
-ssh -T git@github.com-personal
-
-# Check the key exists
-ls ~/.ssh/id_ed25519_personal
-
-# Verify ~/.ssh/config has the right IdentityFile path
+ssh -T git@github.com-work
+ls ~/.ssh/id_ed25519_work
 cat ~/.ssh/config
 ```
 
-### App not starting
+If you set a passphrase, make sure your SSH agent is running or that you unlock the key when prompted.
+
+### App does not start
 
 ```bash
-# Check prerequisites
-git --version    # Must be installed
-node --version   # Must be 18+
-
-# Reinstall dependencies
-npm install
+git --version
+node --version
+npm ci
 ```
 
 ---
 
 ## Architecture
 
-```
+```text
 src/
-├── core/                  # Pure TypeScript — no Electron imports
-│   ├── profiles/          # Zod schemas, JSON storage, undo stack
-│   ├── git/               # Git CLI wrapper, managed include, SSH operations
+├── core/                  # Pure TypeScript logic
+│   ├── profiles/          # Zod schemas, JSON storage, undo state
+│   ├── git/               # Managed include, identity writes, SSH helpers
 │   └── verify/            # Config origin parsing and verification
-│
 ├── main/                  # Electron main process
-│   ├── index.ts           # App lifecycle and startup
-│   ├── ipc.ts             # IPC handlers (all Node/filesystem access)
-│   ├── tray.ts            # System tray menu and profile switching
+│   ├── index.ts           # App lifecycle
+│   ├── ipc.ts             # Typed IPC handlers
+│   ├── tray.ts            # System tray menu
 │   └── windows.ts         # BrowserWindow creation
-│
-├── preload/               # Secure IPC bridge
-│   └── index.ts           # contextBridge.exposeInMainWorld (window.api)
-│
-└── renderer/              # React SPA (HashRouter)
+├── preload/               # Secure bridge exposed to the renderer
+│   └── index.ts           # window.api surface
+└── renderer/              # React SPA
     ├── screens/           # Profiles, Verify, SSHKeys, Settings
     ├── components/        # ProfileForm, OriginTable, InputModal
-    └── themes.ts          # 5 color palettes with CSS custom properties
+    └── themes.ts          # Built-in theme palettes
 ```
 
-**Security model:** `contextIsolation: true`, `nodeIntegration: false`. The renderer never touches the filesystem directly — everything goes through the typed IPC bridge in `window.api`.
+### Security Model
+
+- `contextIsolation: true`
+- `nodeIntegration: false`
+- Filesystem access, Git execution, and SSH operations live in the Electron main process.
+- The renderer only talks to the main process through the typed preload API.
 
 ### Tech Stack
 
 | Technology | Role |
 |-----------|------|
-| **Electron** | Desktop framework |
-| **React** | UI components |
-| **TypeScript** | Type safety across all layers |
-| **Vite** | Build tool with hot reload |
-| **Zod** | Runtime schema validation for profiles |
-| **Execa** | Safe Git CLI execution |
-| **Zustand** | Lightweight state management |
+| **Electron** | Desktop shell and tray integration |
+| **React** | Renderer UI |
+| **TypeScript** | Shared type safety across all layers |
+| **Vite** | Dev server and bundling |
+| **Zod** | Runtime schema validation |
+| **Execa** | Safe Git and SSH command execution |
+| **Vitest** | Fast unit testing for pure logic |
 
 ---
 
@@ -398,34 +430,40 @@ src/
 # Development with hot reload
 npm run dev
 
-# Type-check
-npx tsc --noEmit
+# CI-equivalent checks
+npm run typecheck
+npm run test:run
+npm run build:ci
 
-# Run tests
-npm test              # Watch mode
-npx vitest run        # Single run
-
-# Build
-npm run build         # Windows portable
-npm run build:appimage  # Linux AppImage
-npm run build:arch      # Arch Linux pacman
+# Package locally
+npm run build
+npm run build:appimage
+npm run build:mac
+npm run build:arch
 ```
+
+### Publishing A Release
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+That tag triggers the release workflow, builds cross-platform binaries, and publishes them to GitHub Releases.
 
 ---
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/my-feature`)
-3. Commit your changes
-4. Push to the branch (`git push origin feature/my-feature`)
-5. Open a Pull Request
+Contribution guidelines, safety rules, and the release checklist live in [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+Public issues are routed through the GitHub issue templates in `.github/ISSUE_TEMPLATE`.
 
 ---
 
 ## License
 
-MIT &copy; 2024 [Jose Andres Auyon](https://github.com/auyjos)
+MIT. See [LICENSE](./LICENSE).
 
 ---
 
@@ -433,6 +471,6 @@ MIT &copy; 2024 [Jose Andres Auyon](https://github.com/auyjos)
 
 **Built for developers juggling multiple Git identities.**
 
-[Report a Bug](https://github.com/auyjos/GithubProfileSwitcher/issues) &middot; [Request a Feature](https://github.com/auyjos/GithubProfileSwitcher/issues)
+[Report a Bug](https://github.com/Kinau-Guatemala/git-profile-switcher/issues/new/choose) · [Request a Feature](https://github.com/Kinau-Guatemala/git-profile-switcher/issues/new/choose) · [Download Releases](https://github.com/Kinau-Guatemala/git-profile-switcher/releases)
 
 </div>
