@@ -45,11 +45,14 @@ export default function ProfileForm({ onSave, onCancel }: Props) {
     try {
       const result = await window.api.ssh.generate(userEmail, label, sshPassphrase)
 
-      // Update SSH host field
+      // Best-effort: drop our reference to the passphrase string. V8 may still
+      // retain the underlying immutable string until GC, so this is not a
+      // guarantee — just a small reduction in lifetime.
+      setSSHPassphrase('')
+
       setSSHHost(result.host)
       setGeneratedKey(result.publicKey)
 
-      // Add to SSH config
       await window.api.ssh.addToConfig(result.host, result.privateKeyPath, `${label} GitHub account`)
 
       alert(

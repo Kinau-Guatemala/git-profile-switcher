@@ -107,6 +107,10 @@ export default function SSHKeys() {
         setNewKeyTest({ status: 'idle', message: '' })
         try {
             const result = await globalThis.api.ssh.generate(email, accountName, passphrase)
+            // Best-effort: drop our reference to the passphrase string. V8 may
+            // still retain the underlying immutable string until GC, so this
+            // is not a guarantee — just a small reduction in lifetime.
+            setPassphrase('')
             await globalThis.api.ssh.addToConfig(
                 result.host,
                 result.privateKeyPath,
