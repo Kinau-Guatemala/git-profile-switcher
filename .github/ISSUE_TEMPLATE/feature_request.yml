@@ -1,0 +1,33 @@
+name: Feature request
+description: Suggest a new workflow, platform improvement, or UX enhancement.
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you trying to solve?
+      placeholder: Describe the workflow pain or missing capability.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      placeholder: Describe the behavior you want to see.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      placeholder: Manual workaround, existing Git commands, or other tools you tried.
+
+  - type: textarea
+    id: extra-context
+    attributes:
+      label: Additional context
+      placeholder: Screenshots, repository layout, platform-specific constraints, or adoption concerns.
