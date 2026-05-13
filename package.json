@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "typecheck": "tsc --noEmit",
-    "build": "tsc && vite build && electron-builder --win --config.win.sign=null --publish never",
+    "build": "tsc && vite build && electron-builder --win --publish never",
     "build:arch": "tsc && vite build && electron-builder --linux pacman --publish never",
     "build:appimage": "tsc && vite build && electron-builder --linux AppImage --publish never",
     "build:mac": "tsc && vite build && electron-builder --mac dmg --publish never",
@@ -35,7 +35,9 @@
       "package.json"
     ],
     "win": {
-      "target": "portable"
+      "target": "portable",
+      "sign": null,
+      "signAndEditExecutable": false
     },
     "mac": {
       "target": "dmg"
