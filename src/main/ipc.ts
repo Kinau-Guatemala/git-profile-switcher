@@ -125,9 +125,9 @@ export function setupIpcHandlers(rebuildTray: () => void): void {
     }
   })
 
-  ipcMain.handle('ssh:generate', async (_event, email: string, accountName: string) => {
+  ipcMain.handle('ssh:generate', async (_event, email: string, accountName: string, passphrase?: string) => {
     try {
-      return await generateSSHKey(email, accountName)
+      return await generateSSHKey(email, accountName, passphrase)
     } catch (error: any) {
       throw new Error(error.message)
     }

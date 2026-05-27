@@ -11,13 +11,19 @@ export interface SSHKeyResult {
   host: string
 }
 
+function toKeyToken(value: string): string {
+  return value.toLowerCase().replaceAll(/[^a-z0-9]/g, '_')
+}
+
 export async function generateSSHKey(
   email: string,
-  accountName: string
+  accountName: string,
+  passphrase = ''
 ): Promise<SSHKeyResult> {
   const home = homedir()
   const sshDir = join(home, '.ssh')
-  const keyName = `id_ed25519_${accountName.toLowerCase().replaceAll(/[^a-z0-9]/g, '_')}`
+  const accountToken = toKeyToken(accountName)
+  const keyName = `id_ed25519_${accountToken}`
   const privateKeyPath = join(sshDir, keyName)
   const publicKeyPath = `${privateKeyPath}.pub`
 
@@ -39,23 +45,34 @@ export async function generateSSHKey(
     // Key doesn't exist, continue
   }
 
-  // Generate SSH key using ssh-keygen
+  // Generate SSH key using ssh-keygen.
+  // ssh-keygen has no stdin/env channel for the passphrase, so it must be
+  // passed via -N argv. execa stuffs the full argv into error.message and
+  // error.stderr on failure, so any thrown error is redacted before it
+  // leaves this function (and before it crosses the IPC bridge to the renderer).
   try {
     await execa('ssh-keygen', [
       '-t', 'ed25519',
       '-C', email,
       '-f', privateKeyPath,
-      '-N', '' // No passphrase for convenience
+      '-N', passphrase
     ])
   } catch (error: any) {
-    throw new Error(`Failed to generate SSH key: ${error.message}`)
+    let rawMessage = 'ssh-keygen failed'
+    if (typeof error?.shortMessage === 'string') {
+      rawMessage = error.shortMessage
+    } else if (typeof error?.message === 'string') {
+      rawMessage = error.message
+    }
+    const safeMessage = passphrase ? rawMessage.split(passphrase).join('***') : rawMessage
+    throw new Error(`Failed to generate SSH key: ${safeMessage}`)
   }
 
   // Read the public key
   const publicKey = await readFile(publicKeyPath, 'utf-8')
 
   // Generate host alias
-  const host = `github.com-${accountName.toLowerCase().replaceAll(/[^a-z0-9]/g, '_')}`
+  const host = `github.com-${accountToken}`
 
   return {
     privateKeyPath,

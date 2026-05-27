@@ -1,0 +1,60 @@
+<svg width="1280" height="820" viewBox="0 0 1280 820" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1280" height="820" fill="#0F0F1A"/>
+  <rect x="52" y="52" width="1176" height="716" rx="24" fill="#1A1A2E" stroke="#CC561E" stroke-width="4"/>
+  <rect x="52" y="52" width="1176" height="64" rx="24" fill="#2A2A40"/>
+  <circle cx="96" cy="84" r="9" fill="#F6CE71"/>
+  <circle cx="126" cy="84" r="9" fill="#FF6500"/>
+  <circle cx="156" cy="84" r="9" fill="#C40C0C"/>
+  <text x="192" y="92" fill="#FFF5DC" font-family="'Courier New', monospace" font-size="24" font-weight="700">GIT PROFILE SWITCHER</text>
+
+  <rect x="88" y="144" width="248" height="584" rx="18" fill="#121226" stroke="#353550" stroke-width="2"/>
+  <text x="116" y="188" fill="#F6CE71" font-family="'Courier New', monospace" font-size="18" font-weight="700">SECTIONS</text>
+  <rect x="108" y="212" width="208" height="52" rx="10" fill="#FF6500" opacity="0.18"/>
+  <text x="130" y="244" fill="#FFF5DC" font-family="'Courier New', monospace" font-size="18">▸ Profiles</text>
+  <text x="130" y="296" fill="#B8A060" font-family="'Courier New', monospace" font-size="18">▸ Verify</text>
+  <text x="130" y="348" fill="#B8A060" font-family="'Courier New', monospace" font-size="18">▸ SSH Keys</text>
+  <text x="130" y="400" fill="#B8A060" font-family="'Courier New', monospace" font-size="18">▸ Settings</text>
+
+  <rect x="108" y="468" width="208" height="96" rx="14" fill="#2A2A40" stroke="#CC561E"/>
+  <text x="124" y="500" fill="#FFF5DC" font-family="'Courier New', monospace" font-size="16" font-weight="700">ACTIVE PROFILE</text>
+  <text x="124" y="530" fill="#F6CE71" font-family="'Courier New', monospace" font-size="18">Work</text>
+  <text x="124" y="556" fill="#B8A060" font-family="'Courier New', monospace" font-size="14">jane@company.dev</text>
+
+  <rect x="372" y="144" width="820" height="96" rx="18" fill="#2A2A40" stroke="#353550" stroke-width="2"/>
+  <text x="404" y="188" fill="#FFF5DC" font-family="'Courier New', monospace" font-size="32" font-weight="700">Profiles</text>
+  <text x="404" y="220" fill="#B8A060" font-family="'Courier New', monospace" font-size="18">Manage identities, SSH aliases, and signing keys without rewriting ~/.gitconfig.</text>
+  <rect x="1002" y="168" width="158" height="46" rx="12" fill="#FF6500"/>
+  <text x="1032" y="197" fill="#0F0F1A" font-family="'Courier New', monospace" font-size="18" font-weight="700">+ Add Profile</text>
+
+  <rect x="372" y="272" width="380" height="188" rx="18" fill="#2A2A40" stroke="#CC561E" stroke-width="2"/>
+  <text x="400" y="312" fill="#FFF5DC" font-family="'Courier New', monospace" font-size="24" font-weight="700">Work</text>
+  <text x="400" y="344" fill="#F6CE71" font-family="'Courier New', monospace" font-size="18">Jane Developer</text>
+  <text x="400" y="372" fill="#B8A060" font-family="'Courier New', monospace" font-size="16">jane@company.dev</text>
+  <text x="400" y="412" fill="#B8A060" font-family="'Courier New', monospace" font-size="14">SSH Host: github.com-work</text>
+  <text x="400" y="438" fill="#B8A060" font-family="'Courier New', monospace" font-size="14">GPG signing enabled</text>
+  <rect x="564" y="404" width="156" height="32" rx="10" fill="#F6CE71" opacity="0.18"/>
+  <text x="590" y="426" fill="#FFF5DC" font-family="'Courier New', monospace" font-size="14">Currently active</text>
+
+  <rect x="780" y="272" width="412" height="188" rx="18" fill="#2A2A40" stroke="#353550" stroke-width="2"/>
+  <text x="808" y="312" fill="#FFF5DC" font-family="'Courier New', monospace" font-size="24" font-weight="700">SSH Key Generator</text>
+  <rect x="808" y="332" width="356" height="42" rx="10" fill="#1A1A2E" stroke="#353550"/>
+  <text x="826" y="358" fill="#B8A060" font-family="'Courier New', monospace" font-size="15">Account name: work</text>
+  <rect x="808" y="386" width="356" height="42" rx="10" fill="#1A1A2E" stroke="#353550"/>
+  <text x="826" y="412" fill="#B8A060" font-family="'Courier New', monospace" font-size="15">Passphrase: optional but recommended</text>
+  <rect x="1002" y="430" width="162" height="32" rx="10" fill="#CC561E"/>
+  <text x="1026" y="451" fill="#FFF5DC" font-family="'Courier New', monospace" font-size="14" font-weight="700">Generate & Add Host</text>
+
+  <rect x="372" y="492" width="820" height="236" rx="18" fill="#2A2A40" stroke="#353550" stroke-width="2"/>
+  <text x="404" y="532" fill="#FFF5DC" font-family="'Courier New', monospace" font-size="24" font-weight="700">Verification Overview</text>
+  <rect x="404" y="554" width="320" height="48" rx="12" fill="#1A1A2E" stroke="#353550"/>
+  <text x="424" y="583" fill="#F6CE71" font-family="'Courier New', monospace" font-size="16">Effective identity: Jane Developer</text>
+  <rect x="744" y="554" width="188" height="48" rx="12" fill="#1A1A2E" stroke="#353550"/>
+  <text x="768" y="583" fill="#F6CE71" font-family="'Courier New', monospace" font-size="16">Warnings: 0</text>
+  <rect x="404" y="628" width="736" height="68" rx="14" fill="#1A1A2E" stroke="#353550"/>
+  <text x="426" y="654" fill="#FFF5DC" font-family="'Courier New', monospace" font-size="14">Origin file</text>
+  <text x="716" y="654" fill="#FFF5DC" font-family="'Courier New', monospace" font-size="14">Key</text>
+  <text x="888" y="654" fill="#FFF5DC" font-family="'Courier New', monospace" font-size="14">Value</text>
+  <text x="426" y="684" fill="#B8A060" font-family="'Courier New', monospace" font-size="14">~/.gitconfig-switcher</text>
+  <text x="716" y="684" fill="#B8A060" font-family="'Courier New', monospace" font-size="14">user.email</text>
+  <text x="888" y="684" fill="#B8A060" font-family="'Courier New', monospace" font-size="14">jane@company.dev</text>
+</svg>
