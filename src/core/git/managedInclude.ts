@@ -8,7 +8,56 @@ export interface ManagedIncludeResult {
   gitconfigPath: string
 }
 
-export async function ensureManagedIncludeInstalled(): Promise<ManagedIncludeResult> {
+export type IncludePosition = 'start' | 'end'
+
+/**
+ * Remove any `[include]` block that we own (i.e. one whose `path =` lines all
+ * resolve to the managed switcher file). Blocks that mix the managed path with
+ * other, user-defined paths are left untouched.
+ */
+function stripManagedInclude(content: string, absolutePath: string): string {
+  const managedTargets = new Set([
+    absolutePath,
+    '~/.gitconfig-switcher',
+    '.gitconfig-switcher'
+  ])
+
+  const lines = content.split('\n')
+  const result: string[] = []
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i]
+
+    if (/^\s*\[include\]\s*$/.test(line)) {
+      // Collect the consecutive `path = ...` lines that follow the header.
+      const pathLines: string[] = []
+      let j = i + 1
+      while (j < lines.length && /^\s*path\s*=/.test(lines[j])) {
+        pathLines.push(lines[j])
+        j++
+      }
+
+      const allManaged = pathLines.length > 0 && pathLines.every(pl => {
+        const match = pl.match(/path\s*=\s*(.+?)\s*$/)
+        return match ? managedTargets.has(match[1].trim()) : false
+      })
+
+      if (allManaged) {
+        // Skip the header and its managed path lines.
+        i = j - 1
+        continue
+      }
+    }
+
+    result.push(line)
+  }
+
+  return result.join('\n')
+}
+
+export async function ensureManagedIncludeInstalled(
+  position: IncludePosition = 'end'
+): Promise<ManagedIncludeResult> {
   const home = homedir()
   const managedPath = join(home, '.gitconfig-switcher')
   const gitconfigPath = join(home, '.gitconfig')
@@ -33,18 +82,21 @@ export async function ensureManagedIncludeInstalled(): Promise<ManagedIncludeRes
 
   // Use absolute path with forward slashes for Windows compatibility
   const absolutePath = managedPath.replaceAll('\\', '/')
-  const includeLine = `path = ${absolutePath}`
-  const includeLineTilde = 'path = ~/.gitconfig-switcher'
-  const includeLineRelative = 'path = .gitconfig-switcher'
+  const includeBlock = `[include]\n\tpath = ${absolutePath}\n`
 
-  const hasInclude = gitconfigContent.includes(includeLine) ||
-    gitconfigContent.includes(includeLineTilde) ||
-    gitconfigContent.includes(includeLineRelative)
+  // Remove any existing managed include block so we can reposition it.
+  const body = stripManagedInclude(gitconfigContent, absolutePath)
+    .replace(/\n{3,}/g, '\n\n')
+    .trim()
 
-  if (!hasInclude) {
-    // Use absolute path for Windows compatibility
-    const includeBlock = `\n[include]\n\tpath = ${absolutePath}\n`
-    const newContent = gitconfigContent + includeBlock
+  let newContent: string
+  if (position === 'start') {
+    newContent = body ? `${includeBlock}\n${body}\n` : includeBlock
+  } else {
+    newContent = body ? `${body}\n\n${includeBlock}` : includeBlock
+  }
+
+  if (newContent !== gitconfigContent) {
     await writeFile(gitconfigPath, newContent, 'utf-8')
   }
 

@@ -7,14 +7,16 @@ export const AppStateSchema = z.object({
   undoStack: z.array(z.object({
     profileId: z.string().uuid(),
     at: z.string().datetime()
-  })).max(3)
+  })).max(3),
+  includePosition: z.enum(['start', 'end']).default('end')
 })
 
 export type AppState = z.infer<typeof AppStateSchema>
 
 const defaultState: AppState = {
   activeProfileId: undefined,
-  undoStack: []
+  undoStack: [],
+  includePosition: 'end'
 }
 
 export async function loadState(userDataPath: string): Promise<AppState> {

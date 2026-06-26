@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { useThemeContext } from '../ThemeContext'
 
 const THEME_DESCRIPTIONS: Record<string, string> = {
@@ -10,6 +11,23 @@ const THEME_DESCRIPTIONS: Record<string, string> = {
 
 export default function Settings() {
     const { themeId, switchTheme, themes } = useThemeContext()
+    const [includeAtStart, setIncludeAtStart] = useState(false)
+
+    useEffect(() => {
+        window.api.settings.get()
+            .then(s => setIncludeAtStart(s.includePosition === 'start'))
+            .catch(() => { /* keep default */ })
+    }, [])
+
+    const handleTogglePosition = async (checked: boolean) => {
+        setIncludeAtStart(checked)
+        try {
+            await window.api.settings.setIncludePosition(checked ? 'start' : 'end')
+        } catch {
+            // Revert on failure
+            setIncludeAtStart(!checked)
+        }
+    }
 
     return (
         <div>
@@ -38,6 +56,29 @@ export default function Settings() {
                         </button>
                     ))}
                 </div>
+            </div>
+
+            <div className="pixel-card mb-md">
+                <h2 className="section-title">◈ Git Config Placement</h2>
+                <p className="settings-hint">
+                    Git applies config in file order, so the last value wins. Choose where the
+                    switcher's <code>[include]</code> line sits in your <code>~/.gitconfig</code>.
+                </p>
+
+                <label className="form-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={includeAtStart}
+                        onChange={e => handleTogglePosition(e.target.checked)}
+                    />
+                    Place switcher config at the top of .gitconfig
+                </label>
+
+                <p className="settings-hint">
+                    {includeAtStart
+                        ? 'On: the switcher is at the top, so your existing .gitconfig settings override it.'
+                        : 'Off (default): the switcher is at the bottom, so it overrides your existing .gitconfig settings.'}
+                </p>
             </div>
         </div>
     )

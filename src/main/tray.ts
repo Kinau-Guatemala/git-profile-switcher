@@ -39,7 +39,7 @@ export async function rebuildTrayMenu(): Promise<void> {
     checked: state.activeProfileId === profile.id,
     click: async () => {
       try {
-        const { managedPath } = await ensureManagedIncludeInstalled()
+        const { managedPath } = await ensureManagedIncludeInstalled(state.includePosition)
         await applyProfile(profile, managedPath)
 
         if (state.activeProfileId) {
@@ -80,7 +80,7 @@ export async function rebuildTrayMenu(): Promise<void> {
 
         if (profile) {
           try {
-            const { managedPath } = await ensureManagedIncludeInstalled()
+            const { managedPath } = await ensureManagedIncludeInstalled(state.includePosition)
             await applyProfile(profile, managedPath)
 
             state.activeProfileId = lastEntry.profileId

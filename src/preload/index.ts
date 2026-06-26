@@ -28,6 +28,11 @@ const api = {
   app: {
     openWindow: (name: 'profiles' | 'verify'): Promise<void> => ipcRenderer.invoke('app:openWindow', name)
   },
+  settings: {
+    get: (): Promise<{ includePosition: 'start' | 'end' }> => ipcRenderer.invoke('settings:get'),
+    setIncludePosition: (position: 'start' | 'end'): Promise<{ ok: true }> =>
+      ipcRenderer.invoke('settings:setIncludePosition', position)
+  },
   ssh: {
     generate: (email: string, accountName: string, passphrase?: string): Promise<SSHKeyResult> => ipcRenderer.invoke('ssh:generate', email, accountName, passphrase),
     addToConfig: (host: string, privateKeyPath: string, comment: string): Promise<any> => ipcRenderer.invoke('ssh:addToConfig', host, privateKeyPath, comment),

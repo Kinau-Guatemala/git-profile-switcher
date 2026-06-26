@@ -67,10 +67,10 @@ export function setupIpcHandlers(rebuildTray: () => void): void {
         throw new Error('Profile not found')
       }
 
-      const { managedPath } = await ensureManagedIncludeInstalled()
-      await applyProfile(profile, managedPath)
-
       const state = await loadState(userDataPath)
+
+      const { managedPath } = await ensureManagedIncludeInstalled(state.includePosition)
+      await applyProfile(profile, managedPath)
 
       if (state.activeProfileId) {
         state.undoStack = [
@@ -84,6 +84,30 @@ export function setupIpcHandlers(rebuildTray: () => void): void {
       rebuildTray()
 
       return { ok: true }
+    } catch (error: any) {
+      throw new Error(error.message)
+    }
+  })
+
+  ipcMain.handle('settings:get', async () => {
+    try {
+      const state = await loadState(userDataPath)
+      return { includePosition: state.includePosition }
+    } catch (error: any) {
+      throw new Error(error.message)
+    }
+  })
+
+  ipcMain.handle('settings:setIncludePosition', async (_event, position: 'start' | 'end') => {
+    try {
+      if (position !== 'start' && position !== 'end') {
+        throw new Error(`Invalid include position: ${position}`)
+      }
+      const state = await loadState(userDataPath)
+      state.includePosition = position
+      await saveState(userDataPath, state)
+      await ensureManagedIncludeInstalled(position)
+      return { ok: true as const }
     } catch (error: any) {
       throw new Error(error.message)
     }
