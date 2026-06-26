@@ -12,10 +12,14 @@ const THEME_DESCRIPTIONS: Record<string, string> = {
 export default function Settings() {
     const { themeId, switchTheme, themes } = useThemeContext()
     const [includeAtStart, setIncludeAtStart] = useState(false)
+    const [applyGlobally, setApplyGlobally] = useState(true)
 
     useEffect(() => {
         window.api.settings.get()
-            .then(s => setIncludeAtStart(s.includePosition === 'start'))
+            .then(s => {
+                setIncludeAtStart(s.includePosition === 'start')
+                setApplyGlobally(s.applyGlobally)
+            })
             .catch(() => { /* keep default */ })
     }, [])
 
@@ -26,6 +30,15 @@ export default function Settings() {
         } catch {
             // Revert on failure
             setIncludeAtStart(!checked)
+        }
+    }
+
+    const handleToggleApplyGlobally = async (checked: boolean) => {
+        setApplyGlobally(checked)
+        try {
+            await window.api.settings.setApplyGlobally(checked)
+        } catch {
+            setApplyGlobally(!checked)
         }
     }
 
@@ -56,6 +69,30 @@ export default function Settings() {
                         </button>
                     ))}
                 </div>
+            </div>
+
+            <div className="pixel-card mb-md">
+                <h2 className="section-title">◈ Apply Globally</h2>
+                <p className="settings-hint">
+                    When on, the active profile is your global default everywhere. Per-folder
+                    assignments (see the <code>Folders</code> tab) always override it inside their
+                    folders — just like asdf's global vs. local versions.
+                </p>
+
+                <label className="form-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={applyGlobally}
+                        onChange={e => handleToggleApplyGlobally(e.target.checked)}
+                    />
+                    Apply the active profile globally
+                </label>
+
+                <p className="settings-hint">
+                    {applyGlobally
+                        ? 'On (default): switching a profile changes your identity everywhere a folder rule does not apply.'
+                        : 'Off: only folders with an assigned profile are managed; everywhere else uses your base ~/.gitconfig.'}
+                </p>
             </div>
 
             <div className="pixel-card mb-md">

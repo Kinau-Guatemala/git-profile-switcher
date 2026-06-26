@@ -2,7 +2,7 @@ import { describe, it, expect, afterEach } from 'vitest'
 import { readFile, rm, mkdtemp } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { applyProfile, bareHostFromAlias, insteadOfSources } from './identity'
+import { applyProfile, bareHostFromAlias, aliasRewriteSources } from './identity'
 import { Profile } from '../profiles/schema'
 
 function makeProfile(over: Partial<Profile> & { label: string }): Profile {
@@ -27,20 +27,15 @@ describe('bareHostFromAlias', () => {
   })
 })
 
-describe('insteadOfSources', () => {
+describe('aliasRewriteSources', () => {
   const personal = makeProfile({ label: 'p', advanced: { sshHost: 'github.com-diegoauyon' } })
   const work = makeProfile({ label: 'w', advanced: { sshHost: 'github.com-diegoauyon-styleseat' } })
 
-  it('rewrites the bare host and other aliases to the active alias', () => {
-    expect(insteadOfSources('github.com-diegoauyon', [personal, work])).toEqual([
+  it('lists every profile alias to normalize back to the bare host', () => {
+    expect(aliasRewriteSources('github.com', [personal, work])).toEqual([
       'git@github.com-diegoauyon-styleseat:',
-      'git@github.com:'
+      'git@github.com-diegoauyon:'
     ])
-  })
-
-  it('never rewrites the active alias onto itself', () => {
-    const sources = insteadOfSources('github.com-diegoauyon', [personal, work])
-    expect(sources).not.toContain('git@github.com-diegoauyon:')
   })
 })
 
@@ -51,7 +46,7 @@ describe('applyProfile', () => {
     if (dir) await rm(dir, { recursive: true, force: true })
   })
 
-  it('writes identity and reroutes all GitHub SSH to the active alias', async () => {
+  it('forces the profile key via core.sshCommand and normalizes aliases to plain', async () => {
     dir = await mkdtemp(join(tmpdir(), 'gps-'))
     const managed = join(dir, '.gitconfig-switcher')
 
@@ -59,19 +54,21 @@ describe('applyProfile', () => {
       label: 'personal',
       userName: 'diegoauyon',
       userEmail: 'diegoauyon@gmail.com',
-      advanced: { sshHost: 'github.com-diegoauyon' }
+      // sshKeyPath set explicitly so the test does not depend on `ssh -G`.
+      advanced: { sshHost: 'github.com-diegoauyon', sshKeyPath: '~/.ssh/personal_key' }
     })
     const work = makeProfile({
       label: 'work',
-      advanced: { sshHost: 'github.com-diegoauyon-styleseat' }
+      advanced: { sshHost: 'github.com-diegoauyon-styleseat', sshKeyPath: '~/.ssh/id_ed25519' }
     })
 
     await applyProfile(personal, managed, [personal, work])
     const content = await readFile(managed, 'utf-8')
 
     expect(content).toContain('email = diegoauyon@gmail.com')
-    expect(content).toContain('[url "git@github.com-diegoauyon:"]')
-    expect(content).toContain('insteadOf = git@github.com:')
+    expect(content).toContain('sshCommand = ssh -i ~/.ssh/personal_key -o IdentitiesOnly=yes')
+    expect(content).toContain('[url "git@github.com:"]')
+    // The other profile's alias is normalized to the plain host.
     expect(content).toContain('insteadOf = git@github.com-diegoauyon-styleseat:')
   })
 
@@ -82,12 +79,12 @@ describe('applyProfile', () => {
     const work = makeProfile({
       label: 'work',
       userEmail: 'work@styleseat.com',
-      advanced: { sshHost: 'github.com-diegoauyon-styleseat', signingKey: 'ABC123' }
+      advanced: { sshHost: 'github.com-diegoauyon-styleseat', sshKeyPath: '~/.ssh/id_ed25519', signingKey: 'ABC123' }
     })
     const personal = makeProfile({
       label: 'personal',
       userEmail: 'diegoauyon@gmail.com',
-      advanced: { sshHost: 'github.com-diegoauyon' }
+      advanced: { sshHost: 'github.com-diegoauyon', sshKeyPath: '~/.ssh/personal_key' }
     })
 
     await applyProfile(work, managed, [personal, work])
@@ -95,8 +92,9 @@ describe('applyProfile', () => {
     const content = await readFile(managed, 'utf-8')
 
     expect(content).toContain('email = diegoauyon@gmail.com')
+    expect(content).toContain('sshCommand = ssh -i ~/.ssh/personal_key -o IdentitiesOnly=yes')
     expect(content).not.toContain('work@styleseat.com')
     expect(content).not.toContain('ABC123')
-    expect(content).not.toContain('[url "git@github.com-diegoauyon-styleseat:"]')
+    expect(content).not.toContain('id_ed25519')
   })
 })

@@ -1,16 +1,16 @@
 # Graph Report - git-profile-switcher  (2026-06-26)
 
 ## Corpus Check
-- 48 files · ~37,492 words
+- 52 files · ~40,368 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1170 nodes · 2520 edges · 78 communities (60 shown, 18 thin omitted)
+- 1209 nodes · 2616 edges · 77 communities (58 shown, 19 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 55 edges (avg confidence: 0.81)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `49da0641`
+- Built from commit: `1dbc65be`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -88,7 +88,6 @@
 - [[_COMMUNITY_Community 71|Community 71]]
 - [[_COMMUNITY_Community 72|Community 72]]
 - [[_COMMUNITY_Community 73|Community 73]]
-- [[_COMMUNITY_Community 74|Community 74]]
 - [[_COMMUNITY_Community 75|Community 75]]
 - [[_COMMUNITY_Community 76|Community 76]]
 
@@ -111,9 +110,9 @@
   dist-renderer/assets/index-CnYVGocc.js → dist-electron/main/index.js
 - `Iu()` --calls--> `error`  [INFERRED]
   dist-renderer/assets/index-CnYVGocc.js → dist-electron/main/index.js
-- `Ni()` --calls--> `error`  [INFERRED]
+- `Rn()` --calls--> `error`  [INFERRED]
   dist-renderer/assets/index-CnYVGocc.js → dist-electron/main/index.js
-- `Gn()` --calls--> `error`  [INFERRED]
+- `Wl()` --calls--> `error`  [INFERRED]
   dist-renderer/assets/index-CnYVGocc.js → dist-electron/main/index.js
 
 ## Hyperedges (group relationships)
@@ -121,11 +120,11 @@
 - **Tagged Release Build Pipeline** — contributing_release_process, workflows_release_workflow, contributing_ci_checks, ci_ci_workflow [INFERRED 0.85]
 - **Secure Renderer-Main Process Boundary** — readme_security_model, readme_architecture, index_html_renderer_entry, readme_tech_stack [INFERRED 0.75]
 
-## Communities (78 total, 18 thin omitted)
+## Communities (77 total, 19 thin omitted)
 
 ### Community 0 - "Bundled Runtime Internals"
 Cohesion: 0.02
-Nodes (63): aliases, AppStateSchema, arrayBufferMethods, binary, byteToHex, {
+Nodes (66): aliases, AppStateSchema, arrayBufferMethods, binary, byteToHex, {
   /**
    * Called when the process is exiting, whether via signal, explicit
    * exit, or running out of stuff to do.
@@ -136,26 +135,22 @@ Nodes (63): aliases, AppStateSchema, arrayBufferMethods, binary, byteToHex, {
    * Returns a function that may be used to unload signal-exit.
    */
   onExit
-}, calledFunctions, childProcess (+55 more)
-
-### Community 1 - "Zod Number & Array Schemas"
-Cohesion: 0.13
-Nodes (3): floatSafeRemainder(), readShebang$1(), ZodNumber
+}, calledFunctions, childProcess (+58 more)
 
 ### Community 2 - "Zod Parsing & Error Context"
 Cohesion: 0.10
-Nodes (17): addIssueToContext(), assertNever(), errorMap(), getErrorMap(), joinValues(), makeIssue(), OK(), ZodBoolean (+9 more)
+Nodes (19): addIssueToContext(), assertNever(), errorMap(), getErrorMap(), isValidCidr(), isValidIP(), joinValues(), makeIssue() (+11 more)
 
 ### Community 3 - "Project Docs, CI & Architecture"
 Cohesion: 0.09
 Nodes (31): CI Workflow, Pre-PR CI Checks (typecheck/test/build), Contributing Guide, Project Safety Rules, Tagged Release Process, index.html Renderer Entry, Bug Report Issue Template, Issue Template Config (+23 more)
 
 ### Community 4 - "Electron Main: IPC, Tray & State"
-Cohesion: 0.16
-Nodes (18): setupIpcHandlers(), userDataPath, createTray(), rebuildTrayMenu(), userDataPath, openProfilesWindow(), openVerifyWindow(), preload (+10 more)
+Cohesion: 0.23
+Nodes (10): checkGitInstalled(), GitError, setupIpcHandlers(), createTray(), rebuildTrayMenu(), userDataPath, openProfilesWindow(), openVerifyWindow() (+2 more)
 
 ### Community 5 - "Zod Schema Composition"
-Cohesion: 0.11
+Cohesion: 0.12
 Nodes (4): Ou(), processCreateParams(), ZodPipeline, ZodType
 
 ### Community 6 - "Renderer: Theme & SSH UI"
@@ -164,7 +159,7 @@ Nodes (14): App(), ThemeContext, ThemeContextValue, useThemeContext(), Theme, TH
 
 ### Community 8 - "Zod Parse Status & Wrappers"
 Cohesion: 0.12
-Nodes (5): DIRTY(), ParseStatus, ZodLazy, ZodMap, ZodTuple
+Nodes (5): DIRTY(), ParseStatus, ZodDefault, ZodMap, ZodTuple
 
 ### Community 9 - "Zod Object Schema"
 Cohesion: 0.11
@@ -172,39 +167,39 @@ Nodes (4): createZodEnum(), deepPartialify(), ZodObject, ZodReadonly
 
 ### Community 10 - "Zod String Check Methods"
 Cohesion: 0.04
-Nodes (52): Bc, be, Br(), cf(), Cl(), Cn(), Ct, Dl (+44 more)
+Nodes (53): _a(), ap(), Bc, be, bu(), cf(), Cl(), Cn() (+45 more)
 
 ### Community 11 - "Renderer: Profile Forms"
-Cohesion: 0.13
-Nodes (12): Props, Props, api, DetectedProfile, electron, Profile, ProfileAdvanced, ProfileAdvancedSchema (+4 more)
+Cohesion: 0.10
+Nodes (15): Props, Props, SSHKeyResult, api, DetectedFolderMappingSuggestion, DetectedProfile, electron, Profile (+7 more)
 
 ### Community 12 - "Execa Process Execution"
-Cohesion: 0.12
-Nodes (17): addPipeMethods(), checkGitInstalled(), execa(), generateSSHKey(), getErrorPrefix(), getEscapedCommand(), getSpawnedPromise(), getTimestamp() (+9 more)
+Cohesion: 0.08
+Nodes (25): addPipeMethods(), addToSSHConfig(), changePrototype(), changeToString(), checkGitInstalled(), copyProperty(), ensureManagedIncludeInstalled(), execa() (+17 more)
 
 ### Community 13 - "Zod Default/Catch/Intersection"
-Cohesion: 0.11
-Nodes (10): getParsedType(), handleResult(), isAsync(), isValid(), mergeValues(), ZodBranded, ZodCatch, ZodDefault (+2 more)
+Cohesion: 0.12
+Nodes (10): getParsedType(), handleResult(), isAsync(), isGitHostingDomain(), isValid(), mergeValues(), ZodCatch, ZodEffects (+2 more)
 
 ### Community 14 - "TypeScript Compiler Options"
 Cohesion: 0.11
 Nodes (17): compilerOptions, allowImportingTsExtensions, isolatedModules, jsx, lib, module, moduleResolution, noEmit (+9 more)
 
 ### Community 15 - "Git Config Parsing & Profile Apply"
-Cohesion: 0.23
-Nodes (14): detectExistingProfiles(), ensureManagedIncludeInstalled(), getGlobalProfile(), match, parseConditionalIncludes(), parseConfigContent(), parseShowOrigin(), parseSSHConfig() (+6 more)
+Cohesion: 0.27
+Nodes (12): detectExistingProfiles(), getGlobalProfile(), match, parseConditionalIncludes(), parseConfigContent(), parseShowOrigin(), parseSSHConfig(), parseSSHConfigContent() (+4 more)
 
 ### Community 16 - "Renderer: Origin Verify View"
-Cohesion: 0.22
-Nodes (8): Props, checkGitInstalled(), GitError, runGit(), parseShowOrigin(), output, OriginEntry, VerifyResult
+Cohesion: 0.27
+Nodes (6): Props, runGit(), parseShowOrigin(), output, OriginEntry, VerifyResult
 
 ### Community 17 - "Signal-Exit & Window Mgmt"
 Cohesion: 0.15
 Nodes (7): Emitter, ObjectDefineProperty, openProfilesWindow(), openVerifyWindow(), processOk(), setExitHandler(), SignalExit
 
 ### Community 18 - "Profile Detection & SSH Config"
-Cohesion: 0.20
-Nodes (10): GIT_HOSTING_DOMAINS, DetectedProfile, detectExistingProfiles(), getGlobalProfile(), parseConditionalIncludes(), parseConfigContent(), parseSSHConfigForGitHosts(), parseSSHConfig() (+2 more)
+Cohesion: 0.18
+Nodes (12): GIT_HOSTING_DOMAINS, DetectedFolderMapping, DetectedProfile, detectExistingProfiles(), detectFolderMappings(), getGlobalProfile(), parseConditionalIncludes(), parseConfigContent() (+4 more)
 
 ### Community 19 - "package.json Metadata"
 Cohesion: 0.14
@@ -239,16 +234,16 @@ Cohesion: 0.14
 Nodes (14): add(), applyProfile(), bareHostFromAlias(), getInput(), handleInput(), insteadOfSources(), isExecaChildProcess(), isStream() (+6 more)
 
 ### Community 27 - "Validation Regex & Signals"
-Cohesion: 0.20
-Nodes (4): addToSSHConfig(), isGitHostingDomain(), isValidCidr(), isValidIP()
+Cohesion: 0.15
+Nodes (15): folderConfigDir(), folderConfigPath(), syncManagedGitconfig(), profiles, stale, workDir, ensureManagedFile(), getManagedPaths() (+7 more)
 
 ### Community 29 - "Runtime Dependencies"
 Cohesion: 0.25
 Nodes (8): dependencies, execa, react, react-dom, react-router-dom, uuid, zod, zustand
 
 ### Community 30 - "SSH Key & Host Setup"
-Cohesion: 0.07
-Nodes (47): _a(), ah(), al(), Ar(), Bp(), ch(), dh(), eh() (+39 more)
+Cohesion: 0.10
+Nodes (37): ah(), al(), Ar(), Bp(), dh(), eh(), fh(), gh() (+29 more)
 
 ### Community 31 - "tsconfig.node Config"
 Cohesion: 0.29
@@ -264,18 +259,18 @@ Nodes (6): addArrayBufferChunk(), finalizeArrayBuffer(), getNewContentsLength(),
 
 ### Community 34 - "Zod Effects & Map"
 Cohesion: 0.09
-Nodes (42): ac(), an(), Ao(), ap(), Ba(), Bt(), ca(), Ce() (+34 more)
+Nodes (40): ac(), Ao(), Ba(), bn(), Br(), Bt(), ca(), Ce() (+32 more)
 
 ### Community 36 - "Git Runner & Identity"
-Cohesion: 0.31
-Nodes (7): applyProfile(), bareHostFromAlias(), insteadOfSources(), managed, personal, sources, work
+Cohesion: 0.30
+Nodes (9): aliasRewriteSources(), applyProfile(), bareHostFromAlias(), insteadOfSources(), resolveIdentityFile(), managed, personal, sources (+1 more)
 
 ### Community 37 - "SSH Key Generation"
-Cohesion: 0.40
-Nodes (5): addToSSHConfig(), generateSSHKey(), SSHKeyResult, testSSHConnection(), toKeyToken()
+Cohesion: 0.23
+Nodes (10): addToSSHConfig(), generateSSHKey(), testSSHConnection(), toKeyToken(), userDataPath, ProfileSchema, loadProfiles(), ProfileArraySchema (+2 more)
 
 ### Community 38 - "Process Kill Timeout"
-Cohesion: 0.29
+Cohesion: 0.25
 Nodes (6): getForceKillAfterTimeout(), isSigterm(), setKillTimeout(), shouldForceKill(), spawnedKill(), validateTimeout()
 
 ### Community 40 - "Signal Tables"
@@ -283,36 +278,40 @@ Cohesion: 0.50
 Nodes (4): getRealtimeSignals(), getSignals(), getSignalsByName(), getSignalsByNumber()
 
 ### Community 42 - "Shebang Parsing"
-Cohesion: 0.13
-Nodes (41): Aa(), At(), au(), Bs(), C(), Ci(), de(), df() (+33 more)
+Cohesion: 0.12
+Nodes (44): an(), au(), C(), Ci(), de(), ec(), Fe(), fo() (+36 more)
 
 ### Community 45 - "ZodTuple"
-Cohesion: 0.10
-Nodes (37): ai(), Bf(), Da(), di(), dp(), Du(), es(), Fi() (+29 more)
+Cohesion: 0.12
+Nodes (33): ai(), di(), Du(), es(), eu(), Fi(), Fl(), gc() (+25 more)
 
 ### Community 46 - "ZodNullable"
-Cohesion: 0.09
-Nodes (34): B(), Bi(), bn(), cu(), dc(), ec(), fc(), Fe() (+26 more)
+Cohesion: 0.43
+Nodes (7): At(), df(), jt(), la(), va(), ws(), zi()
 
 ### Community 51 - "Misc Group 51"
-Cohesion: 0.16
-Nodes (20): bu(), Ds(), ea(), Er(), Gn(), Ja(), Je(), ka() (+12 more)
+Cohesion: 0.09
+Nodes (33): B(), Bf(), Dr(), Ds(), Ed(), Eo(), Er(), _f() (+25 more)
 
 ### Community 52 - "Misc Group 52"
-Cohesion: 0.20
-Nodes (18): Ae(), cc(), fn(), ki(), la(), Pn(), Qi(), Ro() (+10 more)
+Cohesion: 0.21
+Nodes (17): cc(), Da(), fn(), Js(), ki(), ko(), Qi(), Ro() (+9 more)
 
 ### Community 55 - "Misc Group 55"
 Cohesion: 0.18
 Nodes (11): code:text (# work GitHub account), code:bash (# Default single-account form), code:bash (git remote set-url origin git@github.com-work:company/repo.g), code:text (Host gh-personal), Creating Profiles, Platform-Agnostic Profile Detection, SSH Configuration for Multiple Accounts, SSH Key Generation (+3 more)
 
 ### Community 56 - "Misc Group 56"
-Cohesion: 0.36
-Nodes (10): D(), Ei(), hc(), Ho(), ll(), lp(), $s(), vc() (+2 more)
+Cohesion: 0.16
+Nodes (21): Ae(), Bs(), ch(), D(), dn(), Ei(), hc(), Ho() (+13 more)
 
 ### Community 58 - "Community 58"
 Cohesion: 0.20
 Nodes (9): Before Opening a Pull Request, Change Scope, code:bash (npm run typecheck), code:bash (git tag v1.0.0), Contributing, Local Setup, Project Safety Rules, Release Process (+1 more)
+
+### Community 59 - "Community 59"
+Cohesion: 0.16
+Nodes (3): floatSafeRemainder(), readShebang$1(), ZodBigInt
 
 ### Community 60 - "Community 60"
 Cohesion: 0.22
@@ -323,8 +322,8 @@ Cohesion: 0.22
 Nodes (8): Comparison vs Manual Setup, Contributing, Features, Git Profile Switcher, License, Screenshots, Themes, Why This Exists
 
 ### Community 62 - "Community 62"
-Cohesion: 0.36
-Nodes (8): Bo(), dn(), Do(), Ft(), hn(), lu(), op(), zo()
+Cohesion: 0.14
+Nodes (24): Aa(), Bi(), Bo(), Do(), dt(), Ft(), hn(), hs() (+16 more)
 
 ### Community 63 - "Community 63"
 Cohesion: 0.29
@@ -335,16 +334,12 @@ Cohesion: 0.33
 Nodes (5): Files The App Does Not Manage, Files The App Touches, Operational Notes, Reporting A Vulnerability, Security Notes
 
 ### Community 66 - "Community 66"
-Cohesion: 0.50
-Nodes (4): ensureManagedIncludeInstalled(), IncludePosition, ManagedIncludeResult, stripManagedInclude()
+Cohesion: 0.17
+Nodes (17): buildManagedRegion(), ensureManagedIncludeInstalled(), IncludePosition, ManagedIncludeResult, ManagedPaths, normalizeGitdir(), stripManagedInclude(), stripManagedRegion() (+9 more)
 
 ### Community 67 - "Community 67"
 Cohesion: 0.40
 Nodes (5): 1. Launch the App, 2. Add a Profile, 3. Switch from the Tray, code:text (┌─────────────────────────────────┐), Quick Start
-
-### Community 68 - "Community 68"
-Cohesion: 0.40
-Nodes (5): changePrototype(), changeToString(), copyProperty(), mimicFunction(), onetime()
 
 ### Community 69 - "Community 69"
 Cohesion: 0.50
@@ -362,29 +357,25 @@ Nodes (3): code:text (~/.gitconfig                          ~/.gitconfig-switche
 Cohesion: 0.67
 Nodes (3): Files it does not manage, Files it touches, Security Notes
 
-### Community 74 - "Community 74"
-Cohesion: 0.67
-Nodes (3): datetimeRegex(), timeRegex(), timeRegexSource()
-
 ## Knowledge Gaps
-- **220 isolated node(s):** `name`, `version`, `description`, `main`, `dev` (+215 more)
+- **234 isolated node(s):** `name`, `version`, `description`, `main`, `dev` (+229 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **18 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **19 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `error` connect `Shebang Parsing` to `Bundled Runtime Internals`, `Zod Effects & Map`, `Zod String Check Methods`, `ZodTuple`, `ZodNullable`, `Git Config Parsing & Profile Apply`, `Misc Group 51`, `Misc Group 52`, `Misc Group 56`, `Community 62`?**
-  _High betweenness centrality (0.225) - this node is a cross-community bridge._
-- **Why does `ZodType` connect `Zod Schema Composition` to `Bundled Runtime Internals`, `Zod Parsing & Error Context`, `Zod Parse Status & Wrappers`, `Zod Default/Catch/Intersection`, `Child Process Spawn Helpers`, `Stream Piping & Input`?**
-  _High betweenness centrality (0.046) - this node is a cross-community bridge._
-- **Why does `ZodString` connect `Zod String Validators` to `Bundled Runtime Internals`, `Validation Regex & Signals`, `Misc Group 53`, `Git Config Parsing & Profile Apply`?**
-  _High betweenness centrality (0.033) - this node is a cross-community bridge._
+  _High betweenness centrality (0.200) - this node is a cross-community bridge._
+- **Why does `ZodString` connect `Zod String Validators` to `Bundled Runtime Internals`, `Zod Parsing & Error Context`, `Process Kill Timeout`, `Execa Process Execution`, `Zod Default/Catch/Intersection`, `Git Config Parsing & Profile Apply`, `Misc Group 53`?**
+  _High betweenness centrality (0.059) - this node is a cross-community bridge._
+- **Why does `ZodType` connect `Zod Schema Composition` to `Bundled Runtime Internals`, `Zod Parsing & Error Context`, `Zod String Validators`, `Zod Parse Status & Wrappers`, `Zod Default/Catch/Intersection`, `Child Process Spawn Helpers`, `Stream Piping & Input`?**
+  _High betweenness centrality (0.022) - this node is a cross-community bridge._
 - **Are the 48 inferred relationships involving `error` (e.g. with `Ir()` and `Iu()`) actually correct?**
   _`error` has 48 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `name`, `version`, `description` to the rest of the system?**
-  _221 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _235 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Bundled Runtime Internals` be split into smaller, more focused modules?**
-  _Cohesion score 0.0205785284410794 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.02032967032967033 - nodes in this community are weakly interconnected._
 - **Should `Zod Number & Array Schemas` be split into smaller, more focused modules?**
-  _Cohesion score 0.13105413105413105 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.13333333333333333 - nodes in this community are weakly interconnected._

@@ -3,6 +3,7 @@ import { homedir } from 'node:os'
 import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { GIT_HOSTING_DOMAINS } from '../constants'
+import { REGION_START, REGION_END } from './managedInclude'
 
 export interface DetectedProfile {
   userName?: string
@@ -138,6 +139,65 @@ function parseConfigContent(content: string): DetectedProfile {
   }
 
   return profile
+}
+
+export interface DetectedFolderMapping {
+  /** Absolute folder path the includeIf condition targets. */
+  path: string
+  /** Email read from the included config file, if it could be read. */
+  email?: string
+}
+
+/**
+ * Find user-authored `[includeIf "gitdir:..."]` blocks in ~/.gitconfig so they
+ * can be imported as tracked folder mappings. The app's own managed region is
+ * skipped so we never re-import our own blocks.
+ */
+export async function detectFolderMappings(): Promise<DetectedFolderMapping[]> {
+  const home = homedir()
+  const gitconfigPath = join(home, '.gitconfig')
+  const results: DetectedFolderMapping[] = []
+
+  let content: string
+  try {
+    content = await readFile(gitconfigPath, 'utf-8')
+  } catch {
+    return results
+  }
+
+  let currentGitdir: string | null = null
+  let inManagedRegion = false
+
+  for (const line of content.split('\n')) {
+    const trimmed = line.trim()
+    if (trimmed === REGION_START) { inManagedRegion = true; continue }
+    if (trimmed === REGION_END) { inManagedRegion = false; continue }
+    if (inManagedRegion) continue
+
+    const sectionMatch = line.match(/^\s*\[([^\]]+)\]\s*$/)
+    if (sectionMatch) {
+      const gitdirMatch = sectionMatch[1].match(/^includeIf\s+"gitdir:(.+?)\/?"$/i)
+      currentGitdir = gitdirMatch ? gitdirMatch[1] : null
+      continue
+    }
+
+    const pathMatch = line.match(/^\s*path\s*=\s*(.+)$/)
+    if (pathMatch && currentGitdir) {
+      const includePath = pathMatch[1].trim().replace(/^~/, home)
+      let email: string | undefined
+      try {
+        email = parseConfigContent(await readFile(includePath, 'utf-8')).userEmail
+      } catch { /* included file may not exist */ }
+
+      results.push({
+        path: currentGitdir.replace(/^~/, home).replace(/\/+$/, ''),
+        email
+      })
+      currentGitdir = null
+    }
+  }
+
+  return results
 }
 
 function isGitHostingDomain(hostname: string): boolean {

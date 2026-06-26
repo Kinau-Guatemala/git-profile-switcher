@@ -1,8 +1,7 @@
 import { app, Menu, Tray, nativeImage } from 'electron'
 import { loadProfiles } from '../core/profiles/storage'
 import { loadState, saveState } from '../core/profiles/state'
-import { ensureManagedIncludeInstalled } from '../core/git/managedInclude'
-import { applyProfile } from '../core/git/identity'
+import { syncManagedGitconfig } from '../core/git/folderConfigs'
 import { verifyGlobal } from '../core/verify/globalVerify'
 import { openProfilesWindow, openVerifyWindow } from './windows'
 
@@ -39,9 +38,6 @@ export async function rebuildTrayMenu(): Promise<void> {
     checked: state.activeProfileId === profile.id,
     click: async () => {
       try {
-        const { managedPath } = await ensureManagedIncludeInstalled(state.includePosition)
-        await applyProfile(profile, managedPath, profiles)
-
         if (state.activeProfileId) {
           state.undoStack = [
             { profileId: state.activeProfileId, at: new Date().toISOString() },
@@ -51,6 +47,7 @@ export async function rebuildTrayMenu(): Promise<void> {
 
         state.activeProfileId = profile.id
         await saveState(userDataPath, state)
+        await syncManagedGitconfig(userDataPath)
         await rebuildTrayMenu()
       } catch (error: any) {
         console.error('Failed to apply profile:', error)
@@ -80,12 +77,10 @@ export async function rebuildTrayMenu(): Promise<void> {
 
         if (profile) {
           try {
-            const { managedPath } = await ensureManagedIncludeInstalled(state.includePosition)
-            await applyProfile(profile, managedPath, profiles)
-
             state.activeProfileId = lastEntry.profileId
             state.undoStack = state.undoStack.slice(1)
             await saveState(userDataPath, state)
+            await syncManagedGitconfig(userDataPath)
             await rebuildTrayMenu()
           } catch (error: any) {
             console.error('Failed to undo:', error)

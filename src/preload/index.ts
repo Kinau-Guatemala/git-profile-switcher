@@ -1,5 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { Profile, ProfileInput } from '../core/profiles/schema'
+import { FolderMapping } from '../core/profiles/state'
 import { VerifyResult } from '../core/verify/types'
 import { SSHHost } from '../core/git/sshConfig'
 import type { SSHKeyResult } from '../core/git/sshKeyGen'
@@ -11,6 +12,11 @@ export interface DetectedProfile {
   sshCommand?: string
   sshHost?: string
   comment?: string
+}
+
+export interface DetectedFolderMappingSuggestion {
+  path: string
+  suggestedProfileId?: string
 }
 
 const api = {
@@ -29,9 +35,22 @@ const api = {
     openWindow: (name: 'profiles' | 'verify'): Promise<void> => ipcRenderer.invoke('app:openWindow', name)
   },
   settings: {
-    get: (): Promise<{ includePosition: 'start' | 'end' }> => ipcRenderer.invoke('settings:get'),
+    get: (): Promise<{ includePosition: 'start' | 'end'; applyGlobally: boolean }> =>
+      ipcRenderer.invoke('settings:get'),
     setIncludePosition: (position: 'start' | 'end'): Promise<{ ok: true }> =>
-      ipcRenderer.invoke('settings:setIncludePosition', position)
+      ipcRenderer.invoke('settings:setIncludePosition', position),
+    setApplyGlobally: (applyGlobally: boolean): Promise<{ ok: true }> =>
+      ipcRenderer.invoke('settings:setApplyGlobally', applyGlobally)
+  },
+  folders: {
+    list: (): Promise<FolderMapping[]> => ipcRenderer.invoke('folders:list'),
+    pick: (): Promise<string | null> => ipcRenderer.invoke('folders:pick'),
+    add: (folderPath: string, profileId: string): Promise<{ ok: true }> =>
+      ipcRenderer.invoke('folders:add', folderPath, profileId),
+    remove: (folderPath: string): Promise<{ ok: true }> =>
+      ipcRenderer.invoke('folders:remove', folderPath),
+    detectExisting: (): Promise<DetectedFolderMappingSuggestion[]> =>
+      ipcRenderer.invoke('folders:detectExisting')
   },
   ssh: {
     generate: (email: string, accountName: string, passphrase?: string): Promise<SSHKeyResult> => ipcRenderer.invoke('ssh:generate', email, accountName, passphrase),

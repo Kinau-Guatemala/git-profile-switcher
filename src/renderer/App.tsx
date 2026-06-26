@@ -3,6 +3,7 @@ import Profiles from './screens/Profiles'
 import Verify from './screens/Verify'
 import Settings from './screens/Settings'
 import SSHKeys from './screens/SSHKeys'
+import FolderConfigs from './screens/FolderConfigs'
 import { useTheme } from './useTheme'
 import { ThemeContext } from './ThemeContext'
 
@@ -33,6 +34,14 @@ function App() {
               ♦ Verify
             </NavLink>
             <NavLink
+              to="/folders"
+              className={({ isActive }) =>
+                `nav-bar__link${isActive ? ' nav-bar__link--active' : ''}`
+              }
+            >
+              ♦ Folders
+            </NavLink>
+            <NavLink
               to="/ssh"
               className={({ isActive }) =>
                 `nav-bar__link${isActive ? ' nav-bar__link--active' : ''}`
@@ -55,6 +64,7 @@ function App() {
             <Routes>
               <Route path="/profiles" element={<Profiles />} />
               <Route path="/verify" element={<Verify />} />
+              <Route path="/folders" element={<FolderConfigs />} />
               <Route path="/ssh" element={<SSHKeys />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/" element={<Navigate to="/profiles" replace />} />

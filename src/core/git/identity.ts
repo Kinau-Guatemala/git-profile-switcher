@@ -1,4 +1,5 @@
 import { writeFile } from 'node:fs/promises'
+import { execa } from 'execa'
 import { Profile } from '../profiles/schema'
 import { runGit } from './gitRunner'
 
@@ -16,30 +17,31 @@ export function bareHostFromAlias(alias: string): string {
 }
 
 /**
- * Build the set of `git@<host>:` URL prefixes that should be rewritten to the
- * active profile's alias so that *all* GitHub SSH traffic authenticates with the
- * active profile's key, regardless of what a repo's stored remote URL says.
- *
- * Sources are: the bare host behind the active alias (covers plain
- * `git@github.com:` remotes) plus every other profile's alias and bare host
- * (covers repos hardcoded to a sibling profile's alias). The active alias itself
- * is never rewritten onto itself.
+ * `git@<alias>:` URL prefixes (across all known profiles, including this one)
+ * that should be normalized back to the bare host. Rewriting every alias to the
+ * same plain host means the *forced key* (core.sshCommand) decides auth, and —
+ * crucially — every managed file rewrites to the **same** target, so the global
+ * and per-folder configs never produce conflicting `insteadOf` entries.
  */
-export function insteadOfSources(sshHost: string, allProfiles: Profile[]): string[] {
-  const target = `git@${sshHost}:`
+export function aliasRewriteSources(bareHost: string, profiles: Profile[]): string[] {
   const sources = new Set<string>()
-
-  sources.add(`git@${bareHostFromAlias(sshHost)}:`)
-
-  for (const other of allProfiles) {
-    const otherHost = other.advanced?.sshHost
-    if (!otherHost || otherHost === sshHost) continue
-    sources.add(`git@${otherHost}:`)
-    sources.add(`git@${bareHostFromAlias(otherHost)}:`)
+  for (const p of profiles) {
+    const host = p.advanced?.sshHost
+    if (host && host !== bareHost) sources.add(`git@${host}:`)
   }
-
-  sources.delete(target)
   return [...sources].sort()
+}
+
+/** Resolve the private key path behind an SSH host alias via `ssh -G`. */
+async function resolveIdentityFile(alias: string): Promise<string | null> {
+  try {
+    const { stdout } = await execa('ssh', ['-G', alias])
+    const line = stdout.split('\n').find(l => /^identityfile /i.test(l))
+    if (line) return line.replace(/^identityfile /i, '').trim()
+  } catch {
+    // ssh unavailable or alias unknown — fall back to no enforcement.
+  }
+  return null
 }
 
 export async function applyProfile(
@@ -63,19 +65,33 @@ export async function applyProfile(
       await runGit(['config', '--file', managedPath, 'user.signingkey', profile.advanced.signingKey])
     }
 
-    // Configure SSH host if specified (for multiple GitHub accounts)
-    if (profile.advanced.sshHost) {
-      const sshHost = profile.advanced.sshHost
-
-      await runGit(['config', '--file', managedPath, 'core.sshCommand', 'ssh -F ~/.ssh/config'])
+    const sshHost = profile.advanced.sshHost
+    if (sshHost) {
       await runGit(['config', '--file', managedPath, 'github.sshHost', sshHost])
+    }
 
-      // Force every GitHub SSH URL through this profile's host alias so the
-      // matching key (from ~/.ssh/config) authenticates. Because the managed
-      // include is loaded last, these rewrites win over any other config.
-      const target = `url.git@${sshHost}:.insteadOf`
-      for (const src of insteadOfSources(sshHost, allProfiles)) {
-        await runGit(['config', '--file', managedPath, '--add', target, src])
+    // Pick the key for this profile (explicit override, else resolved from the alias).
+    const keyPath = profile.advanced.sshKeyPath
+      ?? (sshHost ? await resolveIdentityFile(sshHost) : null)
+
+    if (keyPath) {
+      // Force this profile's key. core.sshCommand is single-valued, so a later
+      // (per-folder) include deterministically overrides the global one — unlike
+      // url.insteadOf, whose ties are broken by first-seen, not include order.
+      await runGit([
+        'config', '--file', managedPath, 'core.sshCommand',
+        `ssh -i ${keyPath} -o IdentitiesOnly=yes`
+      ])
+
+      // Normalize any GitHub host alias back to the plain host so the forced key
+      // (not the alias's own IdentityFile) decides auth. Same target in every
+      // managed file ⇒ no insteadOf conflict between global and folder configs.
+      if (sshHost) {
+        const bareHost = bareHostFromAlias(sshHost)
+        const target = `url.git@${bareHost}:.insteadOf`
+        for (const src of aliasRewriteSources(bareHost, [profile, ...allProfiles])) {
+          await runGit(['config', '--file', managedPath, '--add', target, src])
+        }
       }
     }
   }
