@@ -40,7 +40,7 @@ export async function rebuildTrayMenu(): Promise<void> {
     click: async () => {
       try {
         const { managedPath } = await ensureManagedIncludeInstalled(state.includePosition)
-        await applyProfile(profile, managedPath)
+        await applyProfile(profile, managedPath, profiles)
 
         if (state.activeProfileId) {
           state.undoStack = [
@@ -81,7 +81,7 @@ export async function rebuildTrayMenu(): Promise<void> {
         if (profile) {
           try {
             const { managedPath } = await ensureManagedIncludeInstalled(state.includePosition)
-            await applyProfile(profile, managedPath)
+            await applyProfile(profile, managedPath, profiles)
 
             state.activeProfileId = lastEntry.profileId
             state.undoStack = state.undoStack.slice(1)

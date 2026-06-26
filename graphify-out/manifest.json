@@ -35,14 +35,14 @@
     "semantic_hash": "1ca15047079227ea01b270241433ba09"
   },
   "/home/diego/Dev/personal/git-profile-switcher/src/core/git/identity.ts": {
-    "mtime": 1780869204.301856,
-    "ast_hash": "ec66b0e3c8d1242926bb674797650bc2",
-    "semantic_hash": "ec66b0e3c8d1242926bb674797650bc2"
+    "mtime": 1782497243.7020068,
+    "ast_hash": "576caa82fc573adbc740950bc334d221",
+    "semantic_hash": ""
   },
   "/home/diego/Dev/personal/git-profile-switcher/src/core/git/managedInclude.ts": {
-    "mtime": 1780869204.301856,
-    "ast_hash": "e0c8c10c9d9e48692d42b2cdd4a52aa1",
-    "semantic_hash": "e0c8c10c9d9e48692d42b2cdd4a52aa1"
+    "mtime": 1782490783.2201853,
+    "ast_hash": "7fa330374ad340ffa3c14efd62e018d2",
+    "semantic_hash": ""
   },
   "/home/diego/Dev/personal/git-profile-switcher/src/core/git/sshConfig.ts": {
     "mtime": 1780869204.301856,
@@ -60,9 +60,9 @@
     "semantic_hash": "822736724c87025018502b48d60fd1df"
   },
   "/home/diego/Dev/personal/git-profile-switcher/src/core/profiles/state.ts": {
-    "mtime": 1780869204.3020318,
-    "ast_hash": "e3cce3efd275576871a0cc8c19bc2655",
-    "semantic_hash": "e3cce3efd275576871a0cc8c19bc2655"
+    "mtime": 1782490770.3892844,
+    "ast_hash": "ea1494710b5abc5e75ce16ae3bca88b6",
+    "semantic_hash": ""
   },
   "/home/diego/Dev/personal/git-profile-switcher/src/core/profiles/storage.ts": {
     "mtime": 1780869204.3020318,
@@ -100,14 +100,14 @@
     "semantic_hash": "3e86e9407e5258345cd46cd00ce2e405"
   },
   "/home/diego/Dev/personal/git-profile-switcher/src/main/ipc.ts": {
-    "mtime": 1780869204.3022335,
-    "ast_hash": "e1f8ea55a12dee0a9b8e6d5be117ee24",
-    "semantic_hash": "e1f8ea55a12dee0a9b8e6d5be117ee24"
+    "mtime": 1782497250.4874377,
+    "ast_hash": "6898514bcc67b3d30d44746170bc825e",
+    "semantic_hash": ""
   },
   "/home/diego/Dev/personal/git-profile-switcher/src/main/tray.ts": {
-    "mtime": 1780869204.3022335,
-    "ast_hash": "28d4492036b8db216012800de13df006",
-    "semantic_hash": "28d4492036b8db216012800de13df006"
+    "mtime": 1782497253.9319582,
+    "ast_hash": "94869d3185ed524824517399169627de",
+    "semantic_hash": ""
   },
   "/home/diego/Dev/personal/git-profile-switcher/src/main/windows.ts": {
     "mtime": 1780869204.3022335,
@@ -115,9 +115,9 @@
     "semantic_hash": "61d4c259dcaa7732b74899abf414c18d"
   },
   "/home/diego/Dev/personal/git-profile-switcher/src/preload/index.ts": {
-    "mtime": 1780869204.3022335,
-    "ast_hash": "19832fd13839d7dac4e9d00ab4297530",
-    "semantic_hash": "19832fd13839d7dac4e9d00ab4297530"
+    "mtime": 1782490822.6137936,
+    "ast_hash": "39759025f00db3d88f1ac275a61c1611",
+    "semantic_hash": ""
   },
   "/home/diego/Dev/personal/git-profile-switcher/src/renderer/App.tsx": {
     "mtime": 1780869204.3022335,
@@ -175,9 +175,9 @@
     "semantic_hash": "27e7db7a4795a1409bec492e131e6f55"
   },
   "/home/diego/Dev/personal/git-profile-switcher/src/renderer/screens/Settings.tsx": {
-    "mtime": 1780869204.302674,
-    "ast_hash": "66e4012b80d46d682f98af205353893a",
-    "semantic_hash": "66e4012b80d46d682f98af205353893a"
+    "mtime": 1782490849.912289,
+    "ast_hash": "c23553b3efd9bead72d2a3b923d5df17",
+    "semantic_hash": ""
   },
   "/home/diego/Dev/personal/git-profile-switcher/src/renderer/screens/Verify.tsx": {
     "mtime": 1780869204.302674,
@@ -185,14 +185,14 @@
     "semantic_hash": "3754a7203fd95b71356e887ad11ae563"
   },
   "/home/diego/Dev/personal/git-profile-switcher/dist-electron/preload/index.js": {
-    "mtime": 1780869349.10666,
-    "ast_hash": "40907b709e17cdc8d3bb254cf3bd102d",
-    "semantic_hash": "40907b709e17cdc8d3bb254cf3bd102d"
+    "mtime": 1782496293.2401814,
+    "ast_hash": "0f6e8ecc07e716245a481edf455ded3d",
+    "semantic_hash": ""
   },
   "/home/diego/Dev/personal/git-profile-switcher/dist-electron/main/index.js": {
-    "mtime": 1780869349.523888,
-    "ast_hash": "90fd0d818ab46f88fc76a1572be74432",
-    "semantic_hash": "90fd0d818ab46f88fc76a1572be74432"
+    "mtime": 1782497244.0197365,
+    "ast_hash": "1bea509f81d1eddc965f4eec1479bc41",
+    "semantic_hash": ""
   },
   "/home/diego/Dev/personal/git-profile-switcher/CONTRIBUTING.md": {
     "mtime": 1780869204.3009956,
@@ -248,5 +248,40 @@
     "mtime": 1780869204.3012178,
     "ast_hash": "6c2f67a44f5ea4c361d9c79a97282d0c",
     "semantic_hash": "6c2f67a44f5ea4c361d9c79a97282d0c"
+  },
+  "/home/diego/Dev/personal/git-profile-switcher/vitest.config.ts": {
+    "mtime": 1782497888.396275,
+    "ast_hash": "c46a906ae289755ba8b0b8deb5139fd2",
+    "semantic_hash": ""
+  },
+  "/home/diego/Dev/personal/git-profile-switcher/src/core/git/identity.test.ts": {
+    "mtime": 1782497276.0373983,
+    "ast_hash": "aeef1c89f856d1a95ab8d6f3bd1dcd57",
+    "semantic_hash": ""
+  },
+  "/home/diego/Dev/personal/git-profile-switcher/.claude/settings.json": {
+    "mtime": 1782490807.7339482,
+    "ast_hash": "87f0d903477984d0587a02f8fe185263",
+    "semantic_hash": ""
+  },
+  "/home/diego/Dev/personal/git-profile-switcher/dist-renderer/assets/index-CnYVGocc.js": {
+    "mtime": 1782491164.0400136,
+    "ast_hash": "f141c818b06bcab3b61d10888b209890",
+    "semantic_hash": ""
+  },
+  "/home/diego/Dev/personal/git-profile-switcher/CLAUDE.md": {
+    "mtime": 1782490807.7329333,
+    "ast_hash": "82efb97a359f5c7290bf2513d14686be",
+    "semantic_hash": ""
+  },
+  "/home/diego/Dev/personal/git-profile-switcher/.github/copilot-instructions.md": {
+    "mtime": 1782490820.7649312,
+    "ast_hash": "ec2dc0dc7bef63488889f34de2f5584d",
+    "semantic_hash": ""
+  },
+  "/home/diego/Dev/personal/git-profile-switcher/dist-renderer/index.html": {
+    "mtime": 1782491164.0391715,
+    "ast_hash": "f90fa8feb282bef16543701d3603e9c4",
+    "semantic_hash": ""
   }
 }

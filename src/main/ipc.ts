@@ -70,7 +70,7 @@ export function setupIpcHandlers(rebuildTray: () => void): void {
       const state = await loadState(userDataPath)
 
       const { managedPath } = await ensureManagedIncludeInstalled(state.includePosition)
-      await applyProfile(profile, managedPath)
+      await applyProfile(profile, managedPath, profiles)
 
       if (state.activeProfileId) {
         state.undoStack = [
