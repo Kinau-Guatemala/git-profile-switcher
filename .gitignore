@@ -68,3 +68,15 @@ coverage/
 .agents/
 .github/agents.md
 skills-lock.json
+
+# Claude Code settings (personal dev tooling)
+.claude/
+
+# graphify — machine-local config and build cache; keep outputs (graph.html, graph.json, GRAPH_REPORT.md)
+graphify-out/.graphify_python
+graphify-out/.graphify_root
+graphify-out/cache/
+graphify-out/cost.json
+graphify-out/manifest.json
+graphify-out/stat-index.json
+graphify-out/.graphify_*.json
