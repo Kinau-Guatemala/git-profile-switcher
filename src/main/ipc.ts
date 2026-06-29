@@ -1,13 +1,12 @@
-import { ipcMain, app, shell } from 'electron'
+import { ipcMain, app, shell, dialog } from 'electron'
 import { v4 as uuidv4 } from 'uuid'
 import { loadProfiles, saveProfiles } from '../core/profiles/storage'
-import { loadState, saveState } from '../core/profiles/state'
+import { loadState, saveState, FolderMapping } from '../core/profiles/state'
 import { Profile, ProfileInput, ProfileInputSchema } from '../core/profiles/schema'
-import { ensureManagedIncludeInstalled } from '../core/git/managedInclude'
-import { applyProfile } from '../core/git/identity'
+import { syncManagedGitconfig } from '../core/git/folderConfigs'
 import { verifyGlobal } from '../core/verify/globalVerify'
 import { verifyInRepo } from '../core/verify/repoVerify'
-import { detectExistingProfiles } from '../core/git/detectProfiles'
+import { detectExistingProfiles, detectFolderMappings } from '../core/git/detectProfiles'
 import { generateSSHKey, addToSSHConfig, testSSHConnection } from '../core/git/sshKeyGen'
 import { parseSSHConfig } from '../core/git/sshConfig'
 import { openProfilesWindow, openVerifyWindow } from './windows'
@@ -39,6 +38,7 @@ export function setupIpcHandlers(rebuildTray: () => void): void {
 
       profiles.push(newProfile)
       await saveProfiles(userDataPath, profiles)
+      await syncManagedGitconfig(userDataPath)
       rebuildTray()
 
       return newProfile
@@ -52,6 +52,15 @@ export function setupIpcHandlers(rebuildTray: () => void): void {
       const profiles = await loadProfiles(userDataPath)
       const filtered = profiles.filter(p => p.id !== profileId)
       await saveProfiles(userDataPath, filtered)
+
+      // Drop folder mappings (and the active selection) referencing the deleted profile.
+      const state = await loadState(userDataPath)
+      state.folderMappings = state.folderMappings.filter(m => m.profileId !== profileId)
+      if (state.activeProfileId === profileId) {
+        state.activeProfileId = undefined
+      }
+      await saveState(userDataPath, state)
+      await syncManagedGitconfig(userDataPath)
       rebuildTray()
     } catch (error: any) {
       throw new Error(error.message)
@@ -67,9 +76,6 @@ export function setupIpcHandlers(rebuildTray: () => void): void {
         throw new Error('Profile not found')
       }
 
-      const { managedPath } = await ensureManagedIncludeInstalled()
-      await applyProfile(profile, managedPath)
-
       const state = await loadState(userDataPath)
 
       if (state.activeProfileId) {
@@ -81,9 +87,122 @@ export function setupIpcHandlers(rebuildTray: () => void): void {
 
       state.activeProfileId = profileId
       await saveState(userDataPath, state)
+      await syncManagedGitconfig(userDataPath)
       rebuildTray()
 
       return { ok: true }
+    } catch (error: any) {
+      throw new Error(error.message)
+    }
+  })
+
+  ipcMain.handle('settings:get', async () => {
+    try {
+      const state = await loadState(userDataPath)
+      return { includePosition: state.includePosition, applyGlobally: state.applyGlobally }
+    } catch (error: any) {
+      throw new Error(error.message)
+    }
+  })
+
+  ipcMain.handle('settings:setIncludePosition', async (_event, position: 'start' | 'end') => {
+    try {
+      if (position !== 'start' && position !== 'end') {
+        throw new Error(`Invalid include position: ${position}`)
+      }
+      const state = await loadState(userDataPath)
+      state.includePosition = position
+      await saveState(userDataPath, state)
+      await syncManagedGitconfig(userDataPath)
+      return { ok: true as const }
+    } catch (error: any) {
+      throw new Error(error.message)
+    }
+  })
+
+  ipcMain.handle('settings:setApplyGlobally', async (_event, applyGlobally: boolean) => {
+    try {
+      const state = await loadState(userDataPath)
+      state.applyGlobally = Boolean(applyGlobally)
+      await saveState(userDataPath, state)
+      await syncManagedGitconfig(userDataPath)
+      return { ok: true as const }
+    } catch (error: any) {
+      throw new Error(error.message)
+    }
+  })
+
+  ipcMain.handle('folders:list', async () => {
+    try {
+      const state = await loadState(userDataPath)
+      return state.folderMappings
+    } catch (error: any) {
+      throw new Error(error.message)
+    }
+  })
+
+  ipcMain.handle('folders:pick', async () => {
+    const result = await dialog.showOpenDialog({
+      title: 'Choose a folder to assign a profile',
+      properties: ['openDirectory', 'createDirectory']
+    })
+    if (result.canceled || result.filePaths.length === 0) return null
+    return result.filePaths[0]
+  })
+
+  ipcMain.handle('folders:add', async (_event, folderPath: string, profileId: string) => {
+    try {
+      if (!folderPath || !profileId) {
+        throw new Error('Folder path and profile are required')
+      }
+      const profiles = await loadProfiles(userDataPath)
+      if (!profiles.some(p => p.id === profileId)) {
+        throw new Error('Profile not found')
+      }
+
+      const state = await loadState(userDataPath)
+      const mapping: FolderMapping = { path: folderPath, profileId }
+      // Upsert: one profile per folder; replace an existing mapping for the path.
+      state.folderMappings = [
+        ...state.folderMappings.filter(m => m.path !== folderPath),
+        mapping
+      ]
+      await saveState(userDataPath, state)
+      await syncManagedGitconfig(userDataPath)
+      return { ok: true as const }
+    } catch (error: any) {
+      throw new Error(error.message)
+    }
+  })
+
+  ipcMain.handle('folders:remove', async (_event, folderPath: string) => {
+    try {
+      const state = await loadState(userDataPath)
+      state.folderMappings = state.folderMappings.filter(m => m.path !== folderPath)
+      await saveState(userDataPath, state)
+      await syncManagedGitconfig(userDataPath)
+      return { ok: true as const }
+    } catch (error: any) {
+      throw new Error(error.message)
+    }
+  })
+
+  ipcMain.handle('folders:detectExisting', async () => {
+    try {
+      const [detected, profiles, state] = await Promise.all([
+        detectFolderMappings(),
+        loadProfiles(userDataPath),
+        loadState(userDataPath)
+      ])
+      const tracked = new Set(state.folderMappings.map(m => m.path))
+      return detected
+        .filter(d => !tracked.has(d.path))
+        .map(d => ({
+          path: d.path,
+          suggestedProfileId: d.email
+            ? profiles.find(p => p.userEmail === d.email)?.id
+            : undefined
+        }))
     } catch (error: any) {
       throw new Error(error.message)
     }
