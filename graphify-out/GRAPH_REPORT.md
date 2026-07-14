@@ -1,16 +1,16 @@
 # Graph Report - git-profile-switcher  (2026-07-14)
 
 ## Corpus Check
-- 110 files · ~2,703,246 words
+- 111 files · ~2,703,624 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1623 nodes · 4706 edges · 75 communities (60 shown, 15 thin omitted)
+- 1624 nodes · 4706 edges · 77 communities (62 shown, 15 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 55 edges (avg confidence: 0.81)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `27c2bb79`
+- Built from commit: `58ab18b5`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -70,6 +70,7 @@
 - [[_COMMUNITY_Community 52|Community 52]]
 - [[_COMMUNITY_Community 53|Community 53]]
 - [[_COMMUNITY_Community 55|Community 55]]
+- [[_COMMUNITY_Community 56|Community 56]]
 - [[_COMMUNITY_Community 57|Community 57]]
 - [[_COMMUNITY_Community 58|Community 58]]
 - [[_COMMUNITY_Community 59|Community 59]]
@@ -118,15 +119,15 @@
 - **Tagged Release Build Pipeline** — contributing_release_process, workflows_release_workflow, contributing_ci_checks, ci_ci_workflow [INFERRED 0.85]
 - **Secure Renderer-Main Process Boundary** — readme_security_model, readme_architecture, index_html_renderer_entry, readme_tech_stack [INFERRED 0.75]
 
-## Communities (75 total, 15 thin omitted)
+## Communities (77 total, 15 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.03
 Nodes (154): addArrayBufferChunk(), addStringChunk(), aliases, applyExecPath(), applyPreferLocal(), AppStateSchema, arrayBufferMethods, assertIs() (+146 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.06
-Nodes (90): A(), ae(), Al, ap(), As(), Bc, be, Bh() (+82 more)
+Cohesion: 0.05
+Nodes (95): A(), ae(), Al, ap(), Bc, be, Bh(), bn() (+87 more)
 
 ### Community 2 - "Community 2"
 Cohesion: 0.06
@@ -137,8 +138,8 @@ Cohesion: 0.09
 Nodes (31): CI Workflow, Pre-PR CI Checks (typecheck/test/build), Contributing Guide, Project Safety Rules, Tagged Release Process, index.html Renderer Entry, Bug Report Issue Template, Issue Template Config (+23 more)
 
 ### Community 4 - "Community 4"
-Cohesion: 0.10
-Nodes (39): At(), ce(), Da(), dc(), dp(), dr(), ea(), fc() (+31 more)
+Cohesion: 0.17
+Nodes (21): ce(), dp(), dr(), ea(), eo(), fa(), fc(), fu() (+13 more)
 
 ### Community 5 - "Community 5"
 Cohesion: 0.04
@@ -149,24 +150,24 @@ Cohesion: 0.14
 Nodes (17): App(), ThemeContext, ThemeContextValue, useThemeContext(), Theme, THEMES, applyTheme(), useTheme() (+9 more)
 
 ### Community 8 - "Community 8"
-Cohesion: 0.12
-Nodes (34): an(), D(), di(), Ef(), fi(), gc(), Gr(), gs() (+26 more)
+Cohesion: 0.15
+Nodes (25): Ci(), D(), di(), Ed(), Ef(), fi(), gc(), Gr() (+17 more)
 
 ### Community 10 - "Community 10"
 Cohesion: 0.03
-Nodes (67): _a(), Bc, be, cf(), Cl(), Cn(), Ct, Dl (+59 more)
+Nodes (66): Bc, be, Bf(), Br(), cf(), Cl(), Cn(), Ct (+58 more)
 
 ### Community 11 - "Community 11"
-Cohesion: 0.12
-Nodes (17): InputModal(), Props, ProfileForm(), Props, GIT_HOSTING_DOMAINS, getSSHCommandForHost(), parseSSHConfig(), parseSSHConfigContent() (+9 more)
+Cohesion: 0.21
+Nodes (9): getSSHCommandForHost(), parseSSHConfig(), parseSSHConfigContent(), SSHHost, SSHKeyResult, api, DetectedFolderMappingSuggestion, electron (+1 more)
 
 ### Community 12 - "Community 12"
 Cohesion: 0.20
 Nodes (4): addToSSHConfig(), isGitHostingDomain(), isValidCidr(), isValidIP()
 
 ### Community 13 - "Community 13"
-Cohesion: 0.10
-Nodes (32): ba(), Bs(), C(), Cd(), Ci(), cu(), df(), Ds() (+24 more)
+Cohesion: 0.21
+Nodes (17): Aa(), ai(), di(), dt(), Fl(), gc(), jr(), Lr() (+9 more)
 
 ### Community 14 - "Community 14"
 Cohesion: 0.11
@@ -178,19 +179,19 @@ Nodes (29): buildManagedRegion(), createTray(), detectExistingProfiles(), detect
 
 ### Community 16 - "Community 16"
 Cohesion: 0.20
-Nodes (10): OriginTable(), Props, checkGitInstalled(), GitError, runGit(), Verify(), parseShowOrigin(), output (+2 more)
+Nodes (10): OriginTable(), Props, GitError, runGit(), Verify(), parseShowOrigin(), output, verifyInRepo() (+2 more)
 
 ### Community 17 - "Community 17"
 Cohesion: 0.15
 Nodes (7): Emitter, ObjectDefineProperty, openProfilesWindow(), openVerifyWindow(), processOk(), setExitHandler(), SignalExit
 
 ### Community 18 - "Community 18"
-Cohesion: 0.42
-Nodes (9): DetectedFolderMapping, DetectedProfile, detectExistingProfiles(), detectFolderMappings(), getGlobalProfile(), isGitHostingDomain(), parseConditionalIncludes(), parseConfigContent() (+1 more)
+Cohesion: 0.15
+Nodes (17): InputModal(), Props, ProfileForm(), Props, GIT_HOSTING_DOMAINS, DetectedFolderMapping, DetectedProfile, detectExistingProfiles() (+9 more)
 
 ### Community 19 - "Community 19"
-Cohesion: 0.29
-Nodes (10): author, bugs, url, description, homepage, keywords, license, main (+2 more)
+Cohesion: 0.22
+Nodes (13): author, bugs, url, description, homepage, keywords, license, main (+5 more)
 
 ### Community 20 - "Community 20"
 Cohesion: 0.18
@@ -205,24 +206,24 @@ Cohesion: 0.15
 Nodes (13): devDependencies, electron, electron-builder, @types/node, @types/react, @types/react-dom, @types/uuid, typescript (+5 more)
 
 ### Community 23 - "Community 23"
-Cohesion: 0.12
-Nodes (31): aa(), Au(), Bi(), Bo(), ca(), dn(), Do(), dt() (+23 more)
+Cohesion: 0.13
+Nodes (28): As(), Bo(), Da(), dn(), Do(), Ei(), gs(), hn() (+20 more)
 
 ### Community 24 - "Community 24"
 Cohesion: 0.18
 Nodes (11): scripts, build, build:appimage, build:arch, build:ci, build:mac, dev, preview (+3 more)
 
 ### Community 25 - "Community 25"
-Cohesion: 0.14
-Nodes (29): ah(), Bp(), ch(), Cl(), cr(), dh(), eh(), fh() (+21 more)
+Cohesion: 0.15
+Nodes (27): ah(), Bp(), ch(), Cl(), cr(), dh(), eh(), fh() (+19 more)
 
 ### Community 26 - "Community 26"
 Cohesion: 0.07
 Nodes (30): add(), addPipeMethods(), aliasRewriteSources(), applyProfile(), bareHostFromAlias(), checkGitInstalled(), execa(), generateSSHKey() (+22 more)
 
 ### Community 27 - "Community 27"
-Cohesion: 0.24
-Nodes (15): folderConfigDir(), folderConfigPath(), syncManagedGitconfig(), profile(), profiles, setup(), stale, state() (+7 more)
+Cohesion: 0.21
+Nodes (14): folderConfigDir(), folderConfigPath(), profile(), profiles, setup(), stale, state(), workDir (+6 more)
 
 ### Community 29 - "Community 29"
 Cohesion: 0.25
@@ -230,51 +231,51 @@ Nodes (8): dependencies, execa, react, react-dom, react-router-dom, uuid, zod, z
 
 ### Community 30 - "Community 30"
 Cohesion: 0.09
-Nodes (41): ah(), Ar(), Bp(), ch(), dh(), eh(), fh(), fp() (+33 more)
+Nodes (39): ah(), Ar(), Bp(), ch(), Ci(), dh(), eh(), fh() (+31 more)
 
 ### Community 31 - "Community 31"
 Cohesion: 0.32
 Nodes (6): compilerOptions, jsx, lib, module, extends, include
 
 ### Community 32 - "Community 32"
-Cohesion: 0.13
-Nodes (21): ac(), Ao(), Bf(), Bu(), Co(), Du(), es(), _f() (+13 more)
+Cohesion: 0.12
+Nodes (23): ac(), Ao(), Bf(), Bu(), Co(), cu(), Du(), es() (+15 more)
 
 ### Community 33 - "Community 33"
-Cohesion: 0.15
-Nodes (19): B(), E(), eo(), fa(), Ju(), ks(), n(), Nn() (+11 more)
+Cohesion: 0.08
+Nodes (40): At(), B(), ba(), Cd(), dc(), Ds(), E(), El() (+32 more)
 
 ### Community 34 - "Community 34"
-Cohesion: 0.10
-Nodes (44): ac(), an(), Ao(), ap(), Ba(), Bt(), ca(), Ce() (+36 more)
+Cohesion: 0.09
+Nodes (42): ac(), Ao(), ap(), Ba(), Bt(), Ce(), dc(), Ed() (+34 more)
 
 ### Community 35 - "Community 35"
-Cohesion: 0.16
-Nodes (18): Ai(), bn(), Br(), de(), Fe(), fp(), go(), gp() (+10 more)
+Cohesion: 0.13
+Nodes (23): aa(), Ai(), Br(), ca(), de(), ec(), Fe(), fp() (+15 more)
 
 ### Community 36 - "Community 36"
-Cohesion: 0.18
-Nodes (18): aliasRewriteSources(), applyProfile(), bareHostFromAlias(), insteadOfSources(), resolveIdentityFile(), makeProfile(), managed, personal (+10 more)
+Cohesion: 0.34
+Nodes (11): aliasRewriteSources(), applyProfile(), bareHostFromAlias(), insteadOfSources(), resolveIdentityFile(), makeProfile(), managed, personal (+3 more)
 
 ### Community 37 - "Community 37"
-Cohesion: 0.19
-Nodes (18): addToSSHConfig(), generateSSHKey(), testSSHConnection(), toKeyToken(), setupIpcHandlers(), userDataPath, createTray(), rebuildTrayMenu() (+10 more)
+Cohesion: 0.22
+Nodes (17): checkGitInstalled(), addToSSHConfig(), generateSSHKey(), testSSHConnection(), toKeyToken(), setupIpcHandlers(), userDataPath, createTray() (+9 more)
 
 ### Community 38 - "Community 38"
-Cohesion: 0.20
-Nodes (17): cc(), fn(), Gi(), hs(), jn(), ki(), lu(), pf() (+9 more)
+Cohesion: 0.11
+Nodes (39): an(), Bs(), C(), cc(), df(), fn(), Fr(), Gi() (+31 more)
 
 ### Community 42 - "Community 42"
 Cohesion: 0.10
-Nodes (48): Aa(), At(), au(), Bi(), bn(), Br(), Bs(), C() (+40 more)
+Nodes (30): B(), Bi(), bn(), cu(), de(), dp(), ec(), Fe() (+22 more)
 
 ### Community 45 - "Community 45"
-Cohesion: 0.13
-Nodes (30): ai(), di(), Du(), es(), Fi(), Fl(), gc(), ie() (+22 more)
+Cohesion: 0.12
+Nodes (37): an(), At(), au(), Bs(), C(), ca(), df(), Du() (+29 more)
 
 ### Community 46 - "Community 46"
-Cohesion: 0.25
-Nodes (9): Bf(), Da(), Gf(), jt(), la(), _o(), Qf(), va() (+1 more)
+Cohesion: 0.30
+Nodes (8): AppState, AppStateSchema, defaultState, FolderMapping, FolderMappingSchema, FolderConfigs(), ImportRow(), Suggestion
 
 ### Community 47 - "Community 47"
 Cohesion: 0.40
@@ -285,20 +286,24 @@ Cohesion: 0.40
 Nodes (4): file_format_version, ICD, api_version, library_path
 
 ### Community 49 - "Community 49"
-Cohesion: 0.67
-Nodes (3): repository, type, url
+Cohesion: 0.31
+Nodes (11): D(), Ei(), hc(), Ho(), ll(), lp(), Lt(), $s() (+3 more)
 
 ### Community 51 - "Community 51"
-Cohesion: 0.19
-Nodes (18): bu(), Ds(), Ed(), Er(), Gn(), Ja(), ka(), ms() (+10 more)
+Cohesion: 0.13
+Nodes (26): _a(), bu(), Ds(), ea(), Er(), fo(), Gn(), Ja() (+18 more)
 
 ### Community 52 - "Community 52"
-Cohesion: 0.12
-Nodes (33): Ae(), al(), B(), cc(), D(), Ei(), fn(), hc() (+25 more)
+Cohesion: 0.22
+Nodes (18): Ae(), al(), cc(), fn(), ki(), ko(), Pn(), Qi() (+10 more)
 
 ### Community 55 - "Community 55"
 Cohesion: 0.18
 Nodes (11): code:text (# work GitHub account), code:bash (# Default single-account form), code:bash (git remote set-url origin git@github.com-work:company/repo.g), code:text (Host gh-personal), Creating Profiles, Platform-Agnostic Profile Detection, SSH Configuration for Multiple Accounts, SSH Key Generation (+3 more)
+
+### Community 56 - "Community 56"
+Cohesion: 0.33
+Nodes (9): Au(), Bi(), dt(), tr(), Uu(), Vi(), Vn(), vs() (+1 more)
 
 ### Community 58 - "Community 58"
 Cohesion: 0.18
@@ -317,8 +322,8 @@ Cohesion: 0.20
 Nodes (8): Comparison vs Manual Setup, Contributing, Features, Git Profile Switcher, License, Screenshots, Themes, Why This Exists
 
 ### Community 62 - "Community 62"
-Cohesion: 0.17
-Nodes (19): Bo(), dn(), Do(), fc(), Ft(), Gi(), hn(), hs() (+11 more)
+Cohesion: 0.15
+Nodes (23): Bo(), Cp(), dn(), Do(), fc(), Ft(), gl(), hn() (+15 more)
 
 ### Community 63 - "Community 63"
 Cohesion: 0.29
@@ -330,7 +335,7 @@ Nodes (5): Files The App Does Not Manage, Files The App Touches, Operational Not
 
 ### Community 66 - "Community 66"
 Cohesion: 0.21
-Nodes (20): buildManagedRegion(), ensureManagedFile(), ensureManagedIncludeInstalled(), getManagedPaths(), IncludePosition, ManagedIncludeResult, ManagedPaths, normalizeGitdir() (+12 more)
+Nodes (21): syncManagedGitconfig(), buildManagedRegion(), ensureManagedFile(), ensureManagedIncludeInstalled(), getManagedPaths(), IncludePosition, ManagedIncludeResult, ManagedPaths (+13 more)
 
 ### Community 67 - "Community 67"
 Cohesion: 0.40
@@ -360,8 +365,8 @@ Nodes (3): Files it does not manage, Files it touches, Security Notes
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `error` connect `Community 42` to `Community 0`, `Community 34`, `Community 10`, `Community 45`, `Community 46`, `Community 15`, `Community 51`, `Community 52`, `Community 62`?**
-  _High betweenness centrality (0.147) - this node is a cross-community bridge._
+- **Why does `error` connect `Community 45` to `Community 0`, `Community 34`, `Community 10`, `Community 42`, `Community 13`, `Community 15`, `Community 49`, `Community 51`, `Community 52`, `Community 62`, `Community 30`?**
+  _High betweenness centrality (0.146) - this node is a cross-community bridge._
 - **Why does `ZodString` connect `Community 7` to `Community 0`, `Community 12`, `Community 53`, `Community 15`?**
   _High betweenness centrality (0.028) - this node is a cross-community bridge._
 - **Why does `ZodType` connect `Community 5` to `Community 0`, `Community 2`, `Community 26`?**
@@ -373,4 +378,4 @@ _Questions this graph is uniquely positioned to answer:_
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.02907071696880614 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**
-  _Cohesion score 0.05542283803153368 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05369415807560137 - nodes in this community are weakly interconnected._
