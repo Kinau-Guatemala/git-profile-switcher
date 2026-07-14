@@ -1,0 +1,13 @@
+# makepkg build artifacts — only PKGBUILD and .SRCINFO belong in the AUR repos.
+src/
+pkg/
+*.pkg.tar.zst
+*.pkg.tar.zst.sig
+*.AppImage
+*.log
+
+# Downloaded source copy fetched by the -bin PKGBUILD's source=().
+git-profile-switcher-bin/LICENSE-*
+
+# VCS source clone makepkg creates for the -git package.
+git-profile-switcher-git/git-profile-switcher/
