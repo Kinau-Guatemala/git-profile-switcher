@@ -1,7 +1,7 @@
 # Maintainer: Jose Andres Auyon <auyon.joseandres@gmail.com>
 pkgname=git-profile-switcher-git
 _appname=git-config-switcher
-pkgver=1.0.0.r0.g0000000
+pkgver=1.0.0.r0.g44bfc24
 pkgrel=1
 pkgdesc="Cross-platform desktop tray app for managing multiple Git identities"
 arch=('x86_64')
@@ -9,7 +9,7 @@ url="https://github.com/Kinau-Guatemala/git-profile-switcher"
 license=('MIT')
 depends=('gtk3' 'nss' 'alsa-lib' 'libcups' 'libdrm' 'libxcomposite'
          'libxdamage' 'libxrandr' 'libxfixes' 'libxkbcommon' 'at-spi2-core'
-         'mesa')
+         'mesa' 'hicolor-icon-theme')
 makedepends=('git' 'nodejs' 'npm')
 provides=('git-profile-switcher')
 conflicts=('git-profile-switcher' 'git-profile-switcher-bin')
@@ -53,6 +53,10 @@ package() {
     chrome_crashpad_handler chrome-sandbox \
     "$pkgdir/opt/git-profile-switcher/"
 
+  # `cp -a` preserves the squashfs perms, which lack world read/exec on some
+  # files (locales, resources) — normalize so non-root users can read them.
+  chmod -R u=rwX,go=rX "$pkgdir/opt/git-profile-switcher"
+
   # chrome-sandbox must be setuid root for Electron's sandbox to work.
   chmod 4755 "$pkgdir/opt/git-profile-switcher/chrome-sandbox"
 
@@ -72,6 +76,7 @@ EOF
 
   # Icons (full hicolor set ships inside the AppImage).
   cp -a --no-preserve=ownership usr/share/icons "$pkgdir/usr/share/"
+  chmod -R u=rwX,go=rX "$pkgdir/usr/share/icons"
 
   # License (MIT is not a common license, so it must be installed).
   install -Dm644 "$srcdir/git-profile-switcher/LICENSE" \

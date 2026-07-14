@@ -1,6 +1,6 @@
 pkgbase = git-profile-switcher-git
 	pkgdesc = Cross-platform desktop tray app for managing multiple Git identities
-	pkgver = 1.0.0.r0.g0000000
+	pkgver = 1.0.0.r0.g44bfc24
 	pkgrel = 1
 	url = https://github.com/Kinau-Guatemala/git-profile-switcher
 	arch = x86_64
@@ -20,6 +20,7 @@ pkgbase = git-profile-switcher-git
 	depends = libxkbcommon
 	depends = at-spi2-core
 	depends = mesa
+	depends = hicolor-icon-theme
 	provides = git-profile-switcher
 	conflicts = git-profile-switcher
 	conflicts = git-profile-switcher-bin
