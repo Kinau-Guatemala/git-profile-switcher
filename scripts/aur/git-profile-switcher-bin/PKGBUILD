@@ -9,10 +9,17 @@ url="https://github.com/Kinau-Guatemala/git-profile-switcher"
 license=('MIT')
 depends=('gtk3' 'nss' 'alsa-lib' 'libcups' 'libdrm' 'libxcomposite'
          'libxdamage' 'libxrandr' 'libxfixes' 'libxkbcommon' 'at-spi2-core'
-         'mesa' 'hicolor-icon-theme')
+         'mesa' 'hicolor-icon-theme'
+         # Directly linked by the bundled Electron binary (namcap-detected).
+         # Listed explicitly so we don't rely on transitive pulls from the
+         # runtime deps above. glibc/gcc-libs/bash are omitted as base members.
+         'dbus' 'glib2' 'pango' 'cairo' 'expat' 'nspr'
+         'libx11' 'libxext' 'libxcb')
 provides=('git-profile-switcher')
 conflicts=('git-profile-switcher' 'git-profile-switcher-git')
-options=('!strip')
+# !strip: binaries are prebuilt vendor blobs. !debug: no source to build a
+# debug package from, so skip it (avoids an empty usr/src/debug dir).
+options=('!strip' '!debug')
 # electron-builder names the artifact from productName ("Git Config Switcher");
 # GitHub replaces the spaces with dots when it stores the release asset.
 _asset="Git.Config.Switcher-${pkgver}.AppImage"
