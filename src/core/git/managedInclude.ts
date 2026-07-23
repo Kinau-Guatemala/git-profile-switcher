@@ -9,13 +9,13 @@ export const REGION_START = '# >>> git-profile-switcher (managed) >>>'
 export const REGION_END = '# <<< git-profile-switcher (managed) <<<'
 
 export interface ManagedPaths {
-  managedPath: string   // ~/.gitconfig-switcher (global active profile)
+  managedPath: string   // ~/.git-profile-switcher (global active profile)
   gitconfigPath: string // ~/.gitconfig
 }
 
 export function getManagedPaths(home: string = homedir()): ManagedPaths {
   return {
-    managedPath: join(home, '.gitconfig-switcher'),
+    managedPath: join(home, '.git-profile-switcher'),
     gitconfigPath: join(home, '.gitconfig')
   }
 }
@@ -92,9 +92,18 @@ export function stripManagedRegion(content: string): string {
  * managed path with other, user-defined paths are left untouched.
  */
 export function stripManagedInclude(content: string, absolutePath: string): string {
+  // Pre-rename name of the managed file, so configs written before the app was
+  // renamed still get their stale include dropped instead of pointing at an
+  // orphan file.
+  const legacyPath = absolutePath.replace(/\.git-profile-switcher$/, '.gitconfig-switcher')
+
   const managedTargets = new Set([
     absolutePath,
     toForwardSlashes(absolutePath),
+    legacyPath,
+    toForwardSlashes(legacyPath),
+    '~/.git-profile-switcher',
+    '.git-profile-switcher',
     '~/.gitconfig-switcher',
     '.gitconfig-switcher'
   ])

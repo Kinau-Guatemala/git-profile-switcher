@@ -48,7 +48,7 @@ describe('applyProfile', () => {
 
   it('forces the profile key via core.sshCommand and normalizes aliases to plain', async () => {
     dir = await mkdtemp(join(tmpdir(), 'gps-'))
-    const managed = join(dir, '.gitconfig-switcher')
+    const managed = join(dir, '.git-profile-switcher')
 
     const personal = makeProfile({
       label: 'personal',
@@ -74,7 +74,7 @@ describe('applyProfile', () => {
 
   it('truncates stale config from a previously-active profile on re-apply', async () => {
     dir = await mkdtemp(join(tmpdir(), 'gps-'))
-    const managed = join(dir, '.gitconfig-switcher')
+    const managed = join(dir, '.git-profile-switcher')
 
     const work = makeProfile({
       label: 'work',

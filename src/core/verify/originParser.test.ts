@@ -5,7 +5,7 @@ describe('parseShowOrigin', () => {
   it('parses git config --show-origin lines into structured entries', () => {
     const output = [
       'file:C:/Users/Admin/.gitconfig\tuser.name=Jane Dev',
-      'file:C:/Users/Admin/.gitconfig-switcher\tuser.email=jane@example.com',
+      'file:C:/Users/Admin/.git-profile-switcher\tuser.email=jane@example.com',
       'file:C:/Repos/app/.git/config\tcore.sshCommand=ssh -F ~/.ssh/config'
     ].join('\n')
 
@@ -16,7 +16,7 @@ describe('parseShowOrigin', () => {
         value: 'Jane Dev'
       },
       {
-        originFile: 'C:/Users/Admin/.gitconfig-switcher',
+        originFile: 'C:/Users/Admin/.git-profile-switcher',
         key: 'user.email',
         value: 'jane@example.com'
       },
