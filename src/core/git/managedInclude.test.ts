@@ -15,11 +15,11 @@ describe('buildManagedRegion', () => {
   it('emits the global include before per-folder includeIf blocks', () => {
     const region = buildManagedRegion({
       includeGlobal: true,
-      managedPath: '/home/u/.gitconfig-switcher',
+      managedPath: '/home/u/.git-profile-switcher',
       entries: [{ gitdir: '/home/u/Dev/work', configPath: '/data/folder-configs/abc.gitconfig' }]
     })
 
-    const globalIdx = region.indexOf('path = /home/u/.gitconfig-switcher')
+    const globalIdx = region.indexOf('path = /home/u/.git-profile-switcher')
     const folderIdx = region.indexOf('[includeIf "gitdir:/home/u/Dev/work/"]')
     expect(globalIdx).toBeGreaterThan(-1)
     expect(folderIdx).toBeGreaterThan(globalIdx)
@@ -39,7 +39,7 @@ describe('buildManagedRegion', () => {
   it('omits the global include when applyGlobally is off', () => {
     const region = buildManagedRegion({
       includeGlobal: false,
-      managedPath: '/home/u/.gitconfig-switcher',
+      managedPath: '/home/u/.git-profile-switcher',
       entries: []
     })
     expect(region).not.toContain('[include]')
@@ -69,9 +69,9 @@ describe('stripManagedRegion', () => {
 
 describe('stripManagedInclude (legacy)', () => {
   it('removes a bare managed [include] block from older versions', () => {
-    const content = '[include]\n\tpath = /home/u/.gitconfig-switcher\n[user]\n\temail = a@b.c\n'
-    const stripped = stripManagedInclude(content, '/home/u/.gitconfig-switcher')
-    expect(stripped).not.toContain('.gitconfig-switcher')
+    const content = '[include]\n\tpath = /home/u/.git-profile-switcher\n[user]\n\temail = a@b.c\n'
+    const stripped = stripManagedInclude(content, '/home/u/.git-profile-switcher')
+    expect(stripped).not.toContain('.git-profile-switcher')
     expect(stripped).toContain('email = a@b.c')
   })
 })
@@ -87,7 +87,7 @@ describe('writeManagedRegion', () => {
     home = await mkdtemp(join(tmpdir(), 'gps-home-'))
     await writeFile(join(home, '.gitconfig'), '[user]\n\temail = me@example.com\n', 'utf-8')
 
-    const r1 = buildManagedRegion({ includeGlobal: true, managedPath: join(home, '.gitconfig-switcher'), entries: [] })
+    const r1 = buildManagedRegion({ includeGlobal: true, managedPath: join(home, '.git-profile-switcher'), entries: [] })
     await writeManagedRegion(r1, 'end', home)
     let gc = await readFile(join(home, '.gitconfig'), 'utf-8')
     expect(gc).toContain('email = me@example.com')
@@ -96,7 +96,7 @@ describe('writeManagedRegion', () => {
     // Re-applying a new region must replace, not duplicate.
     const r2 = buildManagedRegion({
       includeGlobal: false,
-      managedPath: join(home, '.gitconfig-switcher'),
+      managedPath: join(home, '.git-profile-switcher'),
       entries: [{ gitdir: join(home, 'Dev/work'), configPath: '/c.gitconfig' }]
     })
     await writeManagedRegion(r2, 'end', home)

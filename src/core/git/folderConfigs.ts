@@ -21,7 +21,7 @@ export function folderConfigPath(userDataPath: string, profileId: string): strin
 
 /**
  * Regenerate everything the app owns from the current state + profiles:
- *   1. the global managed file (~/.gitconfig-switcher) for the active profile,
+ *   1. the global managed file (~/.git-profile-switcher) for the active profile,
  *   2. one per-profile managed file for each referenced folder mapping (pruning
  *      files that are no longer referenced),
  *   3. the marker-delimited region in ~/.gitconfig wiring it all together.
