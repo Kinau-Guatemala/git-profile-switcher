@@ -37,7 +37,12 @@ export async function verifyGlobal(): Promise<VerifyResult> {
     )
     
     // If managed file exists, highlight it
-    const managedFileEntries = origins.filter(o => o.originFile.includes('.git-profile-switcher'))
+    // '.gitconfig-switcher' is the pre-1.1.0 name: a config upgraded from 1.0.0
+    // still points there until the next profile switch rewrites the include.
+    const managedFileEntries = origins.filter(
+      o => o.originFile.includes('.git-profile-switcher') ||
+           o.originFile.includes('.gitconfig-switcher')
+    )
     if (managedFileEntries.length === 0) {
       warnings.push('Managed config file not being used - include may not be set up correctly')
     }
