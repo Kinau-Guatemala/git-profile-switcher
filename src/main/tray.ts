@@ -11,7 +11,7 @@ const userDataPath = app.getPath('userData')
 export async function createTray(): Promise<void> {
   const icon = nativeImage.createEmpty()
   tray = new Tray(icon)
-  tray.setToolTip('Git Config Switcher')
+  tray.setToolTip('Git Profile Switcher')
 
   await rebuildTrayMenu()
 }

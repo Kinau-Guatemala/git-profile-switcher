@@ -54,7 +54,7 @@
   <text x="426" y="654" fill="#FFF5DC" font-family="'Courier New', monospace" font-size="14">Origin file</text>
   <text x="716" y="654" fill="#FFF5DC" font-family="'Courier New', monospace" font-size="14">Key</text>
   <text x="888" y="654" fill="#FFF5DC" font-family="'Courier New', monospace" font-size="14">Value</text>
-  <text x="426" y="684" fill="#B8A060" font-family="'Courier New', monospace" font-size="14">~/.gitconfig-switcher</text>
+  <text x="426" y="684" fill="#B8A060" font-family="'Courier New', monospace" font-size="14">~/.git-profile-switcher</text>
   <text x="716" y="684" fill="#B8A060" font-family="'Courier New', monospace" font-size="14">user.email</text>
   <text x="888" y="684" fill="#B8A060" font-family="'Courier New', monospace" font-size="14">jane@company.dev</text>
 </svg>
