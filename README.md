@@ -19,7 +19,19 @@ Switch between Git profiles — name, email, SSH keys, and GPG signing — with 
 ## Screenshots
 
 <p align="center">
-  <img src="./docs/screenshots/app-overview.svg" alt="App overview showing profiles, SSH generation, and verification panels" width="900" />
+  <img src="./docs/screenshots/verify.png" alt="Verify tab showing the effective Git identity and every config origin that contributes to it" width="900" />
+</p>
+
+<p align="center">
+  <img src="./docs/screenshots/ssh-keys.png" alt="SSH Keys tab with the key generator and the list of existing GitHub SSH hosts" width="900" />
+</p>
+
+<p align="center">
+  <img src="./docs/screenshots/folders.png" alt="Folders tab where a profile is assigned to a directory so repos inside it use that identity" width="900" />
+</p>
+
+<p align="center">
+  <img src="./docs/screenshots/settings.png" alt="Settings tab with the colour palette picker, global apply toggle, and git config placement option" width="900" />
 </p>
 
 <p align="center">
