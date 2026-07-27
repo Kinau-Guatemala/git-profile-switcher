@@ -34,10 +34,6 @@ Switch between Git profiles — name, email, SSH keys, and GPG signing — with 
   <img src="./docs/screenshots/settings.png" alt="Settings tab with the colour palette picker, global apply toggle, and git config placement option" width="900" />
 </p>
 
-<p align="center">
-  <img src="./docs/screenshots/tray-menu.svg" alt="Tray menu preview showing profile switching and undo actions" width="360" />
-</p>
-
 ---
 
 ## Why This Exists
