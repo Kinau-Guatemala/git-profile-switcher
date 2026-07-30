@@ -23,7 +23,7 @@ If you changed packaging or release behavior, validate the platform-specific scr
 ## Project Safety Rules
 
 - Do not rewrite the user's full `~/.gitconfig`; the app may only install a single managed include.
-- Profile switching must write only to `~/.gitconfig-switcher`.
+- Profile switching must write only to `~/.git-profile-switcher`.
 - SSH config changes must remain opt-in and append-only for the selected host alias.
 - Renderer code must stay isolated from Node.js APIs. Filesystem and shell access belong in the main process behind the preload bridge.
 - Keep include installation idempotent and preserve the undo flow.

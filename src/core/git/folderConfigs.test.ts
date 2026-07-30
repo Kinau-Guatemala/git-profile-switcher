@@ -65,10 +65,11 @@ describe('syncManagedGitconfig', () => {
     const gitconfig = await readFile(join(home, '.gitconfig'), 'utf-8')
     expect(gitconfig).toContain(REGION_START)
     expect(gitconfig).toContain('[include]')
-    expect(gitconfig).toContain(`[includeIf "gitdir:${workDir}/"]`)
+    // region paths are always forward-slashed; workDir is backslashed on Windows
+    expect(gitconfig).toContain(`[includeIf "gitdir:${workDir.replaceAll('\\', '/')}/"]`)
 
     // global file = active (personal), forcing the personal key
-    const globalFile = await readFile(join(home, '.gitconfig-switcher'), 'utf-8')
+    const globalFile = await readFile(join(home, '.git-profile-switcher'), 'utf-8')
     expect(globalFile).toContain('me@personal.com')
     expect(globalFile).toContain('sshCommand = ssh -i ~/.ssh/personal -o IdentitiesOnly=yes')
 

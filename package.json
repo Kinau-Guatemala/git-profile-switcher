@@ -1,6 +1,6 @@
 {
-  "name": "git-config-switcher",
-  "version": "1.0.0",
+  "name": "git-profile-switcher",
+  "version": "1.1.0",
   "description": "Cross-platform desktop tray app for managing multiple Git identities",
   "main": "dist-electron/main/index.js",
   "scripts": {
@@ -15,7 +15,15 @@
     "test": "vitest",
     "test:run": "vitest run"
   },
-  "keywords": ["electron", "git", "profile", "identity", "ssh", "tray", "switcher"],
+  "keywords": [
+    "electron",
+    "git",
+    "profile",
+    "identity",
+    "ssh",
+    "tray",
+    "switcher"
+  ],
   "author": "Jose Andres Auyon <auyon.joseandres@gmail.com>",
   "homepage": "https://github.com/Kinau-Guatemala/git-profile-switcher",
   "bugs": {
@@ -27,8 +35,8 @@
   },
   "license": "MIT",
   "build": {
-    "appId": "com.gitconfigswitcher.app",
-    "productName": "Git Config Switcher",
+    "appId": "com.gitprofileswitcher.app",
+    "productName": "Git Profile Switcher",
     "files": [
       "dist-electron/**/*",
       "dist-renderer/**/*",

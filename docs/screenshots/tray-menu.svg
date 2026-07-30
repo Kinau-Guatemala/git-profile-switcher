@@ -26,7 +26,7 @@
 
   <rect x="176" y="574" width="288" height="70" rx="14" fill="#2A2A40" stroke="#353550"/>
   <text x="198" y="606" fill="#FFF5DC" font-family="'Courier New', monospace" font-size="16" font-weight="700">Managed include</text>
-  <text x="198" y="632" fill="#B8A060" font-family="'Courier New', monospace" font-size="13">Writes only to ~/.gitconfig-switcher</text>
+  <text x="198" y="632" fill="#B8A060" font-family="'Courier New', monospace" font-size="13">Writes only to ~/.git-profile-switcher</text>
 
   <text x="176" y="680" fill="#B8A060" font-family="'Courier New', monospace" font-size="17">Quit</text>
 </svg>

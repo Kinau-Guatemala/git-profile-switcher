@@ -19,11 +19,19 @@ Switch between Git profiles — name, email, SSH keys, and GPG signing — with 
 ## Screenshots
 
 <p align="center">
-  <img src="./docs/screenshots/app-overview.svg" alt="App overview showing profiles, SSH generation, and verification panels" width="900" />
+  <img src="./docs/screenshots/verify.png" alt="Verify tab showing the effective Git identity and every config origin that contributes to it" width="900" />
 </p>
 
 <p align="center">
-  <img src="./docs/screenshots/tray-menu.svg" alt="Tray menu preview showing profile switching and undo actions" width="360" />
+  <img src="./docs/screenshots/ssh-keys.png" alt="SSH Keys tab with the key generator and the list of existing GitHub SSH hosts" width="900" />
+</p>
+
+<p align="center">
+  <img src="./docs/screenshots/folders.png" alt="Folders tab where a profile is assigned to a directory so repos inside it use that identity" width="900" />
+</p>
+
+<p align="center">
+  <img src="./docs/screenshots/settings.png" alt="Settings tab with the colour palette picker, global apply toggle, and git config placement option" width="900" />
 </p>
 
 ---
@@ -44,7 +52,7 @@ Git Profile Switcher turns that into a tray-first workflow with undo, verificati
 | Feature | Description |
 |---------|-------------|
 | **Tray-first switching** | Switch profiles from the system tray without keeping the main window open. |
-| **Managed include strategy** | Writes only to `~/.gitconfig-switcher`, not your full `~/.gitconfig`. |
+| **Managed include strategy** | Writes only to `~/.git-profile-switcher`, not your full `~/.gitconfig`. |
 | **SSH key management** | Generate ed25519 keys, add host aliases, and test connections from the app. |
 | **Optional passphrase support** | Leave passphrases blank for convenience, or set one when you want the private key encrypted. |
 | **Config verification** | See the effective Git identity and which file set every value. |
@@ -108,14 +116,14 @@ Packaged artifacts are written to `dist/`.
 Git Profile Switcher uses a managed include strategy that is safe and non-destructive:
 
 ```text
-~/.gitconfig                          ~/.gitconfig-switcher
+~/.gitconfig                          ~/.git-profile-switcher
 ┌──────────────────────────────┐      ┌───────────────────────────────┐
 │ [user]                       │      │ [user]                        │
 │     name = Existing Name     │      │     name = Active Profile     │
 │     email = existing@site    │      │     email = active@site       │
 │                              │      │                               │
 │ [include]                    │─────>│ [core]                        │
-│     path = ~/.gitconfig-     │      │     sshCommand = ssh -F ...   │
+│     path = ~/.git-profile-   │      │     sshCommand = ssh -F ...   │
 │            switcher          │      │                               │
 │                              │      │ [commit]                      │
 │ # Everything else stays      │      │     gpgsign = true            │
@@ -127,9 +135,13 @@ Git Profile Switcher uses a managed include strategy that is safe and non-destru
 ### What This Means
 
 - The app installs one include line into `~/.gitconfig` if it is missing.
-- Every profile switch writes only to `~/.gitconfig-switcher`.
+- Every profile switch writes only to `~/.git-profile-switcher`.
 - Your existing `.gitconfig` is not deeply parsed or rewritten.
 - Disabling the app is simple: remove the include line and Git falls back to your original config.
+
+### Upgrading from 1.0.0
+
+The managed file was renamed from `~/.gitconfig-switcher` to `~/.git-profile-switcher`. Nothing breaks on upgrade: the old include keeps working until you next apply a profile, at which point 1.1.0 drops the stale include and writes the new file. After that first switch you can delete `~/.gitconfig-switcher`.
 
 ---
 
@@ -140,7 +152,7 @@ Git Profile Switcher is opinionated about staying out of the way.
 ### Files it touches
 
 - `~/.gitconfig`: only to add one idempotent include entry.
-- `~/.gitconfig-switcher`: rewritten when you apply or undo a profile switch.
+- `~/.git-profile-switcher`: rewritten when you apply or undo a profile switch.
 - `~/.ssh/config`: appended only when you explicitly add or generate an SSH host alias.
 - `~/.ssh/id_ed25519_<account>` and `.pub`: created only when you explicitly generate a key.
 - Electron user data: `profiles.json` and `state.json` store profile metadata and undo state.
@@ -163,7 +175,7 @@ For a concise version of the same rules, see [SECURITY.md](./SECURITY.md).
 On first launch the app will:
 
 - Verify Git is installed.
-- Create `~/.gitconfig-switcher` if it does not exist.
+- Create `~/.git-profile-switcher` if it does not exist.
 - Install the include directive into `~/.gitconfig` once.
 - Open the Profiles window.
 
