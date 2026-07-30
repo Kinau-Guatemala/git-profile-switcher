@@ -243,7 +243,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/package.json",
       "source_location": "L24",
       "id": "git_profile_switcher_package_repository",
-      "community": 19,
+      "community": 87,
       "norm_label": "repository"
     },
     {
@@ -252,7 +252,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/package.json",
       "source_location": "L25",
       "id": "git_profile_switcher_package_repository_type",
-      "community": 19,
+      "community": 87,
       "norm_label": "type"
     },
     {
@@ -261,7 +261,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/package.json",
       "source_location": "L26",
       "id": "git_profile_switcher_package_repository_url",
-      "community": 19,
+      "community": 87,
       "norm_label": "url"
     },
     {
@@ -873,7 +873,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/core/git/gitRunner.ts",
       "source_location": "L9",
       "id": "git_gitrunner_checkgitinstalled",
-      "community": 37,
+      "community": 16,
       "norm_label": "checkgitinstalled()"
     },
     {
@@ -891,7 +891,7 @@
       "source_file": "src/core/git/sshConfig.ts",
       "source_location": "L1",
       "id": "src_core_git_sshconfig_ts",
-      "community": 11,
+      "community": 18,
       "norm_label": "sshconfig.ts"
     },
     {
@@ -900,7 +900,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/core/git/sshConfig.ts",
       "source_location": "L6",
       "id": "git_sshconfig_sshhost",
-      "community": 11,
+      "community": 18,
       "norm_label": "sshhost"
     },
     {
@@ -909,7 +909,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/core/git/sshConfig.ts",
       "source_location": "L13",
       "id": "git_sshconfig_parsesshconfig",
-      "community": 11,
+      "community": 18,
       "norm_label": "parsesshconfig()"
     },
     {
@@ -918,7 +918,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/core/git/sshConfig.ts",
       "source_location": "L28",
       "id": "git_sshconfig_parsesshconfigcontent",
-      "community": 11,
+      "community": 18,
       "norm_label": "parsesshconfigcontent()"
     },
     {
@@ -927,7 +927,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/core/git/sshConfig.ts",
       "source_location": "L86",
       "id": "git_sshconfig_getsshcommandforhost",
-      "community": 11,
+      "community": 18,
       "norm_label": "getsshcommandforhost()"
     },
     {
@@ -945,7 +945,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/core/git/sshKeyGen.ts",
       "source_location": "L7",
       "id": "git_sshkeygen_sshkeyresult",
-      "community": 11,
+      "community": 37,
       "norm_label": "sshkeyresult"
     },
     {
@@ -1449,7 +1449,7 @@
       "source_file": "src/core/profiles/schema.ts",
       "source_location": "L1",
       "id": "src_core_profiles_schema_ts",
-      "community": 27,
+      "community": 11,
       "norm_label": "schema.ts"
     },
     {
@@ -1458,7 +1458,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/core/profiles/schema.ts",
       "source_location": "L3",
       "id": "profiles_schema_profileadvancedschema",
-      "community": 27,
+      "community": 11,
       "norm_label": "profileadvancedschema"
     },
     {
@@ -1467,7 +1467,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/core/profiles/schema.ts",
       "source_location": "L11",
       "id": "profiles_schema_profileschema",
-      "community": 27,
+      "community": 11,
       "norm_label": "profileschema"
     },
     {
@@ -1476,7 +1476,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/core/profiles/schema.ts",
       "source_location": "L21",
       "id": "profiles_schema_profileinputschema",
-      "community": 27,
+      "community": 11,
       "norm_label": "profileinputschema"
     },
     {
@@ -1485,7 +1485,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/core/profiles/schema.ts",
       "source_location": "L27",
       "id": "profiles_schema_profileadvanced",
-      "community": 27,
+      "community": 11,
       "norm_label": "profileadvanced"
     },
     {
@@ -1494,7 +1494,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/core/profiles/schema.ts",
       "source_location": "L28",
       "id": "profiles_schema_profile",
-      "community": 36,
+      "community": 11,
       "norm_label": "profile"
     },
     {
@@ -1503,7 +1503,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/core/profiles/schema.ts",
       "source_location": "L29",
       "id": "profiles_schema_profileinput",
-      "community": 18,
+      "community": 11,
       "norm_label": "profileinput"
     },
     {
@@ -1512,7 +1512,7 @@
       "source_file": "src/core/profiles/storage.ts",
       "source_location": "L1",
       "id": "src_core_profiles_storage_ts",
-      "community": 27,
+      "community": 11,
       "norm_label": "storage.ts"
     },
     {
@@ -1521,7 +1521,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/core/profiles/storage.ts",
       "source_location": "L6",
       "id": "profiles_storage_profilearrayschema",
-      "community": 27,
+      "community": 11,
       "norm_label": "profilearrayschema"
     },
     {
@@ -1548,7 +1548,7 @@
       "source_file": "src/core/profiles/state.ts",
       "source_location": "L1",
       "id": "src_core_profiles_state_ts",
-      "community": 46,
+      "community": 27,
       "norm_label": "state.ts"
     },
     {
@@ -1557,7 +1557,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/core/profiles/state.ts",
       "source_location": "L5",
       "id": "profiles_state_foldermappingschema",
-      "community": 46,
+      "community": 27,
       "norm_label": "foldermappingschema"
     },
     {
@@ -1566,7 +1566,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/core/profiles/state.ts",
       "source_location": "L10",
       "id": "profiles_state_foldermapping",
-      "community": 46,
+      "community": 11,
       "norm_label": "foldermapping"
     },
     {
@@ -1575,7 +1575,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/core/profiles/state.ts",
       "source_location": "L12",
       "id": "profiles_state_appstateschema",
-      "community": 46,
+      "community": 27,
       "norm_label": "appstateschema"
     },
     {
@@ -1584,7 +1584,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/core/profiles/state.ts",
       "source_location": "L25",
       "id": "profiles_state_appstate",
-      "community": 46,
+      "community": 27,
       "norm_label": "appstate"
     },
     {
@@ -1593,7 +1593,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/core/profiles/state.ts",
       "source_location": "L27",
       "id": "profiles_state_defaultstate",
-      "community": 46,
+      "community": 27,
       "norm_label": "defaultstate"
     },
     {
@@ -1602,7 +1602,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/core/profiles/state.ts",
       "source_location": "L35",
       "id": "profiles_state_loadstate",
-      "community": 37,
+      "community": 27,
       "norm_label": "loadstate()"
     },
     {
@@ -1611,7 +1611,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/core/profiles/state.ts",
       "source_location": "L49",
       "id": "profiles_state_savestate",
-      "community": 37,
+      "community": 27,
       "norm_label": "savestate()"
     },
     {
@@ -1836,7 +1836,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/preload/index.ts",
       "source_location": "L8",
       "id": "preload_index_detectedprofile",
-      "community": 18,
+      "community": 11,
       "norm_label": "detectedprofile"
     },
     {
@@ -1998,7 +1998,7 @@
       "source_file": "src/renderer/components/InputModal.tsx",
       "source_location": "L1",
       "id": "src_renderer_components_inputmodal_tsx",
-      "community": 18,
+      "community": 11,
       "norm_label": "inputmodal.tsx"
     },
     {
@@ -2007,7 +2007,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/renderer/components/InputModal.tsx",
       "source_location": "L3",
       "id": "components_inputmodal_props",
-      "community": 18,
+      "community": 11,
       "norm_label": "props"
     },
     {
@@ -2016,7 +2016,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/renderer/components/InputModal.tsx",
       "source_location": "L9",
       "id": "components_inputmodal_inputmodal",
-      "community": 18,
+      "community": 11,
       "norm_label": "inputmodal()"
     },
     {
@@ -2052,7 +2052,7 @@
       "source_file": "src/renderer/components/ProfileForm.tsx",
       "source_location": "L1",
       "id": "src_renderer_components_profileform_tsx",
-      "community": 18,
+      "community": 11,
       "norm_label": "profileform.tsx"
     },
     {
@@ -2061,7 +2061,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/renderer/components/ProfileForm.tsx",
       "source_location": "L4",
       "id": "components_profileform_props",
-      "community": 18,
+      "community": 11,
       "norm_label": "props"
     },
     {
@@ -2070,7 +2070,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/renderer/components/ProfileForm.tsx",
       "source_location": "L9",
       "id": "components_profileform_profileform",
-      "community": 18,
+      "community": 11,
       "norm_label": "profileform()"
     },
     {
@@ -2079,7 +2079,7 @@
       "source_file": "src/renderer/screens/Profiles.tsx",
       "source_location": "L1",
       "id": "src_renderer_screens_profiles_tsx",
-      "community": 18,
+      "community": 11,
       "norm_label": "profiles.tsx"
     },
     {
@@ -2088,7 +2088,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/renderer/screens/Profiles.tsx",
       "source_location": "L8",
       "id": "screens_profiles_profiles",
-      "community": 18,
+      "community": 11,
       "norm_label": "profiles()"
     },
     {
@@ -2187,7 +2187,7 @@
       "source_file": "src/renderer/screens/FolderConfigs.tsx",
       "source_location": "L1",
       "id": "src_renderer_screens_folderconfigs_tsx",
-      "community": 46,
+      "community": 11,
       "norm_label": "folderconfigs.tsx"
     },
     {
@@ -2196,7 +2196,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/renderer/screens/FolderConfigs.tsx",
       "source_location": "L5",
       "id": "screens_folderconfigs_suggestion",
-      "community": 46,
+      "community": 11,
       "norm_label": "suggestion"
     },
     {
@@ -2205,7 +2205,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/renderer/screens/FolderConfigs.tsx",
       "source_location": "L10",
       "id": "screens_folderconfigs_folderconfigs",
-      "community": 46,
+      "community": 11,
       "norm_label": "folderconfigs()"
     },
     {
@@ -2214,7 +2214,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/renderer/screens/FolderConfigs.tsx",
       "source_location": "L160",
       "id": "screens_folderconfigs_importrow",
-      "community": 46,
+      "community": 11,
       "norm_label": "importrow()"
     },
     {
@@ -2457,7 +2457,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L147",
       "id": "main_index_sync",
-      "community": 0,
+      "community": 82,
       "norm_label": "sync()"
     },
     {
@@ -2466,7 +2466,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L162",
       "id": "main_index_getnotfounderror",
-      "community": 0,
+      "community": 82,
       "norm_label": "getnotfounderror()"
     },
     {
@@ -2475,7 +2475,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L163",
       "id": "main_index_getpathinfo",
-      "community": 0,
+      "community": 82,
       "norm_label": "getpathinfo()"
     },
     {
@@ -2484,7 +2484,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L183",
       "id": "main_index_which_1",
-      "community": 0,
+      "community": 82,
       "norm_label": "which$1()"
     },
     {
@@ -2493,7 +2493,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L217",
       "id": "main_index_whichsync",
-      "community": 0,
+      "community": 82,
       "norm_label": "whichsync()"
     },
     {
@@ -2502,7 +2502,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L249",
       "id": "main_index_pathkey_1",
-      "community": 0,
+      "community": 80,
       "norm_label": "pathkey$1()"
     },
     {
@@ -2511,7 +2511,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L263",
       "id": "main_index_resolvecommandattempt",
-      "community": 0,
+      "community": 82,
       "norm_label": "resolvecommandattempt()"
     },
     {
@@ -2520,7 +2520,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L291",
       "id": "main_index_resolvecommand_1",
-      "community": 0,
+      "community": 82,
       "norm_label": "resolvecommand$1()"
     },
     {
@@ -2610,7 +2610,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L399",
       "id": "main_index_notfounderror",
-      "community": 0,
+      "community": 46,
       "norm_label": "notfounderror()"
     },
     {
@@ -2619,7 +2619,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L408",
       "id": "main_index_hookchildprocess",
-      "community": 0,
+      "community": 46,
       "norm_label": "hookchildprocess()"
     },
     {
@@ -2628,7 +2628,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L423",
       "id": "main_index_verifyenoent",
-      "community": 0,
+      "community": 46,
       "norm_label": "verifyenoent()"
     },
     {
@@ -2637,7 +2637,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L429",
       "id": "main_index_verifyenoentsync",
-      "community": 0,
+      "community": 46,
       "norm_label": "verifyenoentsync()"
     },
     {
@@ -2646,7 +2646,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L444",
       "id": "main_index_spawn",
-      "community": 0,
+      "community": 46,
       "norm_label": "spawn()"
     },
     {
@@ -2655,7 +2655,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L450",
       "id": "main_index_spawnsync",
-      "community": 0,
+      "community": 46,
       "norm_label": "spawnsync()"
     },
     {
@@ -2682,7 +2682,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L474",
       "id": "main_index_pathkey",
-      "community": 0,
+      "community": 80,
       "norm_label": "pathkey()"
     },
     {
@@ -2691,7 +2691,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L484",
       "id": "main_index_npmrunpath",
-      "community": 0,
+      "community": 80,
       "norm_label": "npmrunpath()"
     },
     {
@@ -2700,7 +2700,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L502",
       "id": "main_index_applypreferlocal",
-      "community": 0,
+      "community": 80,
       "norm_label": "applypreferlocal()"
     },
     {
@@ -2709,7 +2709,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L510",
       "id": "main_index_applyexecpath",
-      "community": 0,
+      "community": 80,
       "norm_label": "applyexecpath()"
     },
     {
@@ -2718,7 +2718,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L514",
       "id": "main_index_npmrunpathenv",
-      "community": 0,
+      "community": 80,
       "norm_label": "npmrunpathenv()"
     },
     {
@@ -2727,7 +2727,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L521",
       "id": "main_index_copyproperty",
-      "community": 0,
+      "community": 35,
       "norm_label": "copyproperty()"
     },
     {
@@ -2736,7 +2736,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L538",
       "id": "main_index_changeprototype",
-      "community": 0,
+      "community": 35,
       "norm_label": "changeprototype()"
     },
     {
@@ -2772,7 +2772,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L549",
       "id": "main_index_changetostring",
-      "community": 0,
+      "community": 35,
       "norm_label": "changetostring()"
     },
     {
@@ -2781,7 +2781,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L555",
       "id": "main_index_mimicfunction",
-      "community": 0,
+      "community": 35,
       "norm_label": "mimicfunction()"
     },
     {
@@ -2799,7 +2799,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L565",
       "id": "main_index_onetime",
-      "community": 0,
+      "community": 35,
       "norm_label": "onetime()"
     },
     {
@@ -2907,7 +2907,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L945",
       "id": "main_index_geterrorprefix",
-      "community": 0,
+      "community": 35,
       "norm_label": "geterrorprefix()"
     },
     {
@@ -2916,7 +2916,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L963",
       "id": "main_index_makeerror",
-      "community": 0,
+      "community": 35,
       "norm_label": "makeerror()"
     },
     {
@@ -2934,7 +2934,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L1015",
       "id": "main_index_hasalias",
-      "community": 0,
+      "community": 80,
       "norm_label": "hasalias()"
     },
     {
@@ -2943,7 +2943,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L1016",
       "id": "main_index_normalizestdio",
-      "community": 0,
+      "community": 80,
       "norm_label": "normalizestdio()"
     },
     {
@@ -3150,7 +3150,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L1277",
       "id": "main_index_spawnedkill",
-      "community": 0,
+      "community": 81,
       "norm_label": "spawnedkill()"
     },
     {
@@ -3159,7 +3159,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L1282",
       "id": "main_index_setkilltimeout",
-      "community": 0,
+      "community": 81,
       "norm_label": "setkilltimeout()"
     },
     {
@@ -3168,7 +3168,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L1294",
       "id": "main_index_shouldforcekill",
-      "community": 0,
+      "community": 81,
       "norm_label": "shouldforcekill()"
     },
     {
@@ -3177,7 +3177,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L1295",
       "id": "main_index_issigterm",
-      "community": 0,
+      "community": 81,
       "norm_label": "issigterm()"
     },
     {
@@ -3186,7 +3186,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L1296",
       "id": "main_index_getforcekillaftertimeout",
-      "community": 26,
+      "community": 81,
       "norm_label": "getforcekillaftertimeout()"
     },
     {
@@ -3213,7 +3213,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L1315",
       "id": "main_index_setuptimeout",
-      "community": 26,
+      "community": 35,
       "norm_label": "setuptimeout()"
     },
     {
@@ -3222,7 +3222,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L1330",
       "id": "main_index_validatetimeout",
-      "community": 26,
+      "community": 81,
       "norm_label": "validatetimeout()"
     },
     {
@@ -3276,7 +3276,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L1371",
       "id": "main_index_addpipemethods",
-      "community": 26,
+      "community": 35,
       "norm_label": "addpipemethods()"
     },
     {
@@ -3339,7 +3339,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L1450",
       "id": "main_index_maxbuffererror",
-      "community": 0,
+      "community": 92,
       "norm_label": "maxbuffererror"
     },
     {
@@ -3348,7 +3348,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L1451",
       "id": "main_index_maxbuffererror_constructor",
-      "community": 0,
+      "community": 92,
       "norm_label": ".constructor()"
     },
     {
@@ -3465,7 +3465,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L1472",
       "id": "main_index_addarraybufferchunk",
-      "community": 0,
+      "community": 83,
       "norm_label": "addarraybufferchunk()"
     },
     {
@@ -3474,7 +3474,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L1477",
       "id": "main_index_resizearraybufferslow",
-      "community": 0,
+      "community": 83,
       "norm_label": "resizearraybufferslow()"
     },
     {
@@ -3483,7 +3483,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L1485",
       "id": "main_index_resizearraybuffer",
-      "community": 0,
+      "community": 83,
       "norm_label": "resizearraybuffer()"
     },
     {
@@ -3492,7 +3492,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L1494",
       "id": "main_index_getnewcontentslength",
-      "community": 0,
+      "community": 83,
       "norm_label": "getnewcontentslength()"
     },
     {
@@ -3501,7 +3501,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L1496",
       "id": "main_index_finalizearraybuffer",
-      "community": 0,
+      "community": 83,
       "norm_label": "finalizearraybuffer()"
     },
     {
@@ -3510,7 +3510,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L1497",
       "id": "main_index_hasarraybufferresize",
-      "community": 0,
+      "community": 83,
       "norm_label": "hasarraybufferresize()"
     },
     {
@@ -3726,7 +3726,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L1674",
       "id": "main_index_mergepromise",
-      "community": 26,
+      "community": 35,
       "norm_label": "mergepromise()"
     },
     {
@@ -3735,7 +3735,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L1680",
       "id": "main_index_getspawnedpromise",
-      "community": 26,
+      "community": 35,
       "norm_label": "getspawnedpromise()"
     },
     {
@@ -3744,7 +3744,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L1693",
       "id": "main_index_normalizeargs",
-      "community": 26,
+      "community": 35,
       "norm_label": "normalizeargs()"
     },
     {
@@ -3762,7 +3762,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L1706",
       "id": "main_index_joincommand",
-      "community": 26,
+      "community": 35,
       "norm_label": "joincommand()"
     },
     {
@@ -3771,7 +3771,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L1707",
       "id": "main_index_getescapedcommand",
-      "community": 26,
+      "community": 35,
       "norm_label": "getescapedcommand()"
     },
     {
@@ -3780,7 +3780,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L1709",
       "id": "main_index_padfield",
-      "community": 0,
+      "community": 35,
       "norm_label": "padfield()"
     },
     {
@@ -3789,7 +3789,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L1710",
       "id": "main_index_gettimestamp",
-      "community": 0,
+      "community": 35,
       "norm_label": "gettimestamp()"
     },
     {
@@ -3798,7 +3798,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L1714",
       "id": "main_index_logcommand",
-      "community": 0,
+      "community": 35,
       "norm_label": "logcommand()"
     },
     {
@@ -3807,7 +3807,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L1722",
       "id": "main_index_getenv",
-      "community": 0,
+      "community": 80,
       "norm_label": "getenv()"
     },
     {
@@ -3816,7 +3816,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L1729",
       "id": "main_index_handlearguments",
-      "community": 0,
+      "community": 80,
       "norm_label": "handlearguments()"
     },
     {
@@ -3834,7 +3834,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L1766",
       "id": "main_index_execa",
-      "community": 26,
+      "community": 35,
       "norm_label": "execa()"
     },
     {
@@ -3843,7 +3843,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L1843",
       "id": "main_index_checkgitinstalled",
-      "community": 26,
+      "community": 35,
       "norm_label": "checkgitinstalled()"
     },
     {
@@ -3960,7 +3960,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L1927",
       "id": "main_index_keys",
-      "community": 0,
+      "community": 80,
       "norm_label": "keys"
     },
     {
@@ -3987,7 +3987,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L1986",
       "id": "main_index_getparsedtype",
-      "community": 5,
+      "community": 74,
       "norm_label": "getparsedtype()"
     },
     {
@@ -4140,7 +4140,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L2287",
       "id": "main_index_parsestatus",
-      "community": 2,
+      "community": 78,
       "norm_label": "parsestatus"
     },
     {
@@ -4149,7 +4149,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L2288",
       "id": "main_index_parsestatus_constructor",
-      "community": 2,
+      "community": 78,
       "norm_label": ".constructor()"
     },
     {
@@ -4158,7 +4158,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L2291",
       "id": "main_index_parsestatus_dirty",
-      "community": 2,
+      "community": 78,
       "norm_label": ".dirty()"
     },
     {
@@ -4167,7 +4167,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L2295",
       "id": "main_index_parsestatus_abort",
-      "community": 2,
+      "community": 78,
       "norm_label": ".abort()"
     },
     {
@@ -4176,7 +4176,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L2299",
       "id": "main_index_parsestatus_mergearray",
-      "community": 2,
+      "community": 78,
       "norm_label": ".mergearray()"
     },
     {
@@ -4185,7 +4185,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L2310",
       "id": "main_index_parsestatus_mergeobjectasync",
-      "community": 2,
+      "community": 78,
       "norm_label": ".mergeobjectasync()"
     },
     {
@@ -4194,7 +4194,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L2322",
       "id": "main_index_parsestatus_mergeobjectsync",
-      "community": 2,
+      "community": 78,
       "norm_label": ".mergeobjectsync()"
     },
     {
@@ -4212,7 +4212,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L2344",
       "id": "main_index_dirty",
-      "community": 2,
+      "community": 78,
       "norm_label": "dirty()"
     },
     {
@@ -4248,7 +4248,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L2348",
       "id": "main_index_isvalid",
-      "community": 5,
+      "community": 74,
       "norm_label": "isvalid()"
     },
     {
@@ -4257,7 +4257,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L2349",
       "id": "main_index_isasync",
-      "community": 5,
+      "community": 74,
       "norm_label": "isasync()"
     },
     {
@@ -4293,7 +4293,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L2374",
       "id": "main_index_handleresult",
-      "community": 5,
+      "community": 74,
       "norm_label": "handleresult()"
     },
     {
@@ -4347,7 +4347,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L2433",
       "id": "main_index_zodtype_processinputparams",
-      "community": 2,
+      "community": 78,
       "norm_label": "._processinputparams()"
     },
     {
@@ -4356,7 +4356,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L2446",
       "id": "main_index_zodtype_parsesync",
-      "community": 5,
+      "community": 74,
       "norm_label": "._parsesync()"
     },
     {
@@ -4365,7 +4365,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L2453",
       "id": "main_index_zodtype_parseasync",
-      "community": 5,
+      "community": 74,
       "norm_label": "._parseasync()"
     },
     {
@@ -4374,7 +4374,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L2457",
       "id": "main_index_zodtype_parse",
-      "community": 5,
+      "community": 46,
       "norm_label": ".parse()"
     },
     {
@@ -4392,7 +4392,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L2479",
       "id": "main_index_zodtype_validate",
-      "community": 5,
+      "community": 74,
       "norm_label": ".\"~validate\"()"
     },
     {
@@ -4401,7 +4401,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L2522",
       "id": "main_index_zodtype_safeparseasync",
-      "community": 5,
+      "community": 74,
       "norm_label": ".safeparseasync()"
     },
     {
@@ -4635,7 +4635,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L2749",
       "id": "main_index_isvalidjwt",
-      "community": 5,
+      "community": 46,
       "norm_label": "isvalidjwt()"
     },
     {
@@ -5283,7 +5283,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L3541",
       "id": "main_index_zodnumber_isfinite",
-      "community": 26,
+      "community": 81,
       "norm_label": ".isfinite()"
     },
     {
@@ -5679,7 +5679,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L4004",
       "id": "main_index_zodarray_parse",
-      "community": 2,
+      "community": 78,
       "norm_label": "._parse()"
     },
     {
@@ -5733,7 +5733,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L4104",
       "id": "main_index_deeppartialify",
-      "community": 5,
+      "community": 85,
       "norm_label": "deeppartialify()"
     },
     {
@@ -5769,7 +5769,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L4145",
       "id": "main_index_zodobject_parse",
-      "community": 2,
+      "community": 78,
       "norm_label": "._parse()"
     },
     {
@@ -5868,7 +5868,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L4401",
       "id": "main_index_zodobject_deeppartial",
-      "community": 5,
+      "community": 85,
       "norm_label": ".deeppartial()"
     },
     {
@@ -5895,7 +5895,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L4438",
       "id": "main_index_zodobject_keyof",
-      "community": 9,
+      "community": 91,
       "norm_label": ".keyof()"
     },
     {
@@ -5904,7 +5904,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L4469",
       "id": "main_index_zodunion",
-      "community": 2,
+      "community": 94,
       "norm_label": "zodunion"
     },
     {
@@ -5922,7 +5922,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L4549",
       "id": "main_index_zodunion_options",
-      "community": 2,
+      "community": 94,
       "norm_label": ".options()"
     },
     {
@@ -5931,7 +5931,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L4560",
       "id": "main_index_mergevalues",
-      "community": 5,
+      "community": 74,
       "norm_label": "mergevalues()"
     },
     {
@@ -5940,7 +5940,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L4598",
       "id": "main_index_zodintersection",
-      "community": 5,
+      "community": 74,
       "norm_label": "zodintersection"
     },
     {
@@ -5949,7 +5949,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L4599",
       "id": "main_index_zodintersection_parse",
-      "community": 5,
+      "community": 74,
       "norm_label": "._parse()"
     },
     {
@@ -5958,7 +5958,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L4651",
       "id": "main_index_zodtuple",
-      "community": 2,
+      "community": 90,
       "norm_label": "zodtuple"
     },
     {
@@ -5967,7 +5967,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L4652",
       "id": "main_index_zodtuple_parse",
-      "community": 2,
+      "community": 78,
       "norm_label": "._parse()"
     },
     {
@@ -5976,7 +5976,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L4697",
       "id": "main_index_zodtuple_items",
-      "community": 2,
+      "community": 90,
       "norm_label": ".items()"
     },
     {
@@ -5985,7 +5985,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L4700",
       "id": "main_index_zodtuple_rest",
-      "community": 2,
+      "community": 90,
       "norm_label": ".rest()"
     },
     {
@@ -5994,7 +5994,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L4718",
       "id": "main_index_zodmap",
-      "community": 2,
+      "community": 89,
       "norm_label": "zodmap"
     },
     {
@@ -6003,7 +6003,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L4719",
       "id": "main_index_zodmap_keyschema",
-      "community": 2,
+      "community": 89,
       "norm_label": ".keyschema()"
     },
     {
@@ -6012,7 +6012,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L4722",
       "id": "main_index_zodmap_valueschema",
-      "community": 2,
+      "community": 89,
       "norm_label": ".valueschema()"
     },
     {
@@ -6021,7 +6021,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L4725",
       "id": "main_index_zodmap_parse",
-      "community": 2,
+      "community": 78,
       "norm_label": "._parse()"
     },
     {
@@ -6039,7 +6039,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L4785",
       "id": "main_index_zodset_parse",
-      "community": 2,
+      "community": 78,
       "norm_label": "._parse()"
     },
     {
@@ -6084,7 +6084,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L4869",
       "id": "main_index_zodlazy",
-      "community": 5,
+      "community": 74,
       "norm_label": "zodlazy"
     },
     {
@@ -6093,7 +6093,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L4870",
       "id": "main_index_zodlazy_schema",
-      "community": 5,
+      "community": 74,
       "norm_label": ".schema()"
     },
     {
@@ -6102,7 +6102,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L4873",
       "id": "main_index_zodlazy_parse",
-      "community": 5,
+      "community": 74,
       "norm_label": "._parse()"
     },
     {
@@ -6111,7 +6111,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L4886",
       "id": "main_index_zodliteral",
-      "community": 2,
+      "community": 93,
       "norm_label": "zodliteral"
     },
     {
@@ -6129,7 +6129,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L4899",
       "id": "main_index_zodliteral_value",
-      "community": 2,
+      "community": 93,
       "norm_label": ".value()"
     },
     {
@@ -6138,7 +6138,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L4910",
       "id": "main_index_createzodenum",
-      "community": 9,
+      "community": 91,
       "norm_label": "createzodenum()"
     },
     {
@@ -6147,7 +6147,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L4917",
       "id": "main_index_zodenum",
-      "community": 5,
+      "community": 84,
       "norm_label": "zodenum"
     },
     {
@@ -6165,7 +6165,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L4944",
       "id": "main_index_zodenum_options",
-      "community": 5,
+      "community": 84,
       "norm_label": ".options()"
     },
     {
@@ -6174,7 +6174,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L4947",
       "id": "main_index_zodenum_enum",
-      "community": 5,
+      "community": 84,
       "norm_label": ".enum()"
     },
     {
@@ -6183,7 +6183,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L4954",
       "id": "main_index_zodenum_values",
-      "community": 5,
+      "community": 84,
       "norm_label": ".values()"
     },
     {
@@ -6192,7 +6192,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L4968",
       "id": "main_index_zodenum_extract",
-      "community": 5,
+      "community": 84,
       "norm_label": ".extract()"
     },
     {
@@ -6201,7 +6201,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L4974",
       "id": "main_index_zodenum_exclude",
-      "community": 5,
+      "community": 84,
       "norm_label": ".exclude()"
     },
     {
@@ -6210,7 +6210,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L4982",
       "id": "main_index_zodnativeenum",
-      "community": 2,
+      "community": 86,
       "norm_label": "zodnativeenum"
     },
     {
@@ -6228,7 +6228,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L5009",
       "id": "main_index_zodnativeenum_enum",
-      "community": 2,
+      "community": 86,
       "norm_label": ".enum()"
     },
     {
@@ -6237,7 +6237,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L5020",
       "id": "main_index_zodpromise",
-      "community": 2,
+      "community": 0,
       "norm_label": "zodpromise"
     },
     {
@@ -6246,7 +6246,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L5021",
       "id": "main_index_zodpromise_unwrap",
-      "community": 2,
+      "community": 0,
       "norm_label": ".unwrap()"
     },
     {
@@ -6264,7 +6264,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L5050",
       "id": "main_index_zodeffects",
-      "community": 5,
+      "community": 88,
       "norm_label": "zodeffects"
     },
     {
@@ -6273,7 +6273,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L5051",
       "id": "main_index_zodeffects_innertype",
-      "community": 5,
+      "community": 88,
       "norm_label": ".innertype()"
     },
     {
@@ -6282,7 +6282,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L5054",
       "id": "main_index_zodeffects_sourcetype",
-      "community": 5,
+      "community": 88,
       "norm_label": ".sourcetype()"
     },
     {
@@ -6291,7 +6291,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L5057",
       "id": "main_index_zodeffects_parse",
-      "community": 5,
+      "community": 74,
       "norm_label": "._parse()"
     },
     {
@@ -6300,7 +6300,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L5189",
       "id": "main_index_zodoptional",
-      "community": 2,
+      "community": 0,
       "norm_label": "zodoptional"
     },
     {
@@ -6318,7 +6318,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L5197",
       "id": "main_index_zodoptional_unwrap",
-      "community": 2,
+      "community": 0,
       "norm_label": ".unwrap()"
     },
     {
@@ -6327,7 +6327,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L5208",
       "id": "main_index_zodnullable",
-      "community": 2,
+      "community": 86,
       "norm_label": "zodnullable"
     },
     {
@@ -6345,7 +6345,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L5216",
       "id": "main_index_zodnullable_unwrap",
-      "community": 2,
+      "community": 86,
       "norm_label": ".unwrap()"
     },
     {
@@ -6354,7 +6354,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L5227",
       "id": "main_index_zoddefault",
-      "community": 5,
+      "community": 78,
       "norm_label": "zoddefault"
     },
     {
@@ -6363,7 +6363,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L5228",
       "id": "main_index_zoddefault_parse",
-      "community": 5,
+      "community": 78,
       "norm_label": "._parse()"
     },
     {
@@ -6372,7 +6372,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L5240",
       "id": "main_index_zoddefault_removedefault",
-      "community": 5,
+      "community": 78,
       "norm_label": ".removedefault()"
     },
     {
@@ -6381,7 +6381,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L5252",
       "id": "main_index_zodcatch",
-      "community": 5,
+      "community": 0,
       "norm_label": "zodcatch"
     },
     {
@@ -6390,7 +6390,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L5253",
       "id": "main_index_zodcatch_parse",
-      "community": 5,
+      "community": 74,
       "norm_label": "._parse()"
     },
     {
@@ -6399,7 +6399,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L5293",
       "id": "main_index_zodcatch_removecatch",
-      "community": 5,
+      "community": 0,
       "norm_label": ".removecatch()"
     },
     {
@@ -6426,7 +6426,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L5326",
       "id": "main_index_zodbranded",
-      "community": 5,
+      "community": 74,
       "norm_label": "zodbranded"
     },
     {
@@ -6435,7 +6435,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L5327",
       "id": "main_index_zodbranded_parse",
-      "community": 5,
+      "community": 74,
       "norm_label": "._parse()"
     },
     {
@@ -6444,7 +6444,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L5336",
       "id": "main_index_zodbranded_unwrap",
-      "community": 5,
+      "community": 74,
       "norm_label": ".unwrap()"
     },
     {
@@ -6462,7 +6462,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L5341",
       "id": "main_index_zodpipeline_parse",
-      "community": 2,
+      "community": 78,
       "norm_label": "._parse()"
     },
     {
@@ -6480,7 +6480,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L5395",
       "id": "main_index_zodreadonly",
-      "community": 5,
+      "community": 85,
       "norm_label": "zodreadonly"
     },
     {
@@ -6489,7 +6489,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L5396",
       "id": "main_index_zodreadonly_parse",
-      "community": 5,
+      "community": 74,
       "norm_label": "._parse()"
     },
     {
@@ -6498,7 +6498,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L5406",
       "id": "main_index_zodreadonly_unwrap",
-      "community": 5,
+      "community": 85,
       "norm_label": ".unwrap()"
     },
     {
@@ -6543,7 +6543,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L5490",
       "id": "main_index_loadprofiles",
-      "community": 15,
+      "community": 46,
       "norm_label": "loadprofiles()"
     },
     {
@@ -6588,7 +6588,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L5536",
       "id": "main_index_loadstate",
-      "community": 15,
+      "community": 46,
       "norm_label": "loadstate()"
     },
     {
@@ -6642,7 +6642,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L5616",
       "id": "main_index_getmanagedpaths",
-      "community": 15,
+      "community": 46,
       "norm_label": "getmanagedpaths()"
     },
     {
@@ -6651,7 +6651,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L5622",
       "id": "main_index_toforwardslashes",
-      "community": 15,
+      "community": 46,
       "norm_label": "toforwardslashes()"
     },
     {
@@ -6660,7 +6660,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L5625",
       "id": "main_index_normalizegitdir",
-      "community": 15,
+      "community": 46,
       "norm_label": "normalizegitdir()"
     },
     {
@@ -6669,7 +6669,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L5629",
       "id": "main_index_buildmanagedregion",
-      "community": 15,
+      "community": 46,
       "norm_label": "buildmanagedregion()"
     },
     {
@@ -6696,7 +6696,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L5692",
       "id": "main_index_ensuremanagedfile",
-      "community": 15,
+      "community": 46,
       "norm_label": "ensuremanagedfile()"
     },
     {
@@ -6714,7 +6714,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L5729",
       "id": "main_index_folderconfigdir",
-      "community": 15,
+      "community": 46,
       "norm_label": "folderconfigdir()"
     },
     {
@@ -6723,7 +6723,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L5732",
       "id": "main_index_folderconfigpath",
-      "community": 15,
+      "community": 46,
       "norm_label": "folderconfigpath()"
     },
     {
@@ -6732,7 +6732,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L5735",
       "id": "main_index_syncmanagedgitconfig",
-      "community": 15,
+      "community": 46,
       "norm_label": "syncmanagedgitconfig()"
     },
     {
@@ -6840,7 +6840,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L6084",
       "id": "main_index_tokeytoken",
-      "community": 26,
+      "community": 35,
       "norm_label": "tokeytoken()"
     },
     {
@@ -6849,7 +6849,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L6087",
       "id": "main_index_generatesshkey",
-      "community": 26,
+      "community": 35,
       "norm_label": "generatesshkey()"
     },
     {
@@ -6867,7 +6867,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L6159",
       "id": "main_index_testsshconnection",
-      "community": 26,
+      "community": 35,
       "norm_label": "testsshconnection()"
     },
     {
@@ -6948,7 +6948,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L6519",
       "id": "main_index_createtray",
-      "community": 15,
+      "community": 46,
       "norm_label": "createtray()"
     },
     {
@@ -6957,7 +6957,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js",
       "source_location": "L6525",
       "id": "main_index_rebuildtraymenu",
-      "community": 15,
+      "community": 46,
       "norm_label": "rebuildtraymenu()"
     },
     {
@@ -7020,7 +7020,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L9",
       "id": "assets_index_d6k_jyyq_yn",
-      "community": 33,
+      "community": 56,
       "norm_label": "yn()"
     },
     {
@@ -7065,7 +7065,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L9",
       "id": "assets_index_d6k_jyyq_mo",
-      "community": 23,
+      "community": 4,
       "norm_label": "mo()"
     },
     {
@@ -7110,7 +7110,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L9",
       "id": "assets_index_d6k_jyyq_pf",
-      "community": 38,
+      "community": 79,
       "norm_label": "pf()"
     },
     {
@@ -7137,7 +7137,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L9",
       "id": "assets_index_d6k_jyyq_mf",
-      "community": 33,
+      "community": 56,
       "norm_label": "mf"
     },
     {
@@ -7146,7 +7146,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L17",
       "id": "assets_index_d6k_jyyq_da",
-      "community": 23,
+      "community": 4,
       "norm_label": "da()"
     },
     {
@@ -7281,7 +7281,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L33",
       "id": "assets_index_d6k_jyyq_de",
-      "community": 35,
+      "community": 38,
       "norm_label": "de()"
     },
     {
@@ -7290,7 +7290,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L33",
       "id": "assets_index_d6k_jyyq_go",
-      "community": 35,
+      "community": 38,
       "norm_label": "go()"
     },
     {
@@ -7308,7 +7308,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L33",
       "id": "assets_index_d6k_jyyq_zn",
-      "community": 38,
+      "community": 79,
       "norm_label": "zn()"
     },
     {
@@ -7317,7 +7317,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L34",
       "id": "assets_index_d6k_jyyq_wl",
-      "community": 38,
+      "community": 79,
       "norm_label": "wl()"
     },
     {
@@ -7344,7 +7344,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L37",
       "id": "assets_index_d6k_jyyq_yt",
-      "community": 35,
+      "community": 23,
       "norm_label": "yt()"
     },
     {
@@ -7389,7 +7389,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L37",
       "id": "assets_index_d6k_jyyq_hs",
-      "community": 35,
+      "community": 23,
       "norm_label": "hs()"
     },
     {
@@ -7398,7 +7398,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L37",
       "id": "assets_index_d6k_jyyq_qa",
-      "community": 35,
+      "community": 23,
       "norm_label": "qa()"
     },
     {
@@ -7407,7 +7407,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L37",
       "id": "assets_index_d6k_jyyq_si",
-      "community": 35,
+      "community": 23,
       "norm_label": "si()"
     },
     {
@@ -7416,7 +7416,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L37",
       "id": "assets_index_d6k_jyyq_ms",
-      "community": 33,
+      "community": 56,
       "norm_label": "ms()"
     },
     {
@@ -7425,7 +7425,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L37",
       "id": "assets_index_d6k_jyyq_ki",
-      "community": 38,
+      "community": 79,
       "norm_label": "ki()"
     },
     {
@@ -7434,7 +7434,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L37",
       "id": "assets_index_d6k_jyyq_rn",
-      "community": 35,
+      "community": 23,
       "norm_label": "rn()"
     },
     {
@@ -7443,7 +7443,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L37",
       "id": "assets_index_d6k_jyyq_ni",
-      "community": 33,
+      "community": 56,
       "norm_label": "ni()"
     },
     {
@@ -7461,7 +7461,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L37",
       "id": "assets_index_d6k_jyyq_ya",
-      "community": 35,
+      "community": 23,
       "norm_label": "ya()"
     },
     {
@@ -7506,7 +7506,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L37",
       "id": "assets_index_d6k_jyyq_za",
-      "community": 35,
+      "community": 23,
       "norm_label": "za()"
     },
     {
@@ -7524,7 +7524,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L37",
       "id": "assets_index_d6k_jyyq_i",
-      "community": 35,
+      "community": 23,
       "norm_label": "_i()"
     },
     {
@@ -7551,7 +7551,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L37",
       "id": "assets_index_d6k_jyyq_ba",
-      "community": 33,
+      "community": 56,
       "norm_label": "ba()"
     },
     {
@@ -7623,7 +7623,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L37",
       "id": "assets_index_d6k_jyyq_lu",
-      "community": 38,
+      "community": 79,
       "norm_label": "lu()"
     },
     {
@@ -7677,7 +7677,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L37",
       "id": "assets_index_d6k_jyyq_in",
-      "community": 23,
+      "community": 4,
       "norm_label": "in()"
     },
     {
@@ -7686,7 +7686,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L37",
       "id": "assets_index_d6k_jyyq_qr",
-      "community": 23,
+      "community": 4,
       "norm_label": "qr()"
     },
     {
@@ -7713,7 +7713,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L37",
       "id": "assets_index_d6k_jyyq_li",
-      "community": 23,
+      "community": 4,
       "norm_label": "li()"
     },
     {
@@ -7785,7 +7785,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L37",
       "id": "assets_index_d6k_jyyq_vu",
-      "community": 38,
+      "community": 79,
       "norm_label": "vu()"
     },
     {
@@ -7803,7 +7803,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L37",
       "id": "assets_index_d6k_jyyq_jn",
-      "community": 38,
+      "community": 79,
       "norm_label": "jn()"
     },
     {
@@ -7821,7 +7821,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L37",
       "id": "assets_index_d6k_jyyq_zi",
-      "community": 38,
+      "community": 79,
       "norm_label": "zi()"
     },
     {
@@ -7830,7 +7830,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L37",
       "id": "assets_index_d6k_jyyq_gu",
-      "community": 35,
+      "community": 38,
       "norm_label": "gu()"
     },
     {
@@ -7839,7 +7839,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L37",
       "id": "assets_index_d6k_jyyq_yu",
-      "community": 33,
+      "community": 56,
       "norm_label": "yu()"
     },
     {
@@ -7911,7 +7911,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L37",
       "id": "assets_index_d6k_jyyq_su",
-      "community": 33,
+      "community": 56,
       "norm_label": "su()"
     },
     {
@@ -7920,7 +7920,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L37",
       "id": "assets_index_d6k_jyyq_cd",
-      "community": 33,
+      "community": 56,
       "norm_label": "cd()"
     },
     {
@@ -7947,7 +7947,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L37",
       "id": "assets_index_d6k_jyyq_ku",
-      "community": 33,
+      "community": 56,
       "norm_label": "ku()"
     },
     {
@@ -8037,7 +8037,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L37",
       "id": "assets_index_d6k_jyyq_bn",
-      "community": 1,
+      "community": 38,
       "norm_label": "bn()"
     },
     {
@@ -8091,7 +8091,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L37",
       "id": "assets_index_d6k_jyyq_os",
-      "community": 1,
+      "community": 25,
       "norm_label": "os()"
     },
     {
@@ -8118,7 +8118,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L37",
       "id": "assets_index_d6k_jyyq_zu",
-      "community": 33,
+      "community": 56,
       "norm_label": "zu()"
     },
     {
@@ -8154,7 +8154,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L37",
       "id": "assets_index_d6k_jyyq_tl",
-      "community": 33,
+      "community": 56,
       "norm_label": "tl()"
     },
     {
@@ -8163,7 +8163,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L37",
       "id": "assets_index_d6k_jyyq_ds",
-      "community": 33,
+      "community": 56,
       "norm_label": "ds()"
     },
     {
@@ -8172,7 +8172,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L37",
       "id": "assets_index_d6k_jyyq_as",
-      "community": 23,
+      "community": 1,
       "norm_label": "as()"
     },
     {
@@ -8181,7 +8181,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L38",
       "id": "assets_index_d6k_jyyq_pr",
-      "community": 23,
+      "community": 1,
       "norm_label": "pr()"
     },
     {
@@ -8190,7 +8190,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L38",
       "id": "assets_index_d6k_jyyq_ai",
-      "community": 35,
+      "community": 38,
       "norm_label": "ai()"
     },
     {
@@ -8208,7 +8208,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L38",
       "id": "assets_index_d6k_jyyq_ri",
-      "community": 38,
+      "community": 79,
       "norm_label": "ri()"
     },
     {
@@ -8226,7 +8226,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L38",
       "id": "assets_index_d6k_jyyq_tt",
-      "community": 38,
+      "community": 79,
       "norm_label": "tt()"
     },
     {
@@ -8244,7 +8244,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L38",
       "id": "assets_index_d6k_jyyq_jt",
-      "community": 23,
+      "community": 4,
       "norm_label": "jt()"
     },
     {
@@ -8253,7 +8253,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L38",
       "id": "assets_index_d6k_jyyq_el",
-      "community": 33,
+      "community": 56,
       "norm_label": "el()"
     },
     {
@@ -8280,7 +8280,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L38",
       "id": "assets_index_d6k_jyyq_fn",
-      "community": 38,
+      "community": 79,
       "norm_label": "fn()"
     },
     {
@@ -8289,7 +8289,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L38",
       "id": "assets_index_d6k_jyyq_ve",
-      "community": 38,
+      "community": 79,
       "norm_label": "ve()"
     },
     {
@@ -8352,7 +8352,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L38",
       "id": "assets_index_d6k_jyyq_kt",
-      "community": 33,
+      "community": 4,
       "norm_label": "kt()"
     },
     {
@@ -8496,7 +8496,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L38",
       "id": "assets_index_d6k_jyyq_te",
-      "community": 38,
+      "community": 79,
       "norm_label": "te()"
     },
     {
@@ -8613,7 +8613,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L38",
       "id": "assets_index_d6k_jyyq_le",
-      "community": 35,
+      "community": 23,
       "norm_label": "le()"
     },
     {
@@ -8622,7 +8622,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L38",
       "id": "assets_index_d6k_jyyq_vo",
-      "community": 35,
+      "community": 38,
       "norm_label": "vo()"
     },
     {
@@ -8649,7 +8649,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L38",
       "id": "assets_index_d6k_jyyq_fe",
-      "community": 35,
+      "community": 38,
       "norm_label": "fe()"
     },
     {
@@ -8667,7 +8667,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L38",
       "id": "assets_index_d6k_jyyq_qu",
-      "community": 35,
+      "community": 38,
       "norm_label": "qu()"
     },
     {
@@ -8676,7 +8676,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L38",
       "id": "assets_index_d6k_jyyq_xu",
-      "community": 33,
+      "community": 56,
       "norm_label": "xu()"
     },
     {
@@ -8685,7 +8685,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L38",
       "id": "assets_index_d6k_jyyq_ju",
-      "community": 33,
+      "community": 56,
       "norm_label": "ju()"
     },
     {
@@ -8694,7 +8694,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L38",
       "id": "assets_index_d6k_jyyq_sr",
-      "community": 35,
+      "community": 38,
       "norm_label": "sr()"
     },
     {
@@ -8703,7 +8703,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L38",
       "id": "assets_index_d6k_jyyq_br",
-      "community": 35,
+      "community": 38,
       "norm_label": "br()"
     },
     {
@@ -8712,7 +8712,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L38",
       "id": "assets_index_d6k_jyyq_jl",
-      "community": 35,
+      "community": 38,
       "norm_label": "jl()"
     },
     {
@@ -8721,7 +8721,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L38",
       "id": "assets_index_d6k_jyyq_ec",
-      "community": 35,
+      "community": 23,
       "norm_label": "ec()"
     },
     {
@@ -8730,7 +8730,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L38",
       "id": "assets_index_d6k_jyyq_tc",
-      "community": 23,
+      "community": 4,
       "norm_label": "tc()"
     },
     {
@@ -8748,7 +8748,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L38",
       "id": "assets_index_d6k_jyyq_qo",
-      "community": 33,
+      "community": 4,
       "norm_label": "qo()"
     },
     {
@@ -8793,7 +8793,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L38",
       "id": "assets_index_d6k_jyyq_oc",
-      "community": 33,
+      "community": 4,
       "norm_label": "oc()"
     },
     {
@@ -8838,7 +8838,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L38",
       "id": "assets_index_d6k_jyyq_js",
-      "community": 1,
+      "community": 38,
       "norm_label": "js()"
     },
     {
@@ -8847,7 +8847,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L38",
       "id": "assets_index_d6k_jyyq_cc",
-      "community": 38,
+      "community": 79,
       "norm_label": "cc()"
     },
     {
@@ -8856,7 +8856,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L38",
       "id": "assets_index_d6k_jyyq_gi",
-      "community": 38,
+      "community": 79,
       "norm_label": "gi()"
     },
     {
@@ -8874,7 +8874,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L40",
       "id": "assets_index_d6k_jyyq_ui",
-      "community": 23,
+      "community": 4,
       "norm_label": "ui()"
     },
     {
@@ -8973,7 +8973,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L40",
       "id": "assets_index_d6k_jyyq_ra",
-      "community": 38,
+      "community": 79,
       "norm_label": "ra()"
     },
     {
@@ -9027,7 +9027,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L40",
       "id": "assets_index_d6k_jyyq_vr",
-      "community": 38,
+      "community": 79,
       "norm_label": "vr()"
     },
     {
@@ -9099,7 +9099,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L40",
       "id": "assets_index_d6k_jyyq_eo",
-      "community": 4,
+      "community": 33,
       "norm_label": "eo()"
     },
     {
@@ -9135,7 +9135,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L40",
       "id": "assets_index_d6k_jyyq_aa",
-      "community": 35,
+      "community": 23,
       "norm_label": "aa()"
     },
     {
@@ -9144,7 +9144,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L40",
       "id": "assets_index_d6k_jyyq_up",
-      "community": 33,
+      "community": 4,
       "norm_label": "up()"
     },
     {
@@ -9162,7 +9162,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L40",
       "id": "assets_index_d6k_jyyq_ca",
-      "community": 35,
+      "community": 23,
       "norm_label": "ca()"
     },
     {
@@ -9171,7 +9171,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L40",
       "id": "assets_index_d6k_jyyq_fa",
-      "community": 4,
+      "community": 33,
       "norm_label": "fa()"
     },
     {
@@ -9216,7 +9216,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L40",
       "id": "assets_index_d6k_jyyq_jc",
-      "community": 23,
+      "community": 4,
       "norm_label": "jc()"
     },
     {
@@ -9225,7 +9225,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L40",
       "id": "assets_index_d6k_jyyq_io",
-      "community": 23,
+      "community": 4,
       "norm_label": "io()"
     },
     {
@@ -9234,7 +9234,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L40",
       "id": "assets_index_d6k_jyyq_fp",
-      "community": 35,
+      "community": 38,
       "norm_label": "fp()"
     },
     {
@@ -9252,7 +9252,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L40",
       "id": "assets_index_d6k_jyyq_at",
-      "community": 33,
+      "community": 4,
       "norm_label": "at()"
     },
     {
@@ -9279,7 +9279,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L40",
       "id": "assets_index_d6k_jyyq_vl",
-      "community": 23,
+      "community": 4,
       "norm_label": "vl()"
     },
     {
@@ -9306,7 +9306,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L40",
       "id": "assets_index_d6k_jyyq_hp",
-      "community": 33,
+      "community": 4,
       "norm_label": "hp()"
     },
     {
@@ -9315,7 +9315,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L40",
       "id": "assets_index_d6k_jyyq_un",
-      "community": 33,
+      "community": 4,
       "norm_label": "un()"
     },
     {
@@ -9594,7 +9594,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-renderer/assets/index-D6k_JYyq.js",
       "source_location": "L49",
       "id": "assets_index_d6k_jyyq_qp",
-      "community": 1,
+      "community": 25,
       "norm_label": "qp()"
     },
     {
@@ -10003,96 +10003,6 @@
       "norm_label": "publish.sh"
     },
     {
-      "label": "vk_swiftshader_icd.json",
-      "file_type": "code",
-      "source_file": "scripts/aur/git-profile-switcher-bin/src/squashfs-root/vk_swiftshader_icd.json",
-      "source_location": "L1",
-      "id": "scripts_aur_git_profile_switcher_bin_src_squashfs_root_vk_swiftshader_icd_json",
-      "community": 48,
-      "norm_label": "vk_swiftshader_icd.json"
-    },
-    {
-      "label": "file_format_version",
-      "file_type": "code",
-      "source_file": "scripts/aur/git-profile-switcher-git/src/squashfs-root/vk_swiftshader_icd.json",
-      "source_location": "L1",
-      "id": "squashfs_root_vk_swiftshader_icd_file_format_version",
-      "community": 48,
-      "norm_label": "file_format_version"
-    },
-    {
-      "label": "ICD",
-      "file_type": "code",
-      "source_file": "scripts/aur/git-profile-switcher-git/src/squashfs-root/vk_swiftshader_icd.json",
-      "source_location": "L1",
-      "id": "squashfs_root_vk_swiftshader_icd_icd",
-      "community": 48,
-      "norm_label": "icd"
-    },
-    {
-      "label": "library_path",
-      "file_type": "code",
-      "source_file": "scripts/aur/git-profile-switcher-git/src/squashfs-root/vk_swiftshader_icd.json",
-      "source_location": "L1",
-      "id": "squashfs_root_vk_swiftshader_icd_icd_library_path",
-      "community": 48,
-      "norm_label": "library_path"
-    },
-    {
-      "label": "api_version",
-      "file_type": "code",
-      "source_file": "scripts/aur/git-profile-switcher-git/src/squashfs-root/vk_swiftshader_icd.json",
-      "source_location": "L1",
-      "id": "squashfs_root_vk_swiftshader_icd_icd_api_version",
-      "community": 48,
-      "norm_label": "api_version"
-    },
-    {
-      "label": "vk_swiftshader_icd.json",
-      "file_type": "code",
-      "source_file": "scripts/aur/git-profile-switcher-bin/pkg/git-profile-switcher-bin/opt/git-profile-switcher/vk_swiftshader_icd.json",
-      "source_location": "L1",
-      "id": "scripts_aur_git_profile_switcher_bin_pkg_git_profile_switcher_bin_opt_git_profile_switcher_vk_swiftshader_icd_json",
-      "community": 47,
-      "norm_label": "vk_swiftshader_icd.json"
-    },
-    {
-      "label": "file_format_version",
-      "file_type": "code",
-      "source_file": "scripts/aur/git-profile-switcher-git/pkg/git-profile-switcher-git/opt/git-profile-switcher/vk_swiftshader_icd.json",
-      "source_location": "L1",
-      "id": "git_profile_switcher_vk_swiftshader_icd_file_format_version",
-      "community": 47,
-      "norm_label": "file_format_version"
-    },
-    {
-      "label": "ICD",
-      "file_type": "code",
-      "source_file": "scripts/aur/git-profile-switcher-git/pkg/git-profile-switcher-git/opt/git-profile-switcher/vk_swiftshader_icd.json",
-      "source_location": "L1",
-      "id": "git_profile_switcher_vk_swiftshader_icd_icd",
-      "community": 47,
-      "norm_label": "icd"
-    },
-    {
-      "label": "library_path",
-      "file_type": "code",
-      "source_file": "scripts/aur/git-profile-switcher-git/pkg/git-profile-switcher-git/opt/git-profile-switcher/vk_swiftshader_icd.json",
-      "source_location": "L1",
-      "id": "git_profile_switcher_vk_swiftshader_icd_icd_library_path",
-      "community": 47,
-      "norm_label": "library_path"
-    },
-    {
-      "label": "api_version",
-      "file_type": "code",
-      "source_file": "scripts/aur/git-profile-switcher-git/pkg/git-profile-switcher-git/opt/git-profile-switcher/vk_swiftshader_icd.json",
-      "source_location": "L1",
-      "id": "git_profile_switcher_vk_swiftshader_icd_icd_api_version",
-      "community": 47,
-      "norm_label": "api_version"
-    },
-    {
       "label": "package.json",
       "file_type": "code",
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/package.json",
@@ -10224,7 +10134,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/core/git/sshConfig.ts",
       "source_location": "L1",
       "id": "scripts_aur_git_profile_switcher_git_src_git_profile_switcher_src_core_git_sshconfig_ts",
-      "community": 11,
+      "community": 18,
       "norm_label": "sshconfig.ts"
     },
     {
@@ -10242,7 +10152,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/core/profiles/schema.ts",
       "source_location": "L1",
       "id": "scripts_aur_git_profile_switcher_git_src_git_profile_switcher_src_core_profiles_schema_ts",
-      "community": 27,
+      "community": 11,
       "norm_label": "schema.ts"
     },
     {
@@ -10251,7 +10161,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/core/profiles/state.ts",
       "source_location": "L1",
       "id": "scripts_aur_git_profile_switcher_git_src_git_profile_switcher_src_core_profiles_state_ts",
-      "community": 46,
+      "community": 27,
       "norm_label": "state.ts"
     },
     {
@@ -10260,7 +10170,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/core/profiles/storage.ts",
       "source_location": "L1",
       "id": "scripts_aur_git_profile_switcher_git_src_git_profile_switcher_src_core_profiles_storage_ts",
-      "community": 27,
+      "community": 11,
       "norm_label": "storage.ts"
     },
     {
@@ -10413,7 +10323,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/renderer/components/InputModal.tsx",
       "source_location": "L1",
       "id": "scripts_aur_git_profile_switcher_git_src_git_profile_switcher_src_renderer_components_inputmodal_tsx",
-      "community": 18,
+      "community": 11,
       "norm_label": "inputmodal.tsx"
     },
     {
@@ -10431,7 +10341,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/renderer/components/ProfileForm.tsx",
       "source_location": "L1",
       "id": "scripts_aur_git_profile_switcher_git_src_git_profile_switcher_src_renderer_components_profileform_tsx",
-      "community": 18,
+      "community": 11,
       "norm_label": "profileform.tsx"
     },
     {
@@ -10440,7 +10350,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/renderer/screens/FolderConfigs.tsx",
       "source_location": "L1",
       "id": "scripts_aur_git_profile_switcher_git_src_git_profile_switcher_src_renderer_screens_folderconfigs_tsx",
-      "community": 46,
+      "community": 11,
       "norm_label": "folderconfigs.tsx"
     },
     {
@@ -10449,7 +10359,7 @@
       "source_file": "scripts/aur/git-profile-switcher-git/src/git-profile-switcher/src/renderer/screens/Profiles.tsx",
       "source_location": "L1",
       "id": "scripts_aur_git_profile_switcher_git_src_git_profile_switcher_src_renderer_screens_profiles_tsx",
-      "community": 18,
+      "community": 11,
       "norm_label": "profiles.tsx"
     },
     {
@@ -10516,6 +10426,42 @@
       "norm_label": "vk_swiftshader_icd.json"
     },
     {
+      "label": "file_format_version",
+      "file_type": "code",
+      "source_file": "scripts/aur/git-profile-switcher-git/src/squashfs-root/vk_swiftshader_icd.json",
+      "source_location": "L1",
+      "id": "squashfs_root_vk_swiftshader_icd_file_format_version",
+      "community": 48,
+      "norm_label": "file_format_version"
+    },
+    {
+      "label": "ICD",
+      "file_type": "code",
+      "source_file": "scripts/aur/git-profile-switcher-git/src/squashfs-root/vk_swiftshader_icd.json",
+      "source_location": "L1",
+      "id": "squashfs_root_vk_swiftshader_icd_icd",
+      "community": 48,
+      "norm_label": "icd"
+    },
+    {
+      "label": "library_path",
+      "file_type": "code",
+      "source_file": "scripts/aur/git-profile-switcher-git/src/squashfs-root/vk_swiftshader_icd.json",
+      "source_location": "L1",
+      "id": "squashfs_root_vk_swiftshader_icd_icd_library_path",
+      "community": 48,
+      "norm_label": "library_path"
+    },
+    {
+      "label": "api_version",
+      "file_type": "code",
+      "source_file": "scripts/aur/git-profile-switcher-git/src/squashfs-root/vk_swiftshader_icd.json",
+      "source_location": "L1",
+      "id": "squashfs_root_vk_swiftshader_icd_icd_api_version",
+      "community": 48,
+      "norm_label": "api_version"
+    },
+    {
       "label": "vk_swiftshader_icd.json",
       "file_type": "code",
       "source_file": "scripts/aur/git-profile-switcher-git/pkg/git-profile-switcher-git/opt/git-profile-switcher/vk_swiftshader_icd.json",
@@ -10523,6 +10469,42 @@
       "id": "scripts_aur_git_profile_switcher_git_pkg_git_profile_switcher_git_opt_git_profile_switcher_vk_swiftshader_icd_json",
       "community": 47,
       "norm_label": "vk_swiftshader_icd.json"
+    },
+    {
+      "label": "file_format_version",
+      "file_type": "code",
+      "source_file": "scripts/aur/git-profile-switcher-git/pkg/git-profile-switcher-git/opt/git-profile-switcher/vk_swiftshader_icd.json",
+      "source_location": "L1",
+      "id": "git_profile_switcher_vk_swiftshader_icd_file_format_version",
+      "community": 47,
+      "norm_label": "file_format_version"
+    },
+    {
+      "label": "ICD",
+      "file_type": "code",
+      "source_file": "scripts/aur/git-profile-switcher-git/pkg/git-profile-switcher-git/opt/git-profile-switcher/vk_swiftshader_icd.json",
+      "source_location": "L1",
+      "id": "git_profile_switcher_vk_swiftshader_icd_icd",
+      "community": 47,
+      "norm_label": "icd"
+    },
+    {
+      "label": "library_path",
+      "file_type": "code",
+      "source_file": "scripts/aur/git-profile-switcher-git/pkg/git-profile-switcher-git/opt/git-profile-switcher/vk_swiftshader_icd.json",
+      "source_location": "L1",
+      "id": "git_profile_switcher_vk_swiftshader_icd_icd_library_path",
+      "community": 47,
+      "norm_label": "library_path"
+    },
+    {
+      "label": "api_version",
+      "file_type": "code",
+      "source_file": "scripts/aur/git-profile-switcher-git/pkg/git-profile-switcher-git/opt/git-profile-switcher/vk_swiftshader_icd.json",
+      "source_location": "L1",
+      "id": "git_profile_switcher_vk_swiftshader_icd_icd_api_version",
+      "community": 47,
+      "norm_label": "api_version"
     },
     {
       "label": "CONTRIBUTING.md",
@@ -10748,6 +10730,15 @@
       "id": "git_profile_switcher_readme_what_this_means",
       "community": 72,
       "norm_label": "what this means"
+    },
+    {
+      "label": "Upgrading from 1.0.0",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L142",
+      "id": "git_profile_switcher_readme_upgrading_from_1_0_0",
+      "community": 72,
+      "norm_label": "upgrading from 1.0.0"
     },
     {
       "label": "Security Notes",
@@ -11243,6 +11234,24 @@
       "id": "scripts_aur_git_profile_switcher_git_src_git_profile_switcher_github_copilot_instructions_md",
       "community": 76,
       "norm_label": "copilot-instructions.md"
+    },
+    {
+      "label": "vk_swiftshader_icd.json",
+      "file_type": "code",
+      "source_file": "scripts/aur/git-profile-switcher-bin/src/squashfs-root/vk_swiftshader_icd.json",
+      "source_location": "L1",
+      "community": 48,
+      "norm_label": "vk_swiftshader_icd.json",
+      "id": "scripts_aur_git_profile_switcher_bin_src_squashfs_root_vk_swiftshader_icd_json"
+    },
+    {
+      "label": "vk_swiftshader_icd.json",
+      "file_type": "code",
+      "source_file": "scripts/aur/git-profile-switcher-bin/pkg/git-profile-switcher-bin/opt/git-profile-switcher/vk_swiftshader_icd.json",
+      "source_location": "L1",
+      "community": 47,
+      "norm_label": "vk_swiftshader_icd.json",
+      "id": "scripts_aur_git_profile_switcher_bin_pkg_git_profile_switcher_bin_opt_git_profile_switcher_vk_swiftshader_icd_json"
     },
     {
       "label": "mergeStream",
@@ -50447,126 +50456,6 @@
       "target": "assets_index_d6k_jyyq_qh"
     },
     {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scripts/aur/git-profile-switcher-bin/src/squashfs-root/vk_swiftshader_icd.json",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "scripts_aur_git_profile_switcher_bin_src_squashfs_root_vk_swiftshader_icd_json",
-      "target": "squashfs_root_vk_swiftshader_icd_file_format_version"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scripts/aur/git-profile-switcher-bin/src/squashfs-root/vk_swiftshader_icd.json",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "scripts_aur_git_profile_switcher_bin_src_squashfs_root_vk_swiftshader_icd_json",
-      "target": "squashfs_root_vk_swiftshader_icd_icd"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scripts/aur/git-profile-switcher-git/src/squashfs-root/vk_swiftshader_icd.json",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "scripts_aur_git_profile_switcher_git_src_squashfs_root_vk_swiftshader_icd_json",
-      "target": "squashfs_root_vk_swiftshader_icd_file_format_version"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scripts/aur/git-profile-switcher-git/src/squashfs-root/vk_swiftshader_icd.json",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "squashfs_root_vk_swiftshader_icd_icd",
-      "target": "squashfs_root_vk_swiftshader_icd_icd_library_path"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scripts/aur/git-profile-switcher-git/src/squashfs-root/vk_swiftshader_icd.json",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "squashfs_root_vk_swiftshader_icd_icd",
-      "target": "squashfs_root_vk_swiftshader_icd_icd_api_version"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scripts/aur/git-profile-switcher-git/src/squashfs-root/vk_swiftshader_icd.json",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "scripts_aur_git_profile_switcher_git_src_squashfs_root_vk_swiftshader_icd_json",
-      "target": "squashfs_root_vk_swiftshader_icd_icd"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scripts/aur/git-profile-switcher-bin/pkg/git-profile-switcher-bin/opt/git-profile-switcher/vk_swiftshader_icd.json",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "scripts_aur_git_profile_switcher_bin_pkg_git_profile_switcher_bin_opt_git_profile_switcher_vk_swiftshader_icd_json",
-      "target": "git_profile_switcher_vk_swiftshader_icd_file_format_version"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scripts/aur/git-profile-switcher-bin/pkg/git-profile-switcher-bin/opt/git-profile-switcher/vk_swiftshader_icd.json",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "scripts_aur_git_profile_switcher_bin_pkg_git_profile_switcher_bin_opt_git_profile_switcher_vk_swiftshader_icd_json",
-      "target": "git_profile_switcher_vk_swiftshader_icd_icd"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scripts/aur/git-profile-switcher-git/pkg/git-profile-switcher-git/opt/git-profile-switcher/vk_swiftshader_icd.json",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "scripts_aur_git_profile_switcher_git_pkg_git_profile_switcher_git_opt_git_profile_switcher_vk_swiftshader_icd_json",
-      "target": "git_profile_switcher_vk_swiftshader_icd_file_format_version"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scripts/aur/git-profile-switcher-git/pkg/git-profile-switcher-git/opt/git-profile-switcher/vk_swiftshader_icd.json",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "git_profile_switcher_vk_swiftshader_icd_icd",
-      "target": "git_profile_switcher_vk_swiftshader_icd_icd_library_path"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scripts/aur/git-profile-switcher-git/pkg/git-profile-switcher-git/opt/git-profile-switcher/vk_swiftshader_icd.json",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "git_profile_switcher_vk_swiftshader_icd_icd",
-      "target": "git_profile_switcher_vk_swiftshader_icd_icd_api_version"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "scripts/aur/git-profile-switcher-git/pkg/git-profile-switcher-git/opt/git-profile-switcher/vk_swiftshader_icd.json",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "scripts_aur_git_profile_switcher_git_pkg_git_profile_switcher_git_opt_git_profile_switcher_vk_swiftshader_icd_json",
-      "target": "git_profile_switcher_vk_swiftshader_icd_icd"
-    },
-    {
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -51383,6 +51272,126 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "scripts/aur/git-profile-switcher-git/src/squashfs-root/vk_swiftshader_icd.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_aur_git_profile_switcher_git_src_squashfs_root_vk_swiftshader_icd_json",
+      "target": "squashfs_root_vk_swiftshader_icd_file_format_version"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/aur/git-profile-switcher-git/src/squashfs-root/vk_swiftshader_icd.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_aur_git_profile_switcher_git_src_squashfs_root_vk_swiftshader_icd_json",
+      "target": "squashfs_root_vk_swiftshader_icd_icd"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/aur/git-profile-switcher-bin/src/squashfs-root/vk_swiftshader_icd.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_aur_git_profile_switcher_bin_src_squashfs_root_vk_swiftshader_icd_json",
+      "target": "squashfs_root_vk_swiftshader_icd_file_format_version"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/aur/git-profile-switcher-git/src/squashfs-root/vk_swiftshader_icd.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "squashfs_root_vk_swiftshader_icd_icd",
+      "target": "squashfs_root_vk_swiftshader_icd_icd_library_path"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/aur/git-profile-switcher-git/src/squashfs-root/vk_swiftshader_icd.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "squashfs_root_vk_swiftshader_icd_icd",
+      "target": "squashfs_root_vk_swiftshader_icd_icd_api_version"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/aur/git-profile-switcher-bin/src/squashfs-root/vk_swiftshader_icd.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_aur_git_profile_switcher_bin_src_squashfs_root_vk_swiftshader_icd_json",
+      "target": "squashfs_root_vk_swiftshader_icd_icd"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/aur/git-profile-switcher-git/pkg/git-profile-switcher-git/opt/git-profile-switcher/vk_swiftshader_icd.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_aur_git_profile_switcher_git_pkg_git_profile_switcher_git_opt_git_profile_switcher_vk_swiftshader_icd_json",
+      "target": "git_profile_switcher_vk_swiftshader_icd_file_format_version"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/aur/git-profile-switcher-git/pkg/git-profile-switcher-git/opt/git-profile-switcher/vk_swiftshader_icd.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_aur_git_profile_switcher_git_pkg_git_profile_switcher_git_opt_git_profile_switcher_vk_swiftshader_icd_json",
+      "target": "git_profile_switcher_vk_swiftshader_icd_icd"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/aur/git-profile-switcher-bin/pkg/git-profile-switcher-bin/opt/git-profile-switcher/vk_swiftshader_icd.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_aur_git_profile_switcher_bin_pkg_git_profile_switcher_bin_opt_git_profile_switcher_vk_swiftshader_icd_json",
+      "target": "git_profile_switcher_vk_swiftshader_icd_file_format_version"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/aur/git-profile-switcher-git/pkg/git-profile-switcher-git/opt/git-profile-switcher/vk_swiftshader_icd.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "git_profile_switcher_vk_swiftshader_icd_icd",
+      "target": "git_profile_switcher_vk_swiftshader_icd_icd_library_path"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/aur/git-profile-switcher-git/pkg/git-profile-switcher-git/opt/git-profile-switcher/vk_swiftshader_icd.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "git_profile_switcher_vk_swiftshader_icd_icd",
+      "target": "git_profile_switcher_vk_swiftshader_icd_icd_api_version"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/aur/git-profile-switcher-bin/pkg/git-profile-switcher-bin/opt/git-profile-switcher/vk_swiftshader_icd.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_aur_git_profile_switcher_bin_pkg_git_profile_switcher_bin_opt_git_profile_switcher_vk_swiftshader_icd_json",
+      "target": "git_profile_switcher_vk_swiftshader_icd_icd"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "CONTRIBUTING.md",
       "source_location": "L1",
       "weight": 1.0,
@@ -51729,6 +51738,16 @@
       "confidence_score": 1.0,
       "source": "git_profile_switcher_readme_how_it_works",
       "target": "git_profile_switcher_readme_what_this_means"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L142",
+      "weight": 1.0,
+      "source": "git_profile_switcher_readme_how_it_works",
+      "target": "git_profile_switcher_readme_upgrading_from_1_0_0",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -64302,5 +64321,5 @@
       "source_file": "README.md"
     }
   ],
-  "built_at_commit": "58ab18b50b988551d604c0982e0cfec7992cf5ae"
+  "built_at_commit": "9fda3879d0e331482c1dd459360d840ec6822f33"
 }
