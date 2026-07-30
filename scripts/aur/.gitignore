@@ -11,3 +11,6 @@ git-profile-switcher-bin/LICENSE-*
 
 # VCS source clone makepkg creates for the -git package.
 git-profile-switcher-git/git-profile-switcher/
+
+# Track the publish helper despite the repo-wide *.sh ignore.
+!publish.sh
