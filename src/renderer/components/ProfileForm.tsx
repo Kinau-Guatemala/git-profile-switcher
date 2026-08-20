@@ -1,19 +1,20 @@
 import { useState } from 'react'
-import { ProfileInput } from '../../core/profiles/schema'
+import { Profile, ProfileInput } from '../../core/profiles/schema'
 
 interface Props {
+  initial?: Profile
   onSave: (profile: ProfileInput) => void
   onCancel: () => void
 }
 
-export default function ProfileForm({ onSave, onCancel }: Props) {
-  const [label, setLabel] = useState('')
-  const [userName, setUserName] = useState('')
-  const [userEmail, setUserEmail] = useState('')
-  const [showAdvanced, setShowAdvanced] = useState(false)
-  const [gpgSign, setGpgSign] = useState(false)
-  const [signingKey, setSigningKey] = useState('')
-  const [sshHost, setSSHHost] = useState('')
+export default function ProfileForm({ initial, onSave, onCancel }: Props) {
+  const [label, setLabel] = useState(initial?.label ?? '')
+  const [userName, setUserName] = useState(initial?.userName ?? '')
+  const [userEmail, setUserEmail] = useState(initial?.userEmail ?? '')
+  const [showAdvanced, setShowAdvanced] = useState(Boolean(initial?.advanced))
+  const [gpgSign, setGpgSign] = useState(initial?.advanced?.gpgSign ?? false)
+  const [signingKey, setSigningKey] = useState(initial?.advanced?.signingKey ?? '')
+  const [sshHost, setSSHHost] = useState(initial?.advanced?.sshHost ?? '')
   const [sshPassphrase, setSSHPassphrase] = useState('')
   const [generating, setGenerating] = useState(false)
   const [generatedKey, setGeneratedKey] = useState<string | null>(null)
@@ -207,7 +208,7 @@ export default function ProfileForm({ onSave, onCancel }: Props) {
 
       <div className="btn-row">
         <button type="submit" className="btn btn--primary">
-          ✓ Save
+          {initial ? '✓ Update' : '✓ Save'}
         </button>
         <button type="button" className="btn btn--ghost" onClick={onCancel}>
           ✕ Cancel

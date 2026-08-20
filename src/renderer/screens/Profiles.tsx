@@ -8,6 +8,7 @@ import { GIT_HOSTING_DOMAINS } from '../../core/constants'
 export default function Profiles() {
   const [profiles, setProfiles] = useState<Profile[]>([])
   const [showForm, setShowForm] = useState(false)
+  const [editingProfile, setEditingProfile] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
   const [showImport, setShowImport] = useState(false)
   const [detectedProfiles, setDetectedProfiles] = useState<DetectedProfile[]>([])
@@ -31,13 +32,33 @@ export default function Profiles() {
 
   const handleSave = async (input: ProfileInput) => {
     try {
-      await window.api.profiles.save(input)
+      if (editingProfile) {
+        await window.api.profiles.update(editingProfile.id, input)
+      } else {
+        await window.api.profiles.save(input)
+      }
       await loadProfiles()
       setShowForm(false)
+      setEditingProfile(null)
     } catch (error) {
       console.error('Failed to save profile:', error)
       alert('Failed to save profile')
     }
+  }
+
+  const handleEdit = (profile: Profile) => {
+    setEditingProfile(profile)
+    setShowForm(true)
+  }
+
+  const handleCancelForm = () => {
+    setShowForm(false)
+    setEditingProfile(null)
+  }
+
+  const handleAddNew = () => {
+    setEditingProfile(null)
+    setShowForm(true)
   }
 
   const handleDelete = async (profileId: string) => {
@@ -112,8 +133,9 @@ export default function Profiles() {
       if (currentHost && identityFile && hostName && GIT_HOSTING_DOMAINS.has(hostName.toLowerCase())) {
         profiles.push({
           sshHost: currentHost,
-          comment: hostComment || `Git account (${currentHost})`,
-          sshCommand: `ssh -F ~/.ssh/config`
+          comment: hostComment || `SSH alias: ${currentHost}`,
+          sshCommand: `ssh -F ~/.ssh/config`,
+          source: `Imported file (Host ${currentHost} → ${hostName}, key: ${identityFile})`
         })
       }
     }
@@ -227,7 +249,7 @@ export default function Profiles() {
       <div className="btn-row">
         <button
           className={`btn ${showForm ? 'btn--ghost' : 'btn--primary'}`}
-          onClick={() => setShowForm(!showForm)}
+          onClick={() => (showForm ? handleCancelForm() : handleAddNew())}
         >
           {showForm ? '✕ Cancel' : '+ Add Profile'}
         </button>
@@ -247,8 +269,9 @@ export default function Profiles() {
 
       {showForm && (
         <ProfileForm
+          initial={editingProfile ?? undefined}
           onSave={handleSave}
-          onCancel={() => setShowForm(false)}
+          onCancel={handleCancelForm}
         />
       )}
 
@@ -259,19 +282,26 @@ export default function Profiles() {
             <button className="btn btn--ghost btn--sm" onClick={() => setShowImport(false)}>Close</button>
           </div>
 
+          <p className="form-hint mb-md">
+            <strong>Global / folder identity</strong> entries set your git commit name, email and
+            signing key. <strong>SSH alias</strong> entries only control which SSH key GitHub sees —
+            they don't set a name or email by themselves. Profiles already in the list below are
+            filtered out; import an SSH alias into an existing profile via its <strong>Edit</strong>{' '}
+            button (SSH Host field) rather than creating a separate one.
+          </p>
+
           {detectedProfiles.length === 0 ? (
-            <p>No configurations detected in your .gitconfig file.</p>
+            <p>Nothing new to import — every detected config already matches a profile below.</p>
           ) : (
             detectedProfiles.map((detected, index) => (
               <div key={index} className="pixel-card pixel-card--detected">
-                {detected.comment && (
-                  <p className="pixel-card__label">{detected.comment}</p>
-                )}
+                <p className="pixel-card__label">{detected.comment || 'Detected config'}</p>
                 <p className="pixel-card__info"><strong>Name:</strong> {detected.userName || 'Not set (will prompt)'}</p>
                 <p className="pixel-card__info"><strong>Email:</strong> {detected.userEmail || 'Not set (will prompt)'}</p>
                 {detected.sshHost && <p className="pixel-card__info"><strong>SSH Host:</strong> {detected.sshHost}</p>}
                 {detected.signingKey && <p className="pixel-card__info"><strong>Signing Key:</strong> {detected.signingKey}</p>}
                 {detected.sshCommand && <p className="pixel-card__info"><strong>SSH Cmd:</strong> {detected.sshCommand}</p>}
+                {detected.source && <p className="pixel-card__info"><strong>Source:</strong> {detected.source}</p>}
                 <div className="mt-md">
                   <button
                     className="btn btn--success btn--sm"
@@ -316,6 +346,12 @@ export default function Profiles() {
                   onClick={() => handleApply(profile.id)}
                 >
                   ▶ Apply
+                </button>
+                <button
+                  className="btn btn--info btn--sm"
+                  onClick={() => handleEdit(profile)}
+                >
+                  ✎ Edit
                 </button>
                 <button
                   className="btn btn--danger btn--sm"

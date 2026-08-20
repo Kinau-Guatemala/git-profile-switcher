@@ -12,6 +12,7 @@ export interface DetectedProfile {
   sshCommand?: string
   sshHost?: string
   comment?: string
+  source?: string
 }
 
 export interface DetectedFolderMappingSuggestion {
@@ -23,13 +24,16 @@ const api = {
   profiles: {
     list: (): Promise<Profile[]> => ipcRenderer.invoke('profiles:list'),
     save: (profile: ProfileInput): Promise<Profile> => ipcRenderer.invoke('profiles:save', profile),
+    update: (profileId: string, profile: ProfileInput): Promise<Profile> =>
+      ipcRenderer.invoke('profiles:update', profileId, profile),
     delete: (profileId: string): Promise<void> => ipcRenderer.invoke('profiles:delete', profileId),
     apply: (profileId: string): Promise<{ ok: true }> => ipcRenderer.invoke('profiles:apply', profileId),
     detect: (): Promise<DetectedProfile[]> => ipcRenderer.invoke('profiles:detect')
   },
   verify: {
     global: (): Promise<VerifyResult> => ipcRenderer.invoke('verify:global'),
-    inRepo: (repoPath: string): Promise<VerifyResult> => ipcRenderer.invoke('verify:inRepo', repoPath)
+    inRepo: (repoPath: string): Promise<VerifyResult> => ipcRenderer.invoke('verify:inRepo', repoPath),
+    profile: (profileId: string): Promise<VerifyResult> => ipcRenderer.invoke('verify:profile', profileId)
   },
   app: {
     openWindow: (name: 'profiles' | 'verify'): Promise<void> => ipcRenderer.invoke('app:openWindow', name)
