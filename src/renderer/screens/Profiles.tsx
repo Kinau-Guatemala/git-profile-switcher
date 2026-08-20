@@ -269,6 +269,7 @@ export default function Profiles() {
 
       {showForm && (
         <ProfileForm
+          key={editingProfile?.id ?? 'new'}
           initial={editingProfile ?? undefined}
           onSave={handleSave}
           onCancel={handleCancelForm}

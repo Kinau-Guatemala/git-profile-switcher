@@ -18,25 +18,25 @@ describe('verifyProfile', () => {
   it('previews what applying the profile would write, without touching real config', async () => {
     const personal = makeProfile({
       label: 'personal',
-      userName: 'Diego Auyón',
-      userEmail: 'diegoauyon@gmail.com',
-      advanced: { sshHost: 'github.com-diegoauyon', sshKeyPath: '~/.ssh/personal_key' }
+      userName: 'Jamie Rivera',
+      userEmail: 'jamie@example.com',
+      advanced: { sshHost: 'github.com-personal', sshKeyPath: '~/.ssh/personal_key' }
     })
     const work = makeProfile({
       label: 'work',
-      userEmail: 'dcobar@styleseat.com',
-      advanced: { sshHost: 'github.com-diegoauyon-styleseat', sshKeyPath: '~/.ssh/id_ed25519' }
+      userEmail: 'jamie@example.org',
+      advanced: { sshHost: 'github.com-work', sshKeyPath: '~/.ssh/id_ed25519' }
     })
 
     const result = await verifyProfile(personal, [personal, work])
 
-    expect(result.effectiveName).toBe('Diego Auyón')
-    expect(result.effectiveEmail).toBe('diegoauyon@gmail.com')
+    expect(result.effectiveName).toBe('Jamie Rivera')
+    expect(result.effectiveEmail).toBe('jamie@example.com')
     expect(result.warnings[0]).toContain('Preview only')
 
     const values = result.origins.map(o => `${o.key}=${o.value}`)
     expect(values).toContain('core.sshcommand=ssh -i ~/.ssh/personal_key -o IdentitiesOnly=yes')
-    expect(values).toContain('url.git@github.com:.insteadof=git@github.com-diegoauyon-styleseat:')
+    expect(values).toContain('url.git@github.com:.insteadof=git@github.com-work:')
   })
 
   it('cleans up the scratch preview file after reading it', async () => {

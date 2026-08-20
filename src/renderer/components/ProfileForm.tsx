@@ -22,12 +22,16 @@ export default function ProfileForm({ initial, onSave, onCancel }: Props) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
+    // Persist advanced settings whenever any are actually set, independent of
+    // whether the "Advanced Options" panel happens to be collapsed right now —
+    // it's a pure UI expand/collapse toggle, not a data-inclusion switch.
+    const hasAdvanced = gpgSign || signingKey || sshHost
     const profile: ProfileInput = {
       label,
       userName,
       userEmail,
-      advanced: showAdvanced ? {
-        gpgSign,
+      advanced: hasAdvanced ? {
+        gpgSign: gpgSign || undefined,
         signingKey: signingKey || undefined,
         sshHost: sshHost || undefined
       } : undefined

@@ -23,13 +23,10 @@ export async function verifyProfile(profile: Profile, allProfiles: Profile[]): P
   try {
     await applyProfile(profile, previewPath, allProfiles)
 
-    let origins: VerifyResult['origins'] = []
-    try {
-      const originsResult = await runGit(['config', '--file', previewPath, '--list', '--show-origin'])
-      origins = parseShowOrigin(originsResult.stdout)
-    } catch {
-      // Empty managed file (no advanced settings) produces no output — not an error.
-    }
+    // applyProfile always writes at least user.name/user.email, so this file
+    // is never actually empty — let failures surface instead of masking them.
+    const originsResult = await runGit(['config', '--file', previewPath, '--list', '--show-origin'])
+    const origins = parseShowOrigin(originsResult.stdout)
 
     return {
       effectiveName: profile.userName || null,
