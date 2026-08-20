@@ -1,33 +1,68 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { VerifyResult } from '../../core/verify/types'
+import { Profile } from '../../core/profiles/schema'
 import OriginTable from '../components/OriginTable'
 
+const GLOBAL_OPTION = '__global__'
+
 export default function Verify() {
+  const [profiles, setProfiles] = useState<Profile[]>([])
+  const [selected, setSelected] = useState(GLOBAL_OPTION)
   const [result, setResult] = useState<VerifyResult | null>(null)
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    loadVerify()
-  }, [])
-
-  const loadVerify = async () => {
+  const loadVerify = useCallback(async (target: string) => {
+    setLoading(true)
     try {
-      const data = await window.api.verify.global()
+      const data = target === GLOBAL_OPTION
+        ? await window.api.verify.global()
+        : await window.api.verify.profile(target)
       setResult(data)
     } catch (error) {
       console.error('Failed to verify:', error)
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
 
-  if (loading) return <div className="loading-screen">LOADING...</div>
+  useEffect(() => {
+    window.api.profiles.list()
+      .then(setProfiles)
+      .catch(error => console.error('Failed to load profiles:', error))
+    loadVerify(GLOBAL_OPTION)
+  }, [loadVerify])
+
+  const handleSelect = (value: string) => {
+    setSelected(value)
+    loadVerify(value)
+  }
 
   return (
     <div>
       <h1 className="page-title">▸ VERIFY GIT CONFIG</h1>
 
-      {result && (
+      <div className="form-group">
+        <label htmlFor="verify-target" className="form-label">Checking</label>
+        <select
+          id="verify-target"
+          className="form-input"
+          value={selected}
+          onChange={e => handleSelect(e.target.value)}
+        >
+          <option value={GLOBAL_OPTION}>◆ Active / Global (what git actually uses now)</option>
+          {profiles.map(profile => (
+            <option key={profile.id} value={profile.id}>◇ {profile.label} (preview)</option>
+          ))}
+        </select>
+        <p className="form-hint">
+          "Active / Global" reads your real, currently effective git config. Any other profile is a
+          preview of what applying it would write — it does not change your current setup.
+        </p>
+      </div>
+
+      {loading ? (
+        <div className="loading-screen">LOADING...</div>
+      ) : result && (
         <>
           <div className="pixel-card pixel-card--highlight mb-md">
             <h2 className="section-title">◈ Effective Configuration</h2>
@@ -51,7 +86,7 @@ export default function Verify() {
       )}
 
       <div className="mt-lg">
-        <button className="btn btn--primary" onClick={loadVerify}>
+        <button className="btn btn--primary" onClick={() => loadVerify(selected)}>
           ↻ Refresh
         </button>
       </div>

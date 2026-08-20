@@ -6,7 +6,8 @@ import { Profile, ProfileInput, ProfileInputSchema } from '../core/profiles/sche
 import { syncManagedGitconfig } from '../core/git/folderConfigs'
 import { verifyGlobal } from '../core/verify/globalVerify'
 import { verifyInRepo } from '../core/verify/repoVerify'
-import { detectExistingProfiles, detectFolderMappings } from '../core/git/detectProfiles'
+import { verifyProfile } from '../core/verify/profileVerify'
+import { detectExistingProfiles, detectFolderMappings, DetectedProfile } from '../core/git/detectProfiles'
 import { generateSSHKey, addToSSHConfig, testSSHConnection } from '../core/git/sshKeyGen'
 import { parseSSHConfig } from '../core/git/sshConfig'
 import { openProfilesWindow, openVerifyWindow } from './windows'
@@ -42,6 +43,35 @@ export function setupIpcHandlers(rebuildTray: () => void): void {
       rebuildTray()
 
       return newProfile
+    } catch (error: any) {
+      throw new Error(error.message)
+    }
+  })
+
+  ipcMain.handle('profiles:update', async (_event, profileId: string, input: ProfileInput) => {
+    try {
+      ProfileInputSchema.parse(input)
+
+      const profiles = await loadProfiles(userDataPath)
+      const existing = profiles.find(p => p.id === profileId)
+      if (!existing) {
+        throw new Error('Profile not found')
+      }
+
+      const updated: Profile = {
+        ...existing,
+        ...input,
+        id: existing.id,
+        createdAt: existing.createdAt,
+        updatedAt: new Date().toISOString()
+      }
+
+      const nextProfiles = profiles.map(p => (p.id === profileId ? updated : p))
+      await saveProfiles(userDataPath, nextProfiles)
+      await syncManagedGitconfig(userDataPath)
+      rebuildTray()
+
+      return updated
     } catch (error: any) {
       throw new Error(error.message)
     }
@@ -224,6 +254,19 @@ export function setupIpcHandlers(rebuildTray: () => void): void {
     }
   })
 
+  ipcMain.handle('verify:profile', async (_event, profileId: string) => {
+    try {
+      const profiles = await loadProfiles(userDataPath)
+      const profile = profiles.find(p => p.id === profileId)
+      if (!profile) {
+        throw new Error('Profile not found')
+      }
+      return await verifyProfile(profile, profiles)
+    } catch (error: any) {
+      throw new Error(error.message)
+    }
+  })
+
   ipcMain.handle('app:openWindow', async (_event, name: 'profiles' | 'verify') => {
     try {
       if (name === 'profiles') {
@@ -238,7 +281,32 @@ export function setupIpcHandlers(rebuildTray: () => void): void {
 
   ipcMain.handle('profiles:detect', async () => {
     try {
-      return await detectExistingProfiles()
+      const [detected, profiles] = await Promise.all([
+        detectExistingProfiles(),
+        loadProfiles(userDataPath)
+      ])
+
+      // Already imported: same identity (name+email) or the same SSH alias is
+      // already attached to a tracked profile.
+      const alreadyImported = (d: DetectedProfile) =>
+        profiles.some(p =>
+          (d.userEmail && d.userName && p.userEmail === d.userEmail && p.userName === d.userName) ||
+          (d.sshHost && p.advanced?.sshHost === d.sshHost)
+        )
+
+      const seen = new Set<string>()
+      const result: DetectedProfile[] = []
+      for (const d of detected) {
+        if (alreadyImported(d)) continue
+
+        const key = JSON.stringify([d.userName, d.userEmail, d.signingKey, d.sshHost, d.sshCommand])
+        if (seen.has(key)) continue
+        seen.add(key)
+
+        result.push(d)
+      }
+
+      return result
     } catch (error: any) {
       throw new Error(error.message)
     }

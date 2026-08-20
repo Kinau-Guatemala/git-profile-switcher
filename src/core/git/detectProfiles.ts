@@ -12,6 +12,8 @@ export interface DetectedProfile {
   sshCommand?: string
   sshHost?: string
   comment?: string
+  /** Where this entry was read from, e.g. a file path or SSH config host block. */
+  source?: string
 }
 
 export async function detectExistingProfiles(): Promise<DetectedProfile[]> {
@@ -47,7 +49,10 @@ export async function detectExistingProfiles(): Promise<DetectedProfile[]> {
 }
 
 async function getGlobalProfile(): Promise<DetectedProfile> {
-  const profile: DetectedProfile = {}
+  const profile: DetectedProfile = {
+    comment: 'Global git identity',
+    source: '~/.gitconfig (global user.*, effective everywhere)'
+  }
 
   try {
     const nameResult = await runGit(['config', '--global', '--get', 'user.name'])
@@ -83,13 +88,24 @@ async function parseConditionalIncludes(): Promise<DetectedProfile[]> {
 
     let inIncludeIf = false
     let inInclude = false
+    let currentGitdir: string | null = null
+    // The app's own managed region re-includes files that are already tracked
+    // as profiles/folder mappings — skip it so we don't "detect" our own output.
+    let inManagedRegion = false
 
     for (const line of lines) {
+      const trimmed = line.trim()
+      if (trimmed === REGION_START) { inManagedRegion = true; continue }
+      if (trimmed === REGION_END) { inManagedRegion = false; continue }
+      if (inManagedRegion) continue
+
       const sectionMatch = line.match(/^\s*\[([^\]]+)\]\s*$/)
       if (sectionMatch) {
         const section = sectionMatch[1].trim()
         inIncludeIf = section.startsWith('includeIf ')
         inInclude = section === 'include'
+        const gitdirMatch = section.match(/^includeIf\s+"gitdir:(.+?)\/?"$/i)
+        currentGitdir = gitdirMatch ? gitdirMatch[1] : null
         continue
       }
 
@@ -100,6 +116,10 @@ async function parseConditionalIncludes(): Promise<DetectedProfile[]> {
           const includeContent = await readFile(includePath, 'utf-8')
           const profile = parseConfigContent(includeContent)
           if (profile.userName || profile.userEmail) {
+            profile.comment = currentGitdir
+              ? `Folder-only identity: ${currentGitdir}`
+              : 'Global include'
+            profile.source = includePath
             profiles.push(profile)
           }
         } catch { }
@@ -223,8 +243,9 @@ async function parseSSHConfigForGitHosts(): Promise<DetectedProfile[]> {
       if (currentHost && identityFile && hostName && isGitHostingDomain(hostName)) {
         profiles.push({
           sshHost: currentHost,
-          comment: hostComment || `Git account (${currentHost})`,
-          sshCommand: `ssh -F ~/.ssh/config`
+          comment: hostComment || `SSH alias: ${currentHost}`,
+          sshCommand: `ssh -F ~/.ssh/config`,
+          source: `~/.ssh/config (Host ${currentHost} → ${hostName}, key: ${identityFile})`
         })
       }
     }
