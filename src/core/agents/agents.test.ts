@@ -97,6 +97,28 @@ describe('agents', () => {
     expect(JSON.parse(await readFile(real, 'utf-8')).permissions.deny).toContain(CLAUDE_DENY)
   })
 
+  it('deletes a config file it created once the rule is removed', async () => {
+    const env = await setup()
+    await mkdir(join(home, '.cursor'))
+    const file = join(home, '.cursor', 'hooks.json')
+    await applyAgentRule('cursor', env)
+    await removeAgentRule('cursor', env)
+    expect(await exists(file)).toBe(false)
+  })
+
+  it("keeps the file's indentation", async () => {
+    const env = await setup()
+    await mkdir(join(home, '.claude'))
+    const file = join(home, '.claude', 'settings.json')
+    const original = JSON.stringify({ theme: 'dark', permissions: { deny: ['Bash(rm:*)'] } }, null, 4) + '\n'
+    await writeFile(file, original)
+
+    await applyAgentRule('claude', env)
+    expect(await readFile(file, 'utf-8')).toContain('\n    "theme": "dark"')
+    await removeAgentRule('claude', env)
+    expect(await readFile(file, 'utf-8')).toBe(original)
+  })
+
   it('rejects unknown agent ids', () => {
     expect(() => assertAgentId('vim')).toThrow()
   })

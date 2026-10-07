@@ -1,4 +1,4 @@
-import { chmod, mkdir, readFile, realpath, rename, rm, stat, writeFile } from 'node:fs/promises'
+import { chmod, lstat, mkdir, readFile, realpath, rename, rm, stat, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import * as r from './rules'
 
@@ -62,7 +62,7 @@ async function resolveAgent(id: AgentId, env: AgentEnv): Promise<Agent> {
   }
 }
 
-type ReadResult = { kind: 'missing' } | { kind: 'ok'; value: Json } | { kind: 'invalid' }
+type ReadResult = { kind: 'missing' } | { kind: 'ok'; value: Json; text: string } | { kind: 'invalid' }
 
 async function readJson(file: string): Promise<ReadResult> {
   let text: string
@@ -74,7 +74,7 @@ async function readJson(file: string): Promise<ReadResult> {
   }
   try {
     const value = JSON.parse(text)
-    return typeof value === 'object' && value !== null && !Array.isArray(value) ? { kind: 'ok', value } : { kind: 'invalid' }
+    return typeof value === 'object' && value !== null && !Array.isArray(value) ? { kind: 'ok', value, text } : { kind: 'invalid' }
   } catch {
     return { kind: 'invalid' }
   }
@@ -136,7 +136,7 @@ export async function applyAgentRule(id: AgentId, env: AgentEnv): Promise<void> 
     if (e instanceof r.UnsupportedConfig) throw byHand(a, e.message)
     throw e
   }
-  await writeAtomic(a.file, JSON.stringify(next, null, 2) + '\n')
+  await writeAtomic(a.file, serialize(next, j.kind === 'ok' ? j.text : null))
 }
 
 export async function removeAgentRule(id: AgentId, env: AgentEnv): Promise<void> {
@@ -144,5 +144,17 @@ export async function removeAgentRule(id: AgentId, env: AgentEnv): Promise<void>
   if (a.kind === 'own') return rm(a.file, { force: true })
   const j = await readJson(a.file)
   if (j.kind !== 'ok' || !a.has(j.value)) return
-  await writeAtomic(a.file, JSON.stringify(a.remove(j.value), null, 2) + '\n')
+  const next = a.remove(j.value)
+  // Nothing left but what we added: the file was ours. A symlink (dotfiles)
+  // stays and gets `{}` instead, so the user's link isn't broken.
+  const isLink = await lstat(a.file).then(s => s.isSymbolicLink(), () => false)
+  if (Object.keys(next).length === 0 && !isLink) return rm(a.file, { force: true })
+  await writeAtomic(a.file, serialize(next, j.text))
+}
+
+/** JSON in the file's own indentation and trailing newline (2 spaces + newline for new files). */
+function serialize(value: Json, original: string | null): string {
+  const indent = original?.match(/^([ \t]+)"/m)?.[1] ?? 2
+  const newline = original === null || original.endsWith('\n') ? '\n' : ''
+  return JSON.stringify(value, null, indent) + newline
 }

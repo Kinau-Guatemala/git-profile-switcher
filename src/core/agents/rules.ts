@@ -11,29 +11,41 @@ export const GUARD_BASENAME = 'gh-auth-switch-guard'
 export const GUARD_MESSAGE =
   'gh auth switch is blocked by Git Profile Switcher: gh already uses the account linked to this folder. Do not change the global gh account.'
 
-// Hook scripts get the agent's JSON payload on stdin and search all of it, so
-// `bash -c "gh auth switch"` is caught too. Exactly one JSON object on stdout.
-export const GUARD_SH = `#!/bin/sh
+// Hook scripts get the agent's JSON payload on stdin (still JSON-escaped) and
+// block *running* gh auth switch: gh at the start of a command — after a quote,
+// ; & | ( ` $( or an escaped newline — optionally with a path or .exe. So
+// `bash -c "gh auth switch"` is caught, but a commit message or a doc edit that
+// merely mentions it is not. Copilot's preToolUse fires for every tool, so only
+// its shell tools are checked. Exactly one JSON object (or nothing) on stdout.
+// String.raw keeps the regex backslashes literal; BT stands in for a backtick.
+const BT = '`'
+
+export const GUARD_SH = String.raw`#!/bin/sh
 # Managed by Git Profile Switcher. Usage: ${GUARD_BASENAME}.sh cursor|copilot
 input=$(cat)
 msg='${GUARD_MESSAGE}'
-if printf '%s' "$input" | grep -Eq 'gh[[:space:]]+auth[[:space:]]+switch'; then
+if [ "$1" = copilot ] && ! printf '%s' "$input" | grep -Eq '"toolName"[[:space:]]*:[[:space:]]*"(bash|powershell|shell)"'; then
+  exit 0
+fi
+re='(^|[;&|(${BT}"'"'"']|[$][(]|\\n)[[:space:]]*([^[:space:]"]*[/\\])?gh(\.exe)?[[:space:]]+auth[[:space:]]+switch'
+if printf '%s' "$input" | grep -Eq "$re"; then
   if [ "$1" = copilot ]; then
-    printf '{"permissionDecision":"deny","permissionDecisionReason":"%s"}\\n' "$msg"
+    printf '{"permissionDecision":"deny","permissionDecisionReason":"%s"}\n' "$msg"
   else
-    printf '{"continue":true,"permission":"deny","user_message":"%s","agent_message":"%s"}\\n' "$msg" "$msg"
+    printf '{"continue":true,"permission":"deny","user_message":"%s","agent_message":"%s"}\n' "$msg" "$msg"
   fi
   exit 0
 fi
-if [ "$1" = cursor ]; then printf '{"continue":true,"permission":"allow"}\\n'; fi
+if [ "$1" = cursor ]; then printf '{"continue":true,"permission":"allow"}\n'; fi
 exit 0
 `
 
-export const GUARD_PS1 = `# Managed by Git Profile Switcher. Usage: ${GUARD_BASENAME}.ps1 cursor|copilot
+export const GUARD_PS1 = String.raw`# Managed by Git Profile Switcher. Usage: ${GUARD_BASENAME}.ps1 cursor|copilot
 param([string]$Dialect)
 $text = [Console]::In.ReadToEnd()
 $msg = '${GUARD_MESSAGE}'
-if ($text -match 'gh\\s+auth\\s+switch') {
+if ($Dialect -eq 'copilot' -and $text -notmatch '"toolName"\s*:\s*"(bash|powershell|shell)"') { exit 0 }
+if ($text -match '(^|[;&|(${BT}"'']|\$\(|\\n)\s*([^\s"]*[/\\])?gh(\.exe)?\s+auth\s+switch') {
   if ($Dialect -eq 'copilot') { [ordered]@{ permissionDecision = 'deny'; permissionDecisionReason = $msg } | ConvertTo-Json -Compress }
   else { [ordered]@{ continue = $true; permission = 'deny'; user_message = $msg; agent_message = $msg } | ConvertTo-Json -Compress }
   exit 0
@@ -63,9 +75,19 @@ export function addClaudeRule(s: Json): Json {
   return { ...s, permissions: { ...s.permissions, deny: [...deny, CLAUDE_DENY] } }
 }
 
+/** Drop `key` from `obj` when it ends up empty, so removal undoes what add created. */
+function setOrDrop(obj: Json, key: string, value: unknown): Json {
+  const out = { ...obj }
+  const empty = Array.isArray(value) ? value.length === 0 : isObj(value) && Object.keys(value).length === 0
+  if (empty) delete out[key]
+  else out[key] = value
+  return out
+}
+
 export function removeClaudeRule(s: Json): Json {
   if (!hasClaudeRule(s)) return s
-  return { ...s, permissions: { ...s.permissions, deny: s.permissions.deny.filter((d: unknown) => d !== CLAUDE_DENY) } }
+  const deny = s.permissions.deny.filter((d: unknown) => d !== CLAUDE_DENY)
+  return setOrDrop(s, 'permissions', setOrDrop(s.permissions, 'deny', deny))
 }
 
 // ── OpenCode: permission.bash, last matching rule wins ──
@@ -90,9 +112,12 @@ export function addOpencodeRule(c: Json): Json {
 
 export function removeOpencodeRule(c: Json): Json {
   if (!hasOpencodeRule(c)) return c
-  const rest = { ...c.permission.bash }
+  const rest: Json = { ...c.permission.bash }
   delete rest[OPENCODE_KEY]
-  return { ...c, permission: { ...c.permission, bash: rest } }
+  const keys = Object.keys(rest)
+  // Undo add's string → object conversion: a lone catch-all goes back to a string.
+  const bash = keys.length === 1 && keys[0] === '*' ? rest['*'] : rest
+  return setOrDrop(c, 'permission', setOrDrop(c.permission, 'bash', bash))
 }
 
 // ── Cursor: ~/.cursor/hooks.json ──
@@ -111,7 +136,10 @@ export function addCursorHook(c: Json, command: string): Json {
 
 export function removeCursorHook(c: Json): Json {
   if (!hasCursorHook(c)) return c
-  return { ...c, hooks: { ...c.hooks, beforeShellExecution: c.hooks.beforeShellExecution.filter((h: unknown) => !isGuard(h)) } }
+  const list = c.hooks.beforeShellExecution.filter((h: unknown) => !isGuard(h))
+  const out = setOrDrop(c, 'hooks', setOrDrop(c.hooks, 'beforeShellExecution', list))
+  // A bare {version: 1} is only what addCursorHook put there.
+  return Object.keys(out).length === 1 && out.version === 1 ? {} : out
 }
 
 // ── Own files ──

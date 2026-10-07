@@ -2,6 +2,11 @@ import { useEffect, useState } from 'react'
 import type { GhTabStatus } from '../../main/ghIpc'
 import type { AgentStatus } from '../../core/agents/agents'
 
+/** Unlinking ("none") always works; linking an account needs two or more of them. */
+export function linkChoices(ready: boolean, ghUser: string | null) {
+  return { selectDisabled: !ready && ghUser === null, accountsDisabled: !ready }
+}
+
 // Electron prefixes rejected invokes with "Error invoking remote method '…': Error: ".
 const cleanError = (e: any) => String(e?.message ?? e).replace(/^Error invoking remote method '[^']+': (Error: )?/, '')
 
@@ -132,19 +137,24 @@ export default function GitHubCLI() {
       <div className="pixel-card mb-md">
         <h2 className="section-title">◈ Profile → gh Account</h2>
         {status.profiles.length === 0 && <p className="settings-hint">Create a profile first.</p>}
-        {status.profiles.map(p => (
-          <div className="form-group" key={p.id}>
-            <label className="form-label">{p.label}</label>
-            <select className="form-input" value={p.ghUser ?? ''} disabled={!ready || busy}
-              onChange={e => run(() => window.api.gh.setProfileAccount(p.id, e.target.value || null))}>
-              <option value="">— none —</option>
-              {accounts.map(a => <option key={a.login} value={a.login}>{a.login}</option>)}
-              {p.ghUser && !accounts.some(a => a.login === p.ghUser) && (
-                <option value={p.ghUser}>{p.ghUser} (not logged in)</option>
-              )}
-            </select>
-          </div>
-        ))}
+        {status.profiles.map(p => {
+          const choices = linkChoices(ready, p.ghUser)
+          return (
+            <div className="form-group" key={p.id}>
+              <label className="form-label">{p.label}</label>
+              <select className="form-input" value={p.ghUser ?? ''} disabled={choices.selectDisabled || busy}
+                onChange={e => run(() => window.api.gh.setProfileAccount(p.id, e.target.value || null))}>
+                <option value="">— none —</option>
+                {accounts.map(a => (
+                  <option key={a.login} value={a.login} disabled={choices.accountsDisabled && a.login !== p.ghUser}>{a.login}</option>
+                ))}
+                {p.ghUser && !accounts.some(a => a.login === p.ghUser) && (
+                  <option value={p.ghUser}>{p.ghUser} (not logged in)</option>
+                )}
+              </select>
+            </div>
+          )
+        })}
       </div>
 
       <div className="pixel-card mb-md">
