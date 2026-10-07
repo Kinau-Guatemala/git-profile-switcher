@@ -3,7 +3,7 @@ import { homedir } from 'node:os'
 import { join, win32 } from 'node:path'
 import { loadProfiles, saveProfiles } from '../core/profiles/storage'
 import { syncManagedGitconfig } from '../core/git/folderConfigs'
-import { setProfileGhUser } from '../core/gh/profileLink'
+import { setProfileGhUser, autoLinkGhAccounts, matchGhAccount } from '../core/gh/profileLink'
 import { userShellEnv } from '../core/gh/shellEnv'
 import { getGhStatus, GhStatus } from '../core/gh/ghStatus'
 import { wrapperLayout, wrapperStatus, installWrapper, removeWrapper, pathHint, findRealGh, WrapperStatus } from '../core/gh/wrapper'
@@ -17,7 +17,10 @@ export interface GhTabStatus {
   resolvesToWrapper: boolean
   pathHint: string | null
   windows: { userPathHasDir: boolean; machinePathHasDir: boolean; realGhOnMachinePath: boolean } | null
-  profiles: { id: string; label: string; ghUser: string | null }[]
+  /** Profiles linked by name during this status call. */
+  autoLinked: { label: string; login: string }[]
+  /** suggested: the account the profile's names match, when it differs from the link. */
+  profiles: { id: string; label: string; ghUser: string | null; suggested: string | null }[]
 }
 
 // Same error normalization as ipc.ts: always reject with a plain Error message.
@@ -52,11 +55,21 @@ export function registerGhIpc(userDataPath: string): void {
 
   async function status(): Promise<GhTabStatus> {
     const env = await userShellEnv()
-    const [gh, wrapper, profiles] = await Promise.all([
-      realGhStatus(env),
-      wrapperStatus(layout, env, platform),
-      loadProfiles(userDataPath)
-    ])
+    const [gh, wrapper] = await Promise.all([realGhStatus(env), wrapperStatus(layout, env, platform)])
+    const logins = gh.kind === 'ok' && gh.accounts.length >= 2 ? gh.accounts.map(a => a.login) : []
+
+    // Profiles that never had a gh choice get linked to the account their names match.
+    let profiles = await loadProfiles(userDataPath)
+    let autoLinked: GhTabStatus['autoLinked'] = []
+    if (logins.length) {
+      const result = autoLinkGhAccounts(profiles, logins, new Date().toISOString())
+      if (result.linked.length) {
+        await saveProfiles(userDataPath, result.profiles)
+        await syncManagedGitconfig(userDataPath)
+        profiles = result.profiles
+        autoLinked = result.linked
+      }
+    }
 
     let windows: GhTabStatus['windows'] = null
     let resolvesToWrapper: boolean
@@ -78,7 +91,12 @@ export function registerGhIpc(userDataPath: string): void {
     return {
       platform, gh, wrapper, resolvesToWrapper, windows,
       pathHint: platform === 'win32' ? null : pathHint(process.env.SHELL, layout.dir, platform),
-      profiles: profiles.map(p => ({ id: p.id, label: p.label, ghUser: p.advanced?.ghUser ?? null }))
+      autoLinked,
+      profiles: profiles.map(p => {
+        const ghUser = p.advanced?.ghUser || null // '' is an explicit "none"
+        const match = logins.length ? matchGhAccount(p, logins) : null
+        return { id: p.id, label: p.label, ghUser, suggested: match && match !== ghUser ? match : null }
+      })
     }
   }
 

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { keepGhUser, setProfileGhUser } from './profileLink'
+import { keepGhUser, setProfileGhUser, matchGhAccount, autoLinkGhAccounts } from './profileLink'
 import { Profile } from '../profiles/schema'
 
 const base: Profile = {
@@ -36,16 +36,65 @@ describe('setProfileGhUser', () => {
     expect(linked[0].advanced).toEqual({ ghUser: 'octo' })
     expect(linked[0].updatedAt).toBe(now)
 
+    // Unlinking is remembered as an explicit "none" so auto-linking won't undo it.
     const unlinked = setProfileGhUser(linked, base.id, null, now)
-    expect(unlinked[0].advanced).toBeUndefined()
+    expect(unlinked[0].advanced).toEqual({ ghUser: '' })
   })
 
   it('keeps other advanced settings when unlinking', () => {
     const out = setProfileGhUser([base], base.id, null, base.updatedAt)
-    expect(out[0].advanced).toEqual({ sshHost: 'github.com-work' })
+    expect(out[0].advanced).toEqual({ sshHost: 'github.com-work', ghUser: '' })
   })
 
   it('throws for an unknown profile', () => {
     expect(() => setProfileGhUser([base], 'nope', 'x', base.updatedAt)).toThrow('Profile not found')
+  })
+})
+
+describe('keepGhUser with an explicit "none"', () => {
+  it('keeps the explicit none through a profile edit', () => {
+    const input = { label: 'Work', userName: 'y', userEmail: 'y@example.com' }
+    expect(keepGhUser({ ...base, advanced: { ghUser: '' } }, input).advanced).toEqual({ ghUser: '' })
+  })
+})
+
+const LOGINS = ['diegoauyon', 'diegoauyon-styleseat']
+const profile = (over: Partial<Profile>): Profile => ({ ...base, label: 'Imported Profile 1', userName: 'Diego Auyón', advanced: undefined, ...over })
+
+describe('matchGhAccount', () => {
+  it('matches the account part of the SSH alias', () => {
+    expect(matchGhAccount(profile({ advanced: { sshHost: 'github.com-diegoauyon' } }), LOGINS)).toBe('diegoauyon')
+    expect(matchGhAccount(profile({ advanced: { sshHost: 'github.com-diegoauyon-styleseat' } }), LOGINS)).toBe('diegoauyon-styleseat')
+  })
+
+  it('matches the user name or the label, ignoring case', () => {
+    expect(matchGhAccount(profile({ userName: 'diegoauyon-styleseat' }), LOGINS)).toBe('diegoauyon-styleseat')
+    expect(matchGhAccount(profile({ label: 'DiegoAuyon' }), LOGINS)).toBe('diegoauyon')
+  })
+
+  it('gives up when the names point at different accounts', () => {
+    expect(matchGhAccount(profile({ userName: 'diegoauyon', advanced: { sshHost: 'github.com-diegoauyon-styleseat' } }), LOGINS)).toBeNull()
+  })
+
+  it('returns null when nothing matches', () => {
+    expect(matchGhAccount(profile({ advanced: { sshHost: 'github.com' } }), LOGINS)).toBeNull()
+  })
+})
+
+describe('autoLinkGhAccounts', () => {
+  const now = '2026-10-07T00:00:00.000Z'
+
+  it('links only profiles that never had a choice, and reports them', () => {
+    const fresh = profile({ id: '00000000-0000-0000-0000-00000000000a', advanced: { sshHost: 'github.com-diegoauyon' } })
+    const none = profile({ id: '00000000-0000-0000-0000-00000000000b', advanced: { sshHost: 'github.com-diegoauyon', ghUser: '' } })
+    const chosen = profile({ id: '00000000-0000-0000-0000-00000000000c', advanced: { sshHost: 'github.com-diegoauyon', ghUser: 'diegoauyon-styleseat' } })
+    const nomatch = profile({ id: '00000000-0000-0000-0000-00000000000d', label: 'Other' })
+
+    const { profiles, linked } = autoLinkGhAccounts([fresh, none, chosen, nomatch], LOGINS, now)
+
+    expect(linked).toEqual([{ label: 'Imported Profile 1', login: 'diegoauyon' }])
+    expect(profiles[0].advanced?.ghUser).toBe('diegoauyon')
+    expect(profiles[0].updatedAt).toBe(now)
+    expect(profiles.slice(1)).toEqual([none, chosen, nomatch])
   })
 })

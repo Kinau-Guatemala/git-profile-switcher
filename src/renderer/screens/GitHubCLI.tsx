@@ -15,11 +15,14 @@ export default function GitHubCLI() {
   const [agents, setAgents] = useState<AgentStatus[]>([])
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [autoLinked, setAutoLinked] = useState<GhTabStatus['autoLinked']>([])
 
   const refresh = async () => {
     const [s, a] = await Promise.all([window.api.gh.status(), window.api.agents.status()])
     setStatus(s)
     setAgents(a)
+    // Keep the notice up after later refreshes, which link nothing new.
+    if (s.autoLinked.length) setAutoLinked(s.autoLinked)
   }
 
   useEffect(() => {
@@ -136,6 +139,15 @@ export default function GitHubCLI() {
 
       <div className="pixel-card mb-md">
         <h2 className="section-title">◈ Profile → gh Account</h2>
+        <p className="settings-hint">
+          Profiles whose label, user name or SSH alias (<code>github.com-&lt;account&gt;</code>) matches a gh account
+          are linked automatically. Pick the rest by hand.
+        </p>
+        {autoLinked.length > 0 && (
+          <p className="pixel-card__info">
+            ● Linked automatically by name: {autoLinked.map(l => `${l.label} → ${l.login}`).join(', ')}
+          </p>
+        )}
         {status.profiles.length === 0 && <p className="settings-hint">Create a profile first.</p>}
         {status.profiles.map(p => {
           const choices = linkChoices(ready, p.ghUser)
@@ -152,6 +164,15 @@ export default function GitHubCLI() {
                   <option value={p.ghUser}>{p.ghUser} (not logged in)</option>
                 )}
               </select>
+              {p.suggested && (
+                <div className="btn-row mt-md mb-0">
+                  <span className="settings-hint">Its name matches <code>{p.suggested}</code>.</span>
+                  <button className="btn btn--ghost btn--sm" disabled={!ready || busy}
+                    onClick={() => run(() => window.api.gh.setProfileAccount(p.id, p.suggested))}>
+                    Use {p.suggested}
+                  </button>
+                </div>
+              )}
             </div>
           )
         })}
