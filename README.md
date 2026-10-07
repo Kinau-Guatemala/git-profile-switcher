@@ -60,6 +60,7 @@ Git Profile Switcher turns that into a tray-first workflow with undo, verificati
 | **Platform-agnostic detection** | Detect aliases for GitHub, GitLab, Bitbucket, Codeberg, Azure DevOps, and more. |
 | **Auto-import** | Import existing profiles from your Git config or SSH config. |
 | **Per-profile signing** | Store GPG signing settings alongside the profile. |
+| **gh account per folder** | Link each profile to a GitHub CLI account; `gh` follows the folder's profile, and coding agents can be kept from running `gh auth switch`. |
 | **Retro themes** | Five built-in palettes: Lava, Matrix, Synthwave, Glacier, and Amber. |
 
 ---
@@ -142,6 +143,28 @@ Git Profile Switcher uses a managed include strategy that is safe and non-destru
 ### Upgrading from 1.0.0
 
 The managed file was renamed from `~/.gitconfig-switcher` to `~/.git-profile-switcher`. Nothing breaks on upgrade: the old include keeps working until you next apply a profile, at which point 1.1.0 drops the stale include and writes the new file. After that first switch you can delete `~/.gitconfig-switcher`.
+
+---
+
+## GitHub CLI Accounts
+
+`gh` keeps one active account for every terminal, so `gh auth switch` in one
+session changes it for all of them. The **GitHub CLI** tab fixes that:
+
+1. Link each profile to one of your logged-in github.com accounts. The app
+   writes it as `profileswitcher.ghUser` into the same per-folder config files
+   it already manages.
+2. Install the wrapper: a small `gh` placed ahead of the real one on your PATH
+   (`~/.local/bin/gh`, or `%LOCALAPPDATA%\git-profile-switcher\bin` on Windows).
+   It runs gh with `GH_TOKEN` for the linked account. A `GH_TOKEN` you set
+   yourself always wins, and `gh auth …` commands pass through untouched.
+3. Optionally block `gh auth switch` in Claude Code, Codex, Cursor, GitHub
+   Copilot CLI, Gemini CLI and OpenCode, so an agent can't flip the account
+   another session relies on.
+
+Requires gh with two or more accounts (`gh auth login`). Only github.com is
+supported. Git over HTTPS through `gh auth git-credential` is not routed through
+the wrapper; SSH remotes (what this app manages) are unaffected.
 
 ---
 
