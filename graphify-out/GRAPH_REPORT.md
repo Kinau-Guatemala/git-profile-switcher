@@ -1,16 +1,16 @@
-# Graph Report - git-profile-switcher  (2026-08-20)
+# Graph Report - feat-gh-account-per-profile  (2026-10-07)
 
 ## Corpus Check
-- 109 files · ~1,400,760 words
+- 82 files · ~81,079 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1635 nodes · 4738 edges · 79 communities (65 shown, 14 thin omitted)
-- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 55 edges (avg confidence: 0.81)
+- 2449 nodes · 6617 edges · 126 communities (108 shown, 18 thin omitted)
+- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 119 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `953c26b8`
+- Built from commit: `f1b35f08`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -91,100 +91,147 @@
 - [[_COMMUNITY_Community 74|Community 74]]
 - [[_COMMUNITY_Community 75|Community 75]]
 - [[_COMMUNITY_Community 76|Community 76]]
+- [[_COMMUNITY_Community 79|Community 79]]
+- [[_COMMUNITY_Community 80|Community 80]]
+- [[_COMMUNITY_Community 81|Community 81]]
+- [[_COMMUNITY_Community 82|Community 82]]
+- [[_COMMUNITY_Community 83|Community 83]]
+- [[_COMMUNITY_Community 84|Community 84]]
+- [[_COMMUNITY_Community 85|Community 85]]
+- [[_COMMUNITY_Community 86|Community 86]]
+- [[_COMMUNITY_Community 87|Community 87]]
+- [[_COMMUNITY_Community 88|Community 88]]
+- [[_COMMUNITY_Community 89|Community 89]]
+- [[_COMMUNITY_Community 90|Community 90]]
+- [[_COMMUNITY_Community 91|Community 91]]
+- [[_COMMUNITY_Community 92|Community 92]]
+- [[_COMMUNITY_Community 93|Community 93]]
+- [[_COMMUNITY_Community 94|Community 94]]
+- [[_COMMUNITY_Community 95|Community 95]]
+- [[_COMMUNITY_Community 96|Community 96]]
+- [[_COMMUNITY_Community 97|Community 97]]
+- [[_COMMUNITY_Community 98|Community 98]]
+- [[_COMMUNITY_Community 99|Community 99]]
+- [[_COMMUNITY_Community 100|Community 100]]
+- [[_COMMUNITY_Community 101|Community 101]]
+- [[_COMMUNITY_Community 102|Community 102]]
+- [[_COMMUNITY_Community 103|Community 103]]
+- [[_COMMUNITY_Community 104|Community 104]]
+- [[_COMMUNITY_Community 105|Community 105]]
+- [[_COMMUNITY_Community 106|Community 106]]
+- [[_COMMUNITY_Community 107|Community 107]]
+- [[_COMMUNITY_Community 108|Community 108]]
+- [[_COMMUNITY_Community 109|Community 109]]
+- [[_COMMUNITY_Community 110|Community 110]]
+- [[_COMMUNITY_Community 111|Community 111]]
+- [[_COMMUNITY_Community 112|Community 112]]
+- [[_COMMUNITY_Community 113|Community 113]]
+- [[_COMMUNITY_Community 114|Community 114]]
+- [[_COMMUNITY_Community 115|Community 115]]
+- [[_COMMUNITY_Community 116|Community 116]]
+- [[_COMMUNITY_Community 117|Community 117]]
+- [[_COMMUNITY_Community 118|Community 118]]
+- [[_COMMUNITY_Community 119|Community 119]]
+- [[_COMMUNITY_Community 120|Community 120]]
+- [[_COMMUNITY_Community 121|Community 121]]
+- [[_COMMUNITY_Community 122|Community 122]]
+- [[_COMMUNITY_Community 123|Community 123]]
+- [[_COMMUNITY_Community 124|Community 124]]
+- [[_COMMUNITY_Community 125|Community 125]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `error` - 51 edges
-2. `ZodString` - 50 edges
-3. `C()` - 47 edges
-4. `C()` - 46 edges
-5. `ip()` - 43 edges
-6. `ip()` - 42 edges
-7. `ZodType` - 32 edges
-8. `Ni()` - 27 edges
-9. `Ni()` - 27 edges
-10. `addIssueToContext()` - 26 edges
+1. `error` - 99 edges
+2. `n()` - 54 edges
+3. `ZodString` - 50 edges
+4. `C()` - 47 edges
+5. `C()` - 46 edges
+6. `op()` - 43 edges
+7. `ip()` - 43 edges
+8. `ip()` - 42 edges
+9. `ZodType` - 32 edges
+10. `execa()` - 27 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `run()` --calls--> `execa`  [INFERRED]
+  src/core/agents/rules.test.ts → package.json
 - `Managed Include Strategy` --semantically_similar_to--> `Project Safety Rules`  [INFERRED] [semantically similar]
   README.md → CONTRIBUTING.md
-- `Ir()` --calls--> `error`  [INFERRED]
-  dist-renderer/assets/index-CnYVGocc.js → scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js
-- `Iu()` --calls--> `error`  [INFERRED]
-  dist-renderer/assets/index-CnYVGocc.js → scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js
-- `Rn()` --calls--> `error`  [INFERRED]
-  dist-renderer/assets/index-CnYVGocc.js → scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js
-- `Wl()` --calls--> `error`  [INFERRED]
-  dist-renderer/assets/index-CnYVGocc.js → scripts/aur/git-profile-switcher-git/src/git-profile-switcher/dist-electron/main/index.js
+- `checkGitInstalled()` --calls--> `execa`  [INFERRED]
+  src/core/git/gitRunner.ts → package.json
+- `runGit()` --calls--> `execa`  [INFERRED]
+  src/core/git/gitRunner.ts → package.json
+- `generateSSHKey()` --calls--> `execa`  [INFERRED]
+  src/core/git/sshKeyGen.ts → package.json
 
 ## Hyperedges (group relationships)
 - **Non-Destructive Config Safety Model** — readme_managed_include_strategy, readme_gitconfig_switcher_file, security_files_touched, contributing_project_safety_rules [INFERRED 0.85]
 - **Tagged Release Build Pipeline** — contributing_release_process, workflows_release_workflow, contributing_ci_checks, ci_ci_workflow [INFERRED 0.85]
 - **Secure Renderer-Main Process Boundary** — readme_security_model, readme_architecture, index_html_renderer_entry, readme_tech_stack [INFERRED 0.75]
 
-## Communities (79 total, 14 thin omitted)
+## Communities (126 total, 18 thin omitted)
 
 ### Community 0 - "Community 0"
-Cohesion: 0.03
-Nodes (159): addArrayBufferChunk(), addNewChunk(), addStringChunk(), aliases, appendChunk(), appendFinalChunk(), applyEncoding(), applyExecPath() (+151 more)
+Cohesion: 0.02
+Nodes (174): addArrayBufferChunk(), addNewChunk(), addStringChunk(), AGENT_IDS, aliases, appendChunk(), appendFinalChunk(), applyEncoding() (+166 more)
 
 ### Community 1 - "Community 1"
 Cohesion: 0.05
-Nodes (100): A(), ae(), Al, ap(), As(), Bc, be, Bh() (+92 more)
+Nodes (94): A(), ae(), Al, ap(), As(), Bc, be, Bh() (+86 more)
 
 ### Community 2 - "Community 2"
 Cohesion: 0.06
-Nodes (25): addIssueToContext(), assertNever(), errorMap(), getErrorMap(), getParsedType(), isValidCidr(), isValidIP(), joinValues() (+17 more)
+Nodes (26): addIssueToContext(), assertNever(), DIRTY(), errorMap(), floatSafeRemainder(), getErrorMap(), isValidCidr(), isValidIP() (+18 more)
 
 ### Community 3 - "Community 3"
 Cohesion: 0.09
 Nodes (31): CI Workflow, Pre-PR CI Checks (typecheck/test/build), Contributing Guide, Project Safety Rules, Tagged Release Process, index.html Renderer Entry, Bug Report Issue Template, Issue Template Config (+23 more)
 
 ### Community 4 - "Community 4"
-Cohesion: 0.12
-Nodes (32): ac(), Ao(), Bu(), ce(), dr(), eo(), fa(), fu() (+24 more)
+Cohesion: 0.10
+Nodes (35): At(), B(), Cd(), Da(), E(), fu(), Gd(), ge() (+27 more)
 
 ### Community 5 - "Community 5"
-Cohesion: 0.07
-Nodes (8): Ou(), createZodEnum(), deepPartialify(), processCreateParams(), ZodEnum, ZodPipeline, ZodReadonly, ZodType
+Cohesion: 0.05
+Nodes (18): Ou(), createZodEnum(), deepPartialify(), getParsedType(), handleResult(), isAsync(), isValid(), mergeValues() (+10 more)
 
 ### Community 6 - "Community 6"
 Cohesion: 0.14
 Nodes (17): App(), ThemeContext, ThemeContextValue, useThemeContext(), Theme, THEMES, applyTheme(), useTheme() (+9 more)
 
 ### Community 8 - "Community 8"
-Cohesion: 0.17
-Nodes (22): Au(), di(), dt(), Ef(), fi(), gc(), Gr(), Je() (+14 more)
+Cohesion: 0.14
+Nodes (28): Au(), D(), di(), dt(), Ef(), fi(), gc(), Gr() (+20 more)
 
 ### Community 10 - "Community 10"
-Cohesion: 0.04
-Nodes (58): Bc, be, cf(), Cl(), Cn(), Ct, Dl, dp() (+50 more)
+Cohesion: 0.03
+Nodes (66): _a(), Bc, be, cf(), Cl(), Cn(), Ct, Dl (+58 more)
 
 ### Community 11 - "Community 11"
-Cohesion: 0.12
-Nodes (17): InputModal(), Props, ProfileForm(), Props, GIT_HOSTING_DOMAINS, getSSHCommandForHost(), parseSSHConfig(), parseSSHConfigContent() (+9 more)
+Cohesion: 0.13
+Nodes (14): 1. Data, 2. Wrapper, 3. Install locations and PATH, 4. GitHub CLI tab, 5. Agent rules — block `gh auth switch`, 6. Testing, code:sh (#!/bin/sh), code:text (♦ GitHub CLI) (+6 more)
 
 ### Community 12 - "Community 12"
 Cohesion: 0.12
-Nodes (19): buildManagedRegion(), createTray(), ensureManagedFile(), folderConfigDir(), folderConfigPath(), getManagedPaths(), hookChildProcess(), isValidJWT() (+11 more)
+Nodes (27): execa, getGhStatus(), GhAccount, GhStatus, parseGhAccounts(), parseGhVersion(), json, extractMarkedPath() (+19 more)
 
 ### Community 13 - "Community 13"
-Cohesion: 0.06
-Nodes (14): DIRTY(), handleResult(), isAsync(), isValid(), ParseStatus, ZodBranded, ZodCatch, ZodDefault (+6 more)
+Cohesion: 0.21
+Nodes (18): cmdWrapper(), exists(), findGhCandidates(), installWrapper(), pathHint(), pickRealGh(), posixWrapper(), readBakedRealGh() (+10 more)
 
 ### Community 14 - "Community 14"
-Cohesion: 0.11
-Nodes (17): compilerOptions, allowImportingTsExtensions, isolatedModules, jsx, lib, module, moduleResolution, noEmit (+9 more)
+Cohesion: 0.06
+Nodes (34): compilerOptions, allowImportingTsExtensions, isolatedModules, jsx, lib, module, moduleResolution, noEmit (+26 more)
 
 ### Community 15 - "Community 15"
-Cohesion: 0.12
-Nodes (27): add(), aliasRewriteSources(), applyProfile(), bareHostFromAlias(), detectExistingProfiles(), detectFolderMappings(), ensureManagedIncludeInstalled(), getGlobalProfile() (+19 more)
+Cohesion: 0.09
+Nodes (35): applyProfile(), bareHostFromAlias(), buildManagedRegion(), createTray(), detectExistingProfiles(), detectFolderMappings(), ensureManagedFile(), ensureManagedIncludeInstalled() (+27 more)
 
 ### Community 16 - "Community 16"
-Cohesion: 0.21
-Nodes (10): OriginTable(), Props, GitError, runGit(), Verify(), parseShowOrigin(), output, verifyInRepo() (+2 more)
+Cohesion: 0.20
+Nodes (12): OriginTable(), Props, GitError, runGit(), Verify(), verifyGlobal(), parseShowOrigin(), output (+4 more)
 
 ### Community 17 - "Community 17"
-Cohesion: 0.15
+Cohesion: 0.16
 Nodes (7): Emitter, ObjectDefineProperty, openProfilesWindow(), openVerifyWindow(), processOk(), setExitHandler(), SignalExit
 
 ### Community 18 - "Community 18"
@@ -192,8 +239,8 @@ Cohesion: 0.42
 Nodes (9): DetectedFolderMapping, DetectedProfile, detectExistingProfiles(), detectFolderMappings(), getGlobalProfile(), isGitHostingDomain(), parseConditionalIncludes(), parseConfigContent() (+1 more)
 
 ### Community 19 - "Community 19"
-Cohesion: 0.29
-Nodes (10): author, bugs, url, description, homepage, keywords, license, main (+2 more)
+Cohesion: 0.11
+Nodes (23): author, bugs, url, description, homepage, keywords, license, main (+15 more)
 
 ### Community 21 - "Community 21"
 Cohesion: 0.15
@@ -204,24 +251,24 @@ Cohesion: 0.15
 Nodes (13): devDependencies, electron, electron-builder, @types/node, @types/react, @types/react-dom, @types/uuid, typescript (+5 more)
 
 ### Community 23 - "Community 23"
-Cohesion: 0.12
-Nodes (31): Bo(), Ci(), Cl(), D(), dn(), Do(), Ei(), gs() (+23 more)
+Cohesion: 0.11
+Nodes (22): Bo(), dc(), dn(), Do(), dp(), Ei(), fc(), gs() (+14 more)
 
 ### Community 24 - "Community 24"
 Cohesion: 0.18
 Nodes (11): scripts, build, build:appimage, build:arch, build:ci, build:mac, dev, preview (+3 more)
 
 ### Community 25 - "Community 25"
-Cohesion: 0.16
-Nodes (25): ah(), Bp(), ch(), cr(), dh(), eh(), fh(), gn() (+17 more)
+Cohesion: 0.13
+Nodes (30): ah(), Bp(), ch(), Cl(), cr(), dh(), eh(), fh() (+22 more)
 
 ### Community 26 - "Community 26"
-Cohesion: 0.14
-Nodes (14): addPipeMethods(), addToSSHConfig(), checkGitInstalled(), execa(), generateSSHKey(), getEscapedCommand(), getSpawnedPromise(), isGitHostingDomain() (+6 more)
+Cohesion: 0.10
+Nodes (21): addPipeMethods(), checkGitInstalled(), encodePs(), execa(), extractMarkedPath(), getEscapedCommand(), getForceKillAfterTimeout(), getGhStatus() (+13 more)
 
 ### Community 27 - "Community 27"
-Cohesion: 0.30
-Nodes (8): AppState, AppStateSchema, defaultState, FolderMapping, FolderMappingSchema, FolderConfigs(), ImportRow(), Suggestion
+Cohesion: 0.22
+Nodes (8): code:ts (it('writes profileswitcher.ghUser when the profile links a g), code:ts (import { describe, it, expect } from 'vitest'), code:ts (hosts: z.array(z.string()).optional(),), code:ts (// Read by the gh wrapper (git config --get profileswitcher.), code:ts (import { Profile, ProfileAdvanced, ProfileInput } from '../p), code:ts (const updated: Profile = {), code:bash (git add src/core/profiles/schema.ts src/core/git/identity.ts), Task 1: Profile data — `ghUser` written per folder and preserved on edit
 
 ### Community 29 - "Community 29"
 Cohesion: 0.25
@@ -229,55 +276,59 @@ Nodes (8): dependencies, execa, react, react-dom, react-router-dom, uuid, zod, z
 
 ### Community 30 - "Community 30"
 Cohesion: 0.09
-Nodes (41): ah(), Ar(), Bp(), ch(), dh(), eh(), fh(), fp() (+33 more)
+Nodes (41): ah(), al(), Ar(), Bp(), ch(), Ci(), dh(), eh() (+33 more)
 
 ### Community 31 - "Community 31"
-Cohesion: 0.32
-Nodes (6): compilerOptions, jsx, lib, module, extends, include
+Cohesion: 0.16
+Nodes (12): compilerOptions, jsx, lib, module, extends, include, compilerOptions, jsx (+4 more)
 
 ### Community 32 - "Community 32"
-Cohesion: 0.13
-Nodes (24): Bf(), Co(), Da(), Du(), es(), _f(), Gf(), hr() (+16 more)
+Cohesion: 0.12
+Nodes (23): ac(), Ao(), Bf(), Bu(), ce(), Co(), Du(), es() (+15 more)
 
 ### Community 33 - "Community 33"
-Cohesion: 0.11
-Nodes (30): At(), B(), ba(), Cd(), dc(), Ds(), E(), Ed() (+22 more)
+Cohesion: 0.09
+Nodes (29): Ae(), ai(), Ao(), di(), Fl(), gc(), gh(), ih (+21 more)
 
 ### Community 34 - "Community 34"
-Cohesion: 0.11
-Nodes (41): ac(), an(), ap(), Ba(), Bt(), ca(), Ce(), Cp() (+33 more)
+Cohesion: 0.28
+Nodes (9): AppState, AppStateSchema, defaultState, FolderMapping, FolderMappingSchema, saveState(), FolderConfigs(), ImportRow() (+1 more)
 
 ### Community 35 - "Community 35"
-Cohesion: 0.11
-Nodes (32): aa(), Bi(), ca(), cc(), ec(), fn(), Gi(), hs() (+24 more)
+Cohesion: 0.08
+Nodes (42): aa(), Bi(), ca(), cc(), dr(), ea(), ec(), eo() (+34 more)
 
 ### Community 36 - "Community 36"
-Cohesion: 0.20
-Nodes (17): aliasRewriteSources(), applyProfile(), bareHostFromAlias(), insteadOfSources(), resolveIdentityFile(), makeProfile(), managed, personal (+9 more)
+Cohesion: 0.35
+Nodes (10): aliasRewriteSources(), applyProfile(), bareHostFromAlias(), insteadOfSources(), resolveIdentityFile(), makeProfile(), managed, personal (+2 more)
 
 ### Community 37 - "Community 37"
-Cohesion: 0.22
-Nodes (17): checkGitInstalled(), addToSSHConfig(), generateSSHKey(), testSSHConnection(), toKeyToken(), setupIpcHandlers(), userDataPath, createTray() (+9 more)
+Cohesion: 0.24
+Nodes (15): checkGitInstalled(), addToSSHConfig(), generateSSHKey(), testSSHConnection(), toKeyToken(), setupIpcHandlers(), userDataPath, createTray() (+7 more)
 
 ### Community 38 - "Community 38"
-Cohesion: 0.17
-Nodes (23): an(), Bs(), C(), cu(), df(), Fr(), Ht(), ic() (+15 more)
+Cohesion: 0.16
+Nodes (25): an(), Bs(), C(), cu(), df(), Fr(), Ht(), ic() (+17 more)
+
+### Community 40 - "Community 40"
+Cohesion: 0.40
+Nodes (4): code:ts (import { describe, it, expect, afterEach } from 'vitest'), code:ts (import { execa } from 'execa'), code:bash (git add src/core/gh/wrapper.ts src/core/gh/wrapper.test.ts), Task 3: The `gh` wrapper — content, install, remove, status
 
 ### Community 42 - "Community 42"
-Cohesion: 0.10
-Nodes (48): Aa(), At(), au(), Bi(), bn(), Br(), Bs(), C() (+40 more)
+Cohesion: 0.11
+Nodes (31): At(), au(), Br(), Bs(), C(), ca(), de(), df() (+23 more)
 
 ### Community 44 - "Community 44"
-Cohesion: 0.14
-Nodes (22): _a(), al(), Ao(), cc(), fn(), fo(), gh(), hu() (+14 more)
+Cohesion: 0.15
+Nodes (21): B(), Bi(), bn(), cu(), ec(), Fe(), G(), _i() (+13 more)
 
 ### Community 45 - "Community 45"
-Cohesion: 0.13
-Nodes (30): ai(), di(), Du(), es(), Fi(), Fl(), gc(), ie() (+22 more)
+Cohesion: 0.25
+Nodes (8): code:ts (it('writes profileswitcher.ghUser when the profile links a g), code:ts (import { describe, it, expect } from 'vitest'), code:ts (hosts: z.array(z.string()).optional(),), code:ts (// Read by the gh wrapper (git config --get profileswitcher.), code:ts (import { Profile, ProfileAdvanced, ProfileInput } from '../p), code:ts (const updated: Profile = {), code:bash (git add src/core/profiles/schema.ts src/core/git/identity.ts), Task 1: Profile data — `ghUser` written per folder and preserved on edit
 
 ### Community 46 - "Community 46"
-Cohesion: 0.25
-Nodes (9): Bf(), Da(), Gf(), jt(), la(), _o(), Qf(), va() (+1 more)
+Cohesion: 0.14
+Nodes (22): ac(), Ba(), Bt(), Ce(), fp(), fr(), gp(), jd() (+14 more)
 
 ### Community 47 - "Community 47"
 Cohesion: 0.40
@@ -288,108 +339,276 @@ Cohesion: 0.40
 Nodes (4): file_format_version, ICD, api_version, library_path
 
 ### Community 49 - "Community 49"
-Cohesion: 0.67
-Nodes (3): repository, type, url
+Cohesion: 0.15
+Nodes (17): ba(), Ci(), Ds(), Ed(), El(), Ju(), ku(), Lt() (+9 more)
 
 ### Community 50 - "Community 50"
-Cohesion: 0.25
-Nodes (6): getForceKillAfterTimeout(), isSigterm(), setKillTimeout(), shouldForceKill(), spawnedKill(), validateTimeout()
+Cohesion: 0.29
+Nodes (7): code:ts (import { describe, it, expect } from 'vitest'), code:ts (import { posix, win32 } from 'node:path'), code:ts (import { describe, it, expect, afterEach } from 'vitest'), code:ts (import { chmod, mkdir, readFile, rename, rm, stat, writeFile), code:bash (RULES=$(mktemp --suffix=.rules)), code:bash (git add src/core/agents/rules.ts src/core/agents/rules.test.), Task 5: Agent rules — block `gh auth switch` in six agents
 
 ### Community 51 - "Community 51"
-Cohesion: 0.17
-Nodes (20): B(), bu(), Ds(), Ed(), Er(), Gn(), Ja(), ka() (+12 more)
+Cohesion: 0.26
+Nodes (13): bu(), Ds(), Er(), Gn(), Ja(), ka(), Nd(), Ni() (+5 more)
 
 ### Community 52 - "Community 52"
-Cohesion: 0.17
-Nodes (21): Ae(), D(), Ei(), hc(), Ho(), ko(), ll(), lp() (+13 more)
+Cohesion: 0.31
+Nodes (11): D(), Ei(), hc(), Ho(), ll(), lp(), Lt(), $s() (+3 more)
 
 ### Community 55 - "Community 55"
 Cohesion: 0.18
 Nodes (11): code:text (# work GitHub account), code:bash (# Default single-account form), code:bash (git remote set-url origin git@github.com-work:company/repo.g), code:text (Host gh-personal), Creating Profiles, Platform-Agnostic Profile Detection, SSH Configuration for Multiple Accounts, SSH Key Generation (+3 more)
 
 ### Community 56 - "Community 56"
-Cohesion: 0.29
-Nodes (7): getInput(), handleInput(), isExecaChildProcess(), isStream(), isWritableStream(), pipeToTarget(), validateInputOptions()
+Cohesion: 0.24
+Nodes (13): cc(), fn(), Js(), ki(), Qi(), Qn(), ru(), su() (+5 more)
 
 ### Community 58 - "Community 58"
-Cohesion: 0.18
-Nodes (9): Before Opening a Pull Request, Change Scope, code:bash (npm run typecheck), code:bash (git tag v1.0.0), Contributing, Local Setup, Project Safety Rules, Release Process (+1 more)
-
-### Community 59 - "Community 59"
-Cohesion: 0.16
-Nodes (3): floatSafeRemainder(), readShebang$1(), ZodBigInt
+Cohesion: 0.10
+Nodes (18): Before Opening a Pull Request, Change Scope, code:bash (npm run typecheck), code:bash (git tag v1.0.0), Contributing, Local Setup, Project Safety Rules, Release Process (+10 more)
 
 ### Community 60 - "Community 60"
 Cohesion: 0.22
 Nodes (9): App does not start, code:bash (git config user.name), code:bash (ssh -T git@github.com-work), code:bash (git --version), code:bash (git remote -v), Commits show the wrong identity, Permission denied when pushing, SSH key does not authenticate (+1 more)
 
 ### Community 61 - "Community 61"
-Cohesion: 0.20
-Nodes (8): Comparison vs Manual Setup, Contributing, Features, Git Profile Switcher, License, Screenshots, Themes, Why This Exists
+Cohesion: 0.12
+Nodes (15): Architecture, code:text (src/), Comparison vs Manual Setup, Contributing, Features, Files it does not manage, Files it touches, Git Profile Switcher (+7 more)
 
 ### Community 62 - "Community 62"
-Cohesion: 0.17
-Nodes (19): Bo(), dn(), Do(), fc(), Ft(), Gi(), hn(), hs() (+11 more)
+Cohesion: 0.15
+Nodes (25): Aa(), Bo(), Cp(), dn(), Do(), dt(), fc(), Ft() (+17 more)
 
 ### Community 63 - "Community 63"
 Cohesion: 0.29
 Nodes (7): Build Packages Locally, code:bash (git clone https://github.com/Kinau-Guatemala/git-profile-swi), code:bash (# Windows portable .exe), From Source, Installation, Prebuilt Downloads, Prerequisites
 
+### Community 64 - "Community 64"
+Cohesion: 0.11
+Nodes (37): an(), ap(), Bf(), Da(), dc(), Du(), Ed(), es() (+29 more)
+
 ### Community 65 - "Community 65"
-Cohesion: 0.29
-Nodes (5): Files The App Does Not Manage, Files The App Touches, Operational Notes, Reporting A Vulnerability, Security Notes
+Cohesion: 0.17
+Nodes (10): Files The App Does Not Manage, Files The App Touches, Operational Notes, Reporting A Vulnerability, Security Notes, Files The App Does Not Manage, Files The App Touches, Operational Notes (+2 more)
 
 ### Community 66 - "Community 66"
 Cohesion: 0.15
-Nodes (29): folderConfigDir(), folderConfigPath(), syncManagedGitconfig(), profile(), profiles, setup(), stale, state() (+21 more)
+Nodes (30): folderConfigDir(), folderConfigPath(), syncManagedGitconfig(), profile(), profiles, setup(), stale, state() (+22 more)
 
 ### Community 67 - "Community 67"
 Cohesion: 0.40
 Nodes (5): 1. Launch the App, 2. Add a Profile, 3. Switch from the Tray, code:text (┌─────────────────────────────────┐), Quick Start
 
 ### Community 68 - "Community 68"
-Cohesion: 0.29
-Nodes (5): personal, profile, values, work, verifyProfile()
+Cohesion: 0.12
+Nodes (20): ProfileForm(), Props, keepGhUser(), setProfileGhUser(), base, input, linked, out (+12 more)
 
 ### Community 69 - "Community 69"
-Cohesion: 0.50
-Nodes (4): Architecture, code:text (src/), Security Model, Tech Stack
+Cohesion: 0.20
+Nodes (7): AgentEnv, assertAgentId(), after, dir, file, hooks, original
 
 ### Community 70 - "Community 70"
 Cohesion: 0.50
 Nodes (4): code:bash (# Development with hot reload), code:bash (git tag v1.0.0), Development, Publishing A Release
 
 ### Community 72 - "Community 72"
+Cohesion: 0.04
+Nodes (48): au(), Bh, Bl(), Bp(), Br(), Cs(), _d(), dh() (+40 more)
+
+### Community 73 - "Community 73"
+Cohesion: 0.11
+Nodes (32): dl(), ea(), Ep(), fc(), fe(), Fn(), Gr(), gs() (+24 more)
+
+### Community 74 - "Community 74"
+Cohesion: 0.19
+Nodes (15): Ai(), bn(), Br(), de(), Fe(), fp(), go(), gu() (+7 more)
+
+### Community 79 - "Community 79"
+Cohesion: 0.15
+Nodes (13): build, appId, files, linux, mac, productName, win, maintainer (+5 more)
+
+### Community 80 - "Community 80"
+Cohesion: 0.15
+Nodes (13): devDependencies, electron, electron-builder, @types/node, @types/react, @types/react-dom, @types/uuid, typescript (+5 more)
+
+### Community 81 - "Community 81"
+Cohesion: 0.18
+Nodes (11): scripts, build, build:appimage, build:arch, build:ci, build:mac, dev, preview (+3 more)
+
+### Community 82 - "Community 82"
+Cohesion: 0.18
+Nodes (11): code:text (# work GitHub account), code:bash (# Default single-account form), code:bash (git remote set-url origin git@github.com-work:company/repo.g), code:text (Host gh-personal), Creating Profiles, Platform-Agnostic Profile Detection, SSH Configuration for Multiple Accounts, SSH Key Generation (+3 more)
+
+### Community 83 - "Community 83"
+Cohesion: 0.22
+Nodes (9): App does not start, code:bash (git config user.name), code:bash (ssh -T git@github.com-work), code:bash (git --version), code:bash (git remote -v), Commits show the wrong identity, Permission denied when pushing, SSH key does not authenticate (+1 more)
+
+### Community 84 - "Community 84"
+Cohesion: 0.15
+Nodes (12): Comparison vs Manual Setup, Contributing, Features, Files it does not manage, Files it touches, Git Profile Switcher, GitHub CLI Accounts, License (+4 more)
+
+### Community 85 - "Community 85"
+Cohesion: 0.29
+Nodes (7): dependencies, react, react-dom, react-router-dom, uuid, zod, zustand
+
+### Community 86 - "Community 86"
+Cohesion: 0.29
+Nodes (7): Build Packages Locally, code:bash (git clone https://github.com/Kinau-Guatemala/git-profile-swi), code:bash (# Windows portable .exe), From Source, Installation, Prebuilt Downloads, Prerequisites
+
+### Community 87 - "Community 87"
+Cohesion: 0.40
+Nodes (5): 1. Launch the App, 2. Add a Profile, 3. Switch from the Tray, code:text (┌─────────────────────────────────┐), Quick Start
+
+### Community 88 - "Community 88"
+Cohesion: 0.50
+Nodes (4): Architecture, code:text (src/), Security Model, Tech Stack
+
+### Community 89 - "Community 89"
+Cohesion: 0.50
+Nodes (4): code:bash (# Development with hot reload), code:bash (git tag v1.0.0), Development, Publishing A Release
+
+### Community 90 - "Community 90"
+Cohesion: 0.11
+Nodes (36): Al(), at(), bn(), ch(), Ct(), en(), fh(), gh() (+28 more)
+
+### Community 91 - "Community 91"
+Cohesion: 0.67
+Nodes (3): repository, type, url
+
+### Community 92 - "Community 92"
+Cohesion: 0.21
+Nodes (21): ac(), As(), Be(), bf(), cc(), dc(), gp(), ha() (+13 more)
+
+### Community 94 - "Community 94"
+Cohesion: 0.29
+Nodes (7): code:yaml (jobs:), code:yaml (- name: Build app bundles), code:markdown (| **gh account per folder** | Link each profile to a GitHub ), code:`markdown (## GitHub CLI Accounts), code:bash (git add .github/workflows/ci.yml README.md), code:bash (git add graphify-out), Task 8: CI on three OSes, docs, graph refresh
+
+### Community 95 - "Community 95"
+Cohesion: 0.33
+Nodes (6): code:ts (import { ipcMain } from 'electron'), code:ts (registerGhIpc(userDataPath)), code:ts (import type { GhTabStatus } from '../main/ghIpc'), code:ts (gh: {), code:bash (git add src/main/ghIpc.ts src/main/ipc.ts src/preload/index.), Task 6: IPC and preload API
+
+### Community 96 - "Community 96"
+Cohesion: 0.40
+Nodes (4): File Structure, GitHub CLI Account per Profile Implementation Plan, Global Constraints, Review Focus
+
+### Community 97 - "Community 97"
+Cohesion: 0.40
+Nodes (5): code:ts (import { execa } from 'execa'), code:bash (git add src/core/gh/shellEnv.ts src/core/gh/ghStatus.ts src/), code:ts (import { describe, it, expect } from 'vitest'), code:ts (import { execa } from 'execa'), Task 2: gh detection (login-shell PATH, version, accounts)
+
+### Community 98 - "Community 98"
+Cohesion: 0.40
+Nodes (5): code:tsx (import { useEffect, useState } from 'react'), code:tsx (<NavLink), code:tsx (<Route path="/gh" element={<GitHubCLI />} />), code:bash (git add src/renderer/screens/GitHubCLI.tsx src/renderer/App.), Task 7: The GitHub CLI tab
+
+### Community 99 - "Community 99"
+Cohesion: 0.50
+Nodes (4): code:ts (import { describe, it, expect, afterEach } from 'vitest'), code:ts (import { execa } from 'execa'), code:bash (git add src/core/gh/wrapper.ts src/core/gh/wrapper.test.ts), Task 3: The `gh` wrapper — content, install, remove, status
+
+### Community 100 - "Community 100"
+Cohesion: 0.50
+Nodes (4): code:ts (import { describe, it, expect } from 'vitest'), code:ts (import { execa } from 'execa'), code:bash (git add src/core/gh/windowsPath.ts src/core/gh/windowsPath.t), Task 4: Windows PATH (user, and system via UAC)
+
+### Community 102 - "Community 102"
+Cohesion: 0.40
+Nodes (4): code:ts (import { describe, it, expect } from 'vitest'), code:ts (import { execa } from 'execa'), code:bash (git add src/core/gh/windowsPath.ts src/core/gh/windowsPath.t), Task 4: Windows PATH (user, and system via UAC)
+
+### Community 103 - "Community 103"
+Cohesion: 0.06
+Nodes (49): $(), Ao(), bd(), E(), ef(), es(), _f(), Fo() (+41 more)
+
+### Community 104 - "Community 104"
+Cohesion: 0.25
+Nodes (7): code:yaml (jobs:), code:yaml (- name: Build app bundles), code:markdown (| **gh account per folder** | Link each profile to a GitHub ), code:`markdown (## GitHub CLI Accounts), code:bash (git add .github/workflows/ci.yml README.md), code:bash (git add graphify-out), Task 8: CI on three OSes, docs, graph refresh
+
+### Community 105 - "Community 105"
+Cohesion: 0.17
+Nodes (18): layout, repo, Agent, AGENT_IDS, agentStatuses(), applyAgentRule(), byHand(), exists() (+10 more)
+
+### Community 106 - "Community 106"
+Cohesion: 0.13
+Nodes (26): addClaudeRule(), addCursorHook(), addOpencodeRule(), codexRules(), copilotHooks(), geminiPolicy(), guardCommand(), hasClaudeRule() (+18 more)
+
+### Community 107 - "Community 107"
+Cohesion: 0.29
+Nodes (6): code:ts (import { ipcMain } from 'electron'), code:ts (registerGhIpc(userDataPath)), code:ts (import type { GhTabStatus } from '../main/ghIpc'), code:ts (gh: {), code:bash (git add src/main/ghIpc.ts src/main/ipc.ts src/preload/index.), Task 6: IPC and preload API
+
+### Community 108 - "Community 108"
+Cohesion: 0.25
+Nodes (7): code:ts (import { describe, it, expect } from 'vitest'), code:ts (import { posix, win32 } from 'node:path'), code:ts (import { describe, it, expect, afterEach } from 'vitest'), code:ts (import { chmod, mkdir, readFile, rename, rm, stat, writeFile), code:bash (RULES=$(mktemp --suffix=.rules)), code:bash (git add src/core/agents/rules.ts src/core/agents/rules.test.), Task 5: Agent rules — block `gh auth switch` in six agents
+
+### Community 109 - "Community 109"
+Cohesion: 0.33
+Nodes (5): code:ts (import { describe, it, expect } from 'vitest'), code:ts (import { execa } from 'execa'), code:ts (import { execa } from 'execa'), code:bash (git add src/core/gh/shellEnv.ts src/core/gh/ghStatus.ts src/), Task 2: gh detection (login-shell PATH, version, accounts)
+
+### Community 110 - "Community 110"
+Cohesion: 0.16
+Nodes (25): an(), ap(), B(), Bs(), Ds(), Et(), _i(), il() (+17 more)
+
+### Community 111 - "Community 111"
+Cohesion: 0.10
+Nodes (46): Aa, Ad(), ae(), ai(), ba(), Bt(), _c(), ca() (+38 more)
+
+### Community 112 - "Community 112"
+Cohesion: 0.09
+Nodes (25): add(), aliasRewriteSources(), applyAgentRule(), byHand(), exists(), getInput(), guardCommand(), handleInput() (+17 more)
+
+### Community 113 - "Community 113"
+Cohesion: 0.07
+Nodes (31): addClaudeRule(), addCursorHook(), addOpencodeRule(), addToSSHConfig(), assertAgentId(), cmdWrapper(), entries(), exists$1() (+23 more)
+
+### Community 114 - "Community 114"
+Cohesion: 0.25
+Nodes (3): hc(), oh, Yi()
+
+### Community 115 - "Community 115"
+Cohesion: 0.22
+Nodes (16): Dt(), fi(), ip(), jd(), pi(), Re(), rr(), to() (+8 more)
+
+### Community 116 - "Community 116"
+Cohesion: 0.09
+Nodes (31): ar(), Bu(), Cu(), Dn(), el(), eo(), Fp(), ft() (+23 more)
+
+### Community 117 - "Community 117"
+Cohesion: 0.26
+Nodes (12): Bo(), di(), Ei(), fl(), h(), Hs(), sl(), sp() (+4 more)
+
+### Community 118 - "Community 118"
+Cohesion: 0.33
+Nodes (5): code:tsx (import { useEffect, useState } from 'react'), code:tsx (<NavLink), code:tsx (<Route path="/gh" element={<GitHubCLI />} />), code:bash (git add src/renderer/screens/GitHubCLI.tsx src/renderer/App.), Task 7: The GitHub CLI tab
+
+### Community 119 - "Community 119"
+Cohesion: 0.11
+Nodes (17): AgentId, AgentStatus, InputModal(), Props, GIT_HOSTING_DOMAINS, getSSHCommandForHost(), parseSSHConfig(), parseSSHConfigContent() (+9 more)
+
+### Community 120 - "Community 120"
+Cohesion: 0.67
+Nodes (4): handle(), registerGhIpc(), setupIpcHandlers(), wrapperLayout()
+
+### Community 121 - "Community 121"
+Cohesion: 0.50
+Nodes (4): code:text (~/.gitconfig                          ~/.git-profile-switche), How It Works, Upgrading from 1.0.0, What This Means
+
+### Community 124 - "Community 124"
 Cohesion: 0.50
 Nodes (4): code:text (~/.gitconfig                          ~/.gitconfig-switcher), How It Works, Upgrading from 1.0.0, What This Means
 
-### Community 73 - "Community 73"
-Cohesion: 0.67
-Nodes (3): Files it does not manage, Files it touches, Security Notes
-
-### Community 74 - "Community 74"
-Cohesion: 0.27
-Nodes (11): Ai(), Br(), de(), Fe(), fp(), go(), gu(), jl() (+3 more)
-
 ## Knowledge Gaps
-- **135 isolated node(s):** `dev`, `typecheck`, `build`, `build:arch`, `build:appimage` (+130 more)
+- **389 isolated node(s):** `name`, `version`, `description`, `main`, `dev` (+384 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **14 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **18 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `error` connect `Community 42` to `Community 0`, `Community 34`, `Community 10`, `Community 44`, `Community 45`, `Community 46`, `Community 15`, `Community 51`, `Community 52`, `Community 62`?**
-  _High betweenness centrality (0.151) - this node is a cross-community bridge._
-- **Why does `ZodString` connect `Community 7` to `Community 0`, `Community 2`, `Community 12`, `Community 15`, `Community 50`, `Community 53`, `Community 26`?**
-  _High betweenness centrality (0.031) - this node is a cross-community bridge._
-- **Why does `ZodError` connect `Community 28` to `Community 0`, `Community 59`?**
-  _High betweenness centrality (0.019) - this node is a cross-community bridge._
-- **Are the 48 inferred relationships involving `error` (e.g. with `Ir()` and `Iu()`) actually correct?**
-  _`error` has 48 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `dev`, `typecheck`, `build` to the rest of the system?**
-  _136 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Why does `error` connect `Community 111` to `Community 0`, `Community 10`, `Community 15`, `Community 30`, `Community 33`, `Community 42`, `Community 44`, `Community 46`, `Community 51`, `Community 52`, `Community 56`, `Community 62`, `Community 64`, `Community 72`, `Community 73`, `Community 90`, `Community 92`, `Community 103`, `Community 110`, `Community 115`, `Community 116`, `Community 117`?**
+  _High betweenness centrality (0.346) - this node is a cross-community bridge._
+- **Why does `p` connect `Community 103` to `Community 36`?**
+  _High betweenness centrality (0.209) - this node is a cross-community bridge._
+- **Why does `E()` connect `Community 103` to `Community 72`, `Community 116`, `Community 117`, `Community 111`?**
+  _High betweenness centrality (0.106) - this node is a cross-community bridge._
+- **Are the 96 inferred relationships involving `error` (e.g. with `Dr()` and `Da()`) actually correct?**
+  _`error` has 96 INFERRED edges - model-reasoned connections that need verification._
+- **What connects `name`, `version`, `description` to the rest of the system?**
+  _390 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
-  _Cohesion score 0.028602101065869183 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.024324324324324326 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**
-  _Cohesion score 0.051446321102698506 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.0537280701754386 - nodes in this community are weakly interconnected._
