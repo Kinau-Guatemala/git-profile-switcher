@@ -1,6 +1,33 @@
-import { describe, it, expect } from 'vitest'
-import { parseGhAccounts, parseGhVersion } from './ghStatus'
+import { describe, it, expect, afterEach } from 'vitest'
+import { chmod, mkdtemp, rm, writeFile } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+import { getGhStatus, parseGhAccounts, parseGhVersion } from './ghStatus'
 import { extractMarkedPath } from './shellEnv'
+
+describe.skipIf(process.platform === 'win32')('getGhStatus', () => {
+  let dir: string
+  afterEach(async () => { if (dir) await rm(dir, { recursive: true, force: true }) })
+
+  it('asks the gh binary it is given, not whatever `gh` is on PATH (which may be a broken wrapper)', async () => {
+    dir = await mkdtemp(join(tmpdir(), 'gps-ghstatus-'))
+    const fake = join(dir, 'real gh')
+    await writeFile(fake, [
+      '#!/bin/sh',
+      'if [ "$1" = --version ]; then echo "gh version 9.9.9 (fake)"; exit 0; fi',
+      `echo '{"hosts":{"github.com":[{"login":"a","active":true},{"login":"b","active":false}]}}'`
+    ].join('\n'))
+    await chmod(fake, 0o755)
+
+    expect(await getGhStatus({ ...process.env, PATH: '/nonexistent' }, fake)).toEqual({
+      kind: 'ok', version: '9.9.9', accounts: [{ login: 'a', active: true }, { login: 'b', active: false }]
+    })
+  })
+
+  it('reports missing when there is no real gh', async () => {
+    expect(await getGhStatus(process.env, null)).toEqual({ kind: 'missing' })
+  })
+})
 
 describe('parseGhAccounts', () => {
   it('reads github.com logins and the active flag', () => {

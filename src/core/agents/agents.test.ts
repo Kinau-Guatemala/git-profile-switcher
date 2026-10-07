@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from 'vitest'
-import { mkdtemp, mkdir, readFile, rm, writeFile, stat } from 'node:fs/promises'
+import { mkdtemp, mkdir, readFile, rm, writeFile, stat, lstat, chmod, symlink } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { agentStatuses, applyAgentRule, removeAgentRule, assertAgentId, AgentEnv } from './agents'
@@ -77,6 +77,24 @@ describe('agents', () => {
       await removeAgentRule(id, env)
       expect(await exists(file)).toBe(false)
     }
+  })
+
+  it.skipIf(process.platform === 'win32')('edits a symlinked settings file in place and keeps its permissions', async () => {
+    const env = await setup()
+    const dotfiles = join(home, 'dotfiles')
+    await mkdir(dotfiles)
+    const real = join(dotfiles, 'claude-settings.json')
+    await writeFile(real, JSON.stringify({ env: { SECRET: 'x' } }))
+    await chmod(real, 0o600)
+    await mkdir(join(home, '.claude'))
+    const link = join(home, '.claude', 'settings.json')
+    await symlink(real, link)
+
+    await applyAgentRule('claude', env)
+
+    expect((await lstat(link)).isSymbolicLink()).toBe(true)
+    expect((await stat(real)).mode & 0o777).toBe(0o600)
+    expect(JSON.parse(await readFile(real, 'utf-8')).permissions.deny).toContain(CLAUDE_DENY)
   })
 
   it('rejects unknown agent ids', () => {

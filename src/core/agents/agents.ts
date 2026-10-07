@@ -1,4 +1,4 @@
-import { chmod, mkdir, readFile, rename, rm, stat, writeFile } from 'node:fs/promises'
+import { chmod, mkdir, readFile, realpath, rename, rm, stat, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import * as r from './rules'
 
@@ -81,10 +81,15 @@ async function readJson(file: string): Promise<ReadResult> {
 }
 
 async function writeAtomic(file: string, text: string): Promise<void> {
-  await mkdir(dirname(file), { recursive: true })
-  const tmp = `${file}.gps-tmp`
+  // Write through symlinks (dotfile managers link these configs) and keep the
+  // original mode (Claude settings can hold secrets and be 0600).
+  const target = await realpath(file).catch(() => file)
+  await mkdir(dirname(target), { recursive: true })
+  const mode = await stat(target).then(s => s.mode & 0o777, () => undefined)
+  const tmp = `${target}.gps-tmp`
   await writeFile(tmp, text, 'utf-8')
-  await rename(tmp, file)
+  if (mode !== undefined) await chmod(tmp, mode)
+  await rename(tmp, target)
 }
 
 const snippet = (a: JsonAgent) => JSON.stringify(a.add({}), null, 2)

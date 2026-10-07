@@ -6,7 +6,7 @@ import { syncManagedGitconfig } from '../core/git/folderConfigs'
 import { setProfileGhUser } from '../core/gh/profileLink'
 import { userShellEnv } from '../core/gh/shellEnv'
 import { getGhStatus, GhStatus } from '../core/gh/ghStatus'
-import { wrapperLayout, wrapperStatus, installWrapper, removeWrapper, pathHint, WrapperStatus } from '../core/gh/wrapper'
+import { wrapperLayout, wrapperStatus, installWrapper, removeWrapper, pathHint, findRealGh, WrapperStatus } from '../core/gh/wrapper'
 import { readRegistryPath, writeRegistryPath, hasPathEntry, prependPathEntry, removePathEntry } from '../core/gh/windowsPath'
 import { agentStatuses, applyAgentRule, removeAgentRule, assertAgentId, AgentEnv, AgentId } from '../core/agents/agents'
 
@@ -36,8 +36,14 @@ export function registerGhIpc(userDataPath: string): void {
   const layout = wrapperLayout(platform, homedir(), process.env.LOCALAPPDATA)
   const agentEnv: AgentEnv = { home: homedir(), platform, hookDir: join(userDataPath, 'agent-hooks') }
 
+  // Always ask the real gh: the wrapper may be broken, and in a linked folder it
+  // would answer as a single account.
+  async function realGhStatus(env: NodeJS.ProcessEnv): Promise<GhStatus> {
+    return getGhStatus(env, await findRealGh(env, layout.dir, platform))
+  }
+
   async function requireMultiAccount() {
-    const gh = await getGhStatus(await userShellEnv())
+    const gh = await realGhStatus(await userShellEnv())
     if (gh.kind !== 'ok' || gh.accounts.length < 2) {
       throw new Error('This needs gh with two or more github.com accounts logged in.')
     }
@@ -47,7 +53,7 @@ export function registerGhIpc(userDataPath: string): void {
   async function status(): Promise<GhTabStatus> {
     const env = await userShellEnv()
     const [gh, wrapper, profiles] = await Promise.all([
-      getGhStatus(env),
+      realGhStatus(env),
       wrapperStatus(layout, env, platform),
       loadProfiles(userDataPath)
     ])

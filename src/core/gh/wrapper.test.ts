@@ -1,11 +1,11 @@
 import { describe, it, expect, afterEach } from 'vitest'
-import { mkdtemp, mkdir, readFile, rm, writeFile, chmod } from 'node:fs/promises'
+import { mkdtemp, mkdir, readFile, rm, writeFile, chmod, symlink } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { execa } from 'execa'
 import {
   wrapperLayout, posixWrapper, cmdWrapper, readBakedRealGh, toMsysPath, pickRealGh,
-  installWrapper, removeWrapper, pathHint, WRAPPER_MARKER
+  installWrapper, removeWrapper, pathHint, findRealGh, WRAPPER_MARKER
 } from './wrapper'
 
 describe('wrapperLayout', () => {
@@ -126,9 +126,85 @@ describe.skipIf(process.platform === 'win32')('sh wrapper behaviour', () => {
     expect(stdout).toBe('GH_TOKEN=preset ARGS=pr list')
   })
 
-  it('leaves gh auth commands untouched', async () => {
+  it('leaves the gh auth commands that refuse GH_TOKEN untouched', async () => {
+    const { wrapper, repo, env } = await setup()
+    for (const sub of ['login', 'logout', 'switch', 'refresh']) {
+      const { stdout } = await execa(wrapper, ['auth', sub], { cwd: repo, env, extendEnv: false })
+      expect(stdout).toBe(`GH_TOKEN= ARGS=auth ${sub}`)
+    }
+  })
+
+  it('answers gh auth token and status as the linked account', async () => {
     const { wrapper, repo, env } = await setup()
     const { stdout } = await execa(wrapper, ['auth', 'status'], { cwd: repo, env, extendEnv: false })
-    expect(stdout).toBe('GH_TOKEN= ARGS=auth status')
+    expect(stdout).toBe('GH_TOKEN=token-for-alice ARGS=auth status')
+  })
+})
+
+describe.skipIf(process.platform === 'win32')('findRealGh', () => {
+  let root: string
+  afterEach(async () => { if (root) await rm(root, { recursive: true, force: true }) })
+
+  it('never picks the wrapper reached through a symlinked directory', async () => {
+    root = await mkdtemp(join(tmpdir(), 'gps-real-'))
+    const wrapperDir = join(root, 'local-bin')
+    const alias = join(root, 'bin-alias')
+    const realDir = join(root, 'real')
+    await mkdir(wrapperDir)
+    await mkdir(realDir)
+    await writeFile(join(wrapperDir, 'gh'), posixWrapper('/nowhere/gh'))
+    await chmod(join(wrapperDir, 'gh'), 0o755)
+    await writeFile(join(realDir, 'gh'), '#!/bin/sh\necho real\n')
+    await chmod(join(realDir, 'gh'), 0o755)
+    await symlink(wrapperDir, alias)
+
+    const env = { ...process.env, PATH: `${alias}:${realDir}:/usr/bin:/bin` }
+    expect(await findRealGh(env, wrapperDir, 'linux')).toBe(join(realDir, 'gh'))
+  })
+})
+
+describe('cmd wrapper text', () => {
+  it('clears an inherited GPS_GH_USER and only bypasses the auth commands that refuse GH_TOKEN', () => {
+    const text = cmdWrapper('C:\\gh.exe')
+    expect(text).toContain('set "GPS_GH_USER="')
+    expect(text).not.toMatch(/if \/i "%~1"=="auth" goto run/)
+    expect(text).toContain('if /i "%~2"=="switch" goto run')
+  })
+})
+
+describe.skipIf(process.platform !== 'win32')('cmd wrapper behaviour (Windows)', () => {
+  let root: string
+  afterEach(async () => { if (root) await rm(root, { recursive: true, force: true }) })
+
+  async function setup() {
+    root = await mkdtemp(join(tmpdir(), 'gps cmd '))
+    const realDir = join(root, 'Program Files', 'GitHub CLI')
+    await mkdir(realDir, { recursive: true })
+    const fakeGh = join(realDir, 'gh.cmd')
+    await writeFile(fakeGh, [
+      '@echo off',
+      'if "%~1 %~2"=="auth token" (echo token-for-%~4& exit /b 0)',
+      'echo GH_TOKEN=%GH_TOKEN% ARGS=%*'
+    ].join('\r\n'))
+    const wrapper = join(root, 'gh.cmd')
+    await writeFile(wrapper, cmdWrapper(fakeGh))
+    const repo = join(root, 'repo')
+    await mkdir(repo)
+    await execa('git', ['init', '-q'], { cwd: repo })
+    await execa('git', ['config', 'profileswitcher.ghUser', 'alice'], { cwd: repo })
+    const env = { ...process.env, GH_TOKEN: '', GITHUB_TOKEN: '', GIT_CONFIG_GLOBAL: join(root, 'none'), GIT_CONFIG_NOSYSTEM: '1' }
+    return { wrapper, repo, env }
+  }
+
+  it('injects the linked token through a Program Files path with spaces', async () => {
+    const { wrapper, repo, env } = await setup()
+    const { stdout } = await execa('cmd', ['/c', wrapper, 'api', 'user'], { cwd: repo, env })
+    expect(stdout.trim()).toBe('GH_TOKEN=token-for-alice ARGS=api user')
+  })
+
+  it('ignores a GPS_GH_USER inherited from the environment', async () => {
+    const { wrapper, env } = await setup()
+    const { stdout } = await execa('cmd', ['/c', wrapper, 'api', 'user'], { cwd: root, env: { ...env, GPS_GH_USER: 'mallory' } })
+    expect(stdout.trim()).toBe('GH_TOKEN= ARGS=api user')
   })
 })

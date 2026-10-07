@@ -110,13 +110,16 @@ describe('applyProfile', () => {
     expect(stdout.trim()).toBe('octo-cat')
   })
 
-  it('omits profileswitcher.ghUser when no gh account is linked', async () => {
+  it('writes an empty profileswitcher.ghUser when no gh account is linked', async () => {
+    // Empty, not absent: a folder profile without a link must override the
+    // global profile's link (git's last value wins), so the wrapper passes through.
     dir = await mkdtemp(join(tmpdir(), 'gps-'))
     const managed = join(dir, '.git-profile-switcher')
     const p = makeProfile({ label: 'p' })
 
     await applyProfile(p, managed, [p])
 
-    expect(await readFile(managed, 'utf-8')).not.toContain('profileswitcher')
+    const { stdout } = await runGit(['config', '--file', managed, '--get', 'profileswitcher.ghUser'])
+    expect(stdout).toBe('')
   })
 })

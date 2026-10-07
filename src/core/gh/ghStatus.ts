@@ -22,17 +22,21 @@ export function parseGhAccounts(json: string): GhAccount[] {
     .map(e => ({ login: e.login, active: e.active === true }))
 }
 
-export async function getGhStatus(env: NodeJS.ProcessEnv): Promise<GhStatus> {
+/**
+ * `realGh` is the real binary (see findRealGh), never our wrapper: a wrapper
+ * whose target vanished would otherwise report gh as missing, and in a linked
+ * folder it would answer `auth status` as a single account.
+ */
+export async function getGhStatus(env: NodeJS.ProcessEnv, realGh: string | null): Promise<GhStatus> {
+  if (!realGh) return { kind: 'missing' }
   let version: string
   try {
-    version = parseGhVersion((await execa('gh', ['--version'], { env })).stdout)
+    version = parseGhVersion((await execa(realGh, ['--version'], { env })).stdout)
   } catch {
     return { kind: 'missing' }
   }
   try {
-    // `auth` is passed through untouched by our own wrapper, so this always
-    // reports gh's real logins.
-    const { stdout } = await execa('gh', ['auth', 'status', '--json', 'hosts'], { env })
+    const { stdout } = await execa(realGh, ['auth', 'status', '--json', 'hosts'], { env })
     return { kind: 'ok', version, accounts: parseGhAccounts(stdout) }
   } catch {
     return { kind: 'unsupported', version }

@@ -1,5 +1,5 @@
 import { execa } from 'execa'
-import { chmod, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises'
+import { chmod, mkdir, open, readFile, rm, stat, writeFile } from 'node:fs/promises'
 import { posix, win32 } from 'node:path'
 
 export const WRAPPER_MARKER = 'Managed by Git Profile Switcher'
@@ -50,12 +50,19 @@ export function posixWrapper(realGh: string): string {
 # Runs gh as the account linked to the profile for the current folder
 # (git config profileswitcher.ghUser). A token already in the env always wins.
 REAL_GH=${shQuote(realGh)}
-if [ -z "$GH_TOKEN$GITHUB_TOKEN" ] && [ "$1" != auth ]; then
-  u=$(git config --get profileswitcher.ghUser 2>/dev/null)
-  if [ -n "$u" ]; then
-    t=$("$REAL_GH" auth token --user "$u" 2>/dev/null) && [ -n "$t" ] && GH_TOKEN=$t && export GH_TOKEN
-  fi
-fi
+case "$1:$2" in
+  # These refuse to run while GH_TOKEN is set; everything else, including
+  # \`auth token\` and \`auth status\`, answers as the linked account.
+  auth:login|auth:logout|auth:switch|auth:refresh) ;;
+  *)
+    if [ -z "$GH_TOKEN$GITHUB_TOKEN" ]; then
+      u=$(git config --get profileswitcher.ghUser 2>/dev/null)
+      if [ -n "$u" ]; then
+        t=$("$REAL_GH" auth token --user "$u" 2>/dev/null) && [ -n "$t" ] && GH_TOKEN=$t && export GH_TOKEN
+      fi
+    fi
+    ;;
+esac
 exec "$REAL_GH" "$@"
 `
 }
@@ -66,8 +73,13 @@ export function cmdWrapper(realGh: string): string {
     `rem ${WRAPPER_MARKER} - do not edit.`,
     'setlocal',
     `set "REAL_GH=${realGh}"`,
+    'set "GPS_GH_USER="',
     'if not "%GH_TOKEN%%GITHUB_TOKEN%"=="" goto run',
-    'if /i "%~1"=="auth" goto run',
+    // These refuse to run while GH_TOKEN is set.
+    'if /i "%~1"=="auth" if /i "%~2"=="login" goto run',
+    'if /i "%~1"=="auth" if /i "%~2"=="logout" goto run',
+    'if /i "%~1"=="auth" if /i "%~2"=="switch" goto run',
+    'if /i "%~1"=="auth" if /i "%~2"=="refresh" goto run',
     `for /f "delims=" %%u in ('git config --get profileswitcher.ghUser 2^>nul') do set "GPS_GH_USER=%%u"`,
     'if not defined GPS_GH_USER goto run',
     // `call` keeps cmd from stripping the quotes around a path with spaces.
@@ -102,6 +114,38 @@ export async function findGhCandidates(env: NodeJS.ProcessEnv, platform: NodeJS.
   } catch {
     return []
   }
+}
+
+/** True when the file is one of our wrappers, whatever path it was reached through. */
+async function isWrapperFile(path: string): Promise<boolean> {
+  let fh
+  try {
+    fh = await open(path, 'r')
+    const buf = Buffer.alloc(4096)
+    const { bytesRead } = await fh.read(buf, 0, buf.length, 0)
+    return buf.subarray(0, bytesRead).toString('utf-8').includes(WRAPPER_MARKER)
+  } catch {
+    return false
+  } finally {
+    await fh?.close()
+  }
+}
+
+/**
+ * The real gh on PATH. Skips our wrapper dir and, via the marker, the wrapper
+ * reached through any other spelling (symlinked dir, symlinked home) — baking
+ * the wrapper into itself would make every gh call hang.
+ */
+export async function findRealGh(
+  env: NodeJS.ProcessEnv,
+  wrapperDir: string,
+  platform: NodeJS.Platform
+): Promise<string | null> {
+  const candidates: string[] = []
+  for (const c of await findGhCandidates(env, platform)) {
+    if (!(await isWrapperFile(c))) candidates.push(c)
+  }
+  return pickRealGh(candidates, wrapperDir, platform)
 }
 
 async function readIfExists(path: string): Promise<string | null> {
@@ -153,7 +197,7 @@ export async function installWrapper(
   if (status.foreignFile) {
     throw new Error(`${status.foreignFile} already exists and is not managed by Git Profile Switcher. Move it before installing the wrapper.`)
   }
-  const realGh = pickRealGh(await findGhCandidates(env, platform), layout.dir, platform)
+  const realGh = await findRealGh(env, layout.dir, platform)
   if (!realGh) throw new Error('gh was not found on PATH.')
 
   await mkdir(layout.dir, { recursive: true })

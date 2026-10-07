@@ -31,8 +31,12 @@ const KEY: Record<PathScope, string> = {
   Machine: "[Microsoft.Win32.Registry]::LocalMachine.OpenSubKey('SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment', WRITABLE)"
 }
 
+// Windows PowerShell writes redirected stdout in the OEM code page; execa
+// decodes UTF-8, so C:\Users\José would come back mangled and be written back.
+const UTF8_OUTPUT = '[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; '
+
 export function readPathScript(scope: PathScope): string {
-  return `${KEY[scope].replace('WRITABLE', '$false')}.GetValue('Path', '', 'DoNotExpandEnvironmentNames')`
+  return `${UTF8_OUTPUT}${KEY[scope].replace('WRITABLE', '$false')}.GetValue('Path', '', 'DoNotExpandEnvironmentNames')`
 }
 
 export function writePathScript(scope: PathScope, value: string): string {
@@ -52,9 +56,15 @@ export function encodePs(script: string): string {
 
 const PS = ['-NoProfile', '-NonInteractive']
 
-export async function readRegistryPath(scope: PathScope): Promise<string> {
-  const { stdout } = await execa('powershell', [...PS, '-EncodedCommand', encodePs(readPathScript(scope))])
+/** Runs a script whose output must survive as UTF-8 (prefixed like the PATH read). */
+export async function runPsForOutput(script: string): Promise<string> {
+  const body = script.startsWith(UTF8_OUTPUT) ? script : UTF8_OUTPUT + script
+  const { stdout } = await execa('powershell', [...PS, '-EncodedCommand', encodePs(body)])
   return stdout.trim()
+}
+
+export async function readRegistryPath(scope: PathScope): Promise<string> {
+  return runPsForOutput(readPathScript(scope))
 }
 
 export async function writeRegistryPath(scope: PathScope, value: string): Promise<void> {

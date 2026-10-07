@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { hasPathEntry, prependPathEntry, removePathEntry, expandWinEnv, writePathScript, readPathScript, encodePs } from './windowsPath'
+import { hasPathEntry, prependPathEntry, removePathEntry, expandWinEnv, writePathScript, readPathScript, encodePs, runPsForOutput } from './windowsPath'
 
 const DIR = 'C:\\Users\\u\\AppData\\Local\\git-profile-switcher\\bin'
 
@@ -26,6 +26,11 @@ describe('PowerShell scripts', () => {
     expect(readPathScript('Machine')).toContain('Session Manager\\Environment')
   })
 
+  it('reads as UTF-8 so entries like C:\\Users\\José survive the round trip', () => {
+    // Windows PowerShell writes redirected stdout in the OEM code page otherwise.
+    expect(readPathScript('User')).toMatch(/^\[Console\]::OutputEncoding = \[System\.Text\.Encoding\]::UTF8; /)
+  })
+
   it('writes ExpandString and escapes single quotes', () => {
     const s = writePathScript('User', "C:\\it's;D:\\x")
     expect(s).toContain("'C:\\it''s;D:\\x'")
@@ -34,5 +39,11 @@ describe('PowerShell scripts', () => {
 
   it('encodes as UTF-16LE base64 for -EncodedCommand', () => {
     expect(Buffer.from(encodePs('echo hi'), 'base64').toString('utf16le')).toBe('echo hi')
+  })
+})
+
+describe.skipIf(process.platform !== 'win32')('PowerShell output encoding (Windows)', () => {
+  it('returns non-ASCII text intact through the same prefix the PATH read uses', async () => {
+    expect(await runPsForOutput("'C:\\Users\\José\\bin'")).toBe('C:\\Users\\José\\bin')
   })
 })

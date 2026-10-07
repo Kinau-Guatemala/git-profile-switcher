@@ -166,6 +166,12 @@ Requires gh with two or more accounts (`gh auth login`). Only github.com is
 supported. Git over HTTPS through `gh auth git-credential` is not routed through
 the wrapper; SSH remotes (what this app manages) are unaffected.
 
+On Windows, cmd.exe and PowerShell reach gh through a `gh.cmd` shim, and cmd
+re-parses arguments: a multi-line argument is cut at the first line break, and
+unquoted `&`, `|`, `^` or `%` are interpreted by cmd. Pass long text through a
+file (`gh pr create --body-file body.md`). Git Bash uses the sh wrapper and is
+not affected.
+
 ---
 
 ## Security Notes
