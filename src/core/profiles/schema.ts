@@ -5,7 +5,8 @@ export const ProfileAdvancedSchema = z.object({
   signingKey: z.string().optional(),
   sshKeyPath: z.string().optional(),
   sshHost: z.string().optional(),
-  hosts: z.array(z.string()).optional()
+  hosts: z.array(z.string()).optional(),
+  ghUser: z.string().optional()
 })
 
 export const ProfileSchema = z.object({

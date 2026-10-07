@@ -4,6 +4,7 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { applyProfile, bareHostFromAlias, aliasRewriteSources } from './identity'
 import { Profile } from '../profiles/schema'
+import { runGit } from './gitRunner'
 
 function makeProfile(over: Partial<Profile> & { label: string }): Profile {
   return {
@@ -96,5 +97,26 @@ describe('applyProfile', () => {
     expect(content).not.toContain('work@styleseat.com')
     expect(content).not.toContain('ABC123')
     expect(content).not.toContain('id_ed25519')
+  })
+
+  it('writes profileswitcher.ghUser when the profile links a gh account', async () => {
+    dir = await mkdtemp(join(tmpdir(), 'gps-'))
+    const managed = join(dir, '.git-profile-switcher')
+    const p = makeProfile({ label: 'p', advanced: { ghUser: 'octo-cat' } })
+
+    await applyProfile(p, managed, [p])
+
+    const { stdout } = await runGit(['config', '--file', managed, '--get', 'profileswitcher.ghUser'])
+    expect(stdout.trim()).toBe('octo-cat')
+  })
+
+  it('omits profileswitcher.ghUser when no gh account is linked', async () => {
+    dir = await mkdtemp(join(tmpdir(), 'gps-'))
+    const managed = join(dir, '.git-profile-switcher')
+    const p = makeProfile({ label: 'p' })
+
+    await applyProfile(p, managed, [p])
+
+    expect(await readFile(managed, 'utf-8')).not.toContain('profileswitcher')
   })
 })
