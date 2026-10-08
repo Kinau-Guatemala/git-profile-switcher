@@ -79,6 +79,8 @@ export async function autoLinkAndSync(
     return { profiles, linked, error: null }
   } catch (e: any) {
     await saveProfiles(userDataPath, original)
+    // Files written before the failure would keep the rolled-back link: rewrite them.
+    await sync(userDataPath).catch(() => {})
     return { profiles: original, linked: [], error: `Couldn't link gh accounts automatically: ${e?.message ?? e}` }
   }
 }

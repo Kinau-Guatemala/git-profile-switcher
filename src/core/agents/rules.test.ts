@@ -64,7 +64,8 @@ describe('Cursor', () => {
     const cmd = guardCommand('/home/u/.config/Git Profile Switcher/agent-hooks', 'linux', 'cursor')
     const once = addCursorHook(cfg, cmd)
     expect(addCursorHook(once, cmd)).toEqual(once)
-    expect(once.hooks.beforeShellExecution).toEqual([{ command: './audit.sh' }, { command: cmd }])
+    // The matcher keeps Cursor from starting the guard for every other command.
+    expect(once.hooks.beforeShellExecution).toEqual([{ command: './audit.sh' }, { command: cmd, matcher: 'auth\\s+switch' }])
     expect(hasCursorHook(once)).toBe(true)
     expect(removeCursorHook(once)).toEqual(cfg)
   })
@@ -103,6 +104,9 @@ const GUARD_CASES: ['cursor' | 'copilot', object, Outcome][] = [
   ['cursor', { command: 'ls && gh auth switch' }, 'deny'],
   ['cursor', { command: '/usr/bin/gh auth switch' }, 'deny'],
   ['cursor', { command: 'gh.exe auth switch' }, 'deny'],
+  ['cursor', { command: 'GH_HOST=github.com gh auth switch' }, 'deny'],
+  ['cursor', { command: 'command gh auth switch' }, 'deny'],
+  ['cursor', { command: 'env GH_HOST=github.com gh auth switch --user x' }, 'deny'],
   ['cursor', { command: 'gh pr list' }, 'allow'],
   // Mentioning the command is not running it.
   ['cursor', { command: 'git commit -m "block gh auth switch in agents"' }, 'allow'],
@@ -122,6 +126,10 @@ function expectOutcome(dialect: string, stdout: string, expected: Outcome, label
     expect(out.permissionDecision, label).toBe('deny')
     expect(out.permissionDecisionReason, label).toMatch(/blocked/)
   } else {
+    // Exactly Cursor's documented fields: an off-schema response blocks the command.
+    expect(Object.keys(out).sort(), label).toEqual(
+      expected === 'deny' ? ['agent_message', 'permission', 'user_message'] : ['permission']
+    )
     expect(out.permission, label).toBe(expected)
   }
 }

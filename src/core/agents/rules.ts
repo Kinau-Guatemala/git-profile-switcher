@@ -27,16 +27,16 @@ msg='${GUARD_MESSAGE}'
 if [ "$1" = copilot ] && ! printf '%s' "$input" | grep -Eq '"toolName"[[:space:]]*:[[:space:]]*"(bash|powershell|shell)"'; then
   exit 0
 fi
-re='(^|[;&|(${BT}"'"'"']|[$][(]|\\n)[[:space:]]*([^[:space:]"]*[/\\])?gh(\.exe)?[[:space:]]+auth[[:space:]]+switch'
+re='(^|[;&|(${BT}"'"'"']|[$][(]|\\n)[[:space:]]*([A-Za-z_][A-Za-z0-9_]*=[^[:space:]]*[[:space:]]+)*((command|env|exec)[[:space:]]+)?([A-Za-z_][A-Za-z0-9_]*=[^[:space:]]*[[:space:]]+)*([^[:space:]"]*[/\\])?gh(\.exe)?[[:space:]]+auth[[:space:]]+switch'
 if printf '%s' "$input" | grep -Eq "$re"; then
   if [ "$1" = copilot ]; then
     printf '{"permissionDecision":"deny","permissionDecisionReason":"%s"}\n' "$msg"
   else
-    printf '{"continue":true,"permission":"deny","user_message":"%s","agent_message":"%s"}\n' "$msg" "$msg"
+    printf '{"permission":"deny","user_message":"%s","agent_message":"%s"}\n' "$msg" "$msg"
   fi
   exit 0
 fi
-if [ "$1" = cursor ]; then printf '{"continue":true,"permission":"allow"}\n'; fi
+if [ "$1" = cursor ]; then printf '{"permission":"allow"}\n'; fi
 exit 0
 `
 
@@ -45,12 +45,12 @@ param([string]$Dialect)
 $text = [Console]::In.ReadToEnd()
 $msg = '${GUARD_MESSAGE}'
 if ($Dialect -eq 'copilot' -and $text -notmatch '"toolName"\s*:\s*"(bash|powershell|shell)"') { exit 0 }
-if ($text -match '(^|[;&|(${BT}"'']|\$\(|\\n)\s*([^\s"]*[/\\])?gh(\.exe)?\s+auth\s+switch') {
+if ($text -match '(^|[;&|(${BT}"'']|\$\(|\\n)\s*([A-Za-z_]\w*=\S*\s+)*((command|env|exec)\s+)?([A-Za-z_]\w*=\S*\s+)*([^\s"]*[/\\])?gh(\.exe)?\s+auth\s+switch') {
   if ($Dialect -eq 'copilot') { [ordered]@{ permissionDecision = 'deny'; permissionDecisionReason = $msg } | ConvertTo-Json -Compress }
-  else { [ordered]@{ continue = $true; permission = 'deny'; user_message = $msg; agent_message = $msg } | ConvertTo-Json -Compress }
+  else { [ordered]@{ permission = 'deny'; user_message = $msg; agent_message = $msg } | ConvertTo-Json -Compress }
   exit 0
 }
-if ($Dialect -eq 'cursor') { '{"continue":true,"permission":"allow"}' }
+if ($Dialect -eq 'cursor') { '{"permission":"allow"}' }
 exit 0
 `
 
@@ -127,11 +127,15 @@ export function hasCursorHook(c: Json): boolean {
   return Array.isArray(c.hooks?.beforeShellExecution) && c.hooks.beforeShellExecution.some(isGuard)
 }
 
+// Cursor tests this against the full command before starting the hook, so the
+// guard doesn't spawn (a cold PowerShell on Windows) for every other command.
+const CURSOR_MATCHER = 'auth\\s+switch'
+
 export function addCursorHook(c: Json, command: string): Json {
   if (c.hooks !== undefined && !isObj(c.hooks)) throw new UnsupportedConfig('"hooks" is not an object')
   const list = c.hooks?.beforeShellExecution ?? []
   if (!Array.isArray(list)) throw new UnsupportedConfig('"hooks.beforeShellExecution" is not a list')
-  return { version: 1, ...c, hooks: { ...c.hooks, beforeShellExecution: [...list.filter(h => !isGuard(h)), { command }] } }
+  return { version: 1, ...c, hooks: { ...c.hooks, beforeShellExecution: [...list.filter(h => !isGuard(h)), { command, matcher: CURSOR_MATCHER }] } }
 }
 
 export function removeCursorHook(c: Json): Json {

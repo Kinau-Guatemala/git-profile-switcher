@@ -111,6 +111,9 @@ export default function GitHubCLI() {
         {wrapper.installed && !status.resolvesToWrapper && status.pathHint && (
           <p className="settings-hint">Put <code>{wrapper.dir}</code> first on your PATH, then open a new terminal: <code>{status.pathHint}</code></p>
         )}
+        {windows && !windows.pathReadable && (
+          <p className="settings-hint">✕ Couldn't read the Windows PATH from the registry, so whether gh reaches the wrapper is unknown.</p>
+        )}
         {wrapper.installed && windows && windows.realGhOnMachinePath && !windows.machinePathHasDir && (
           <p className="settings-hint">
             gh is on the system PATH, which Windows searches before your user PATH. Putting the wrapper first there needs administrator rights.
@@ -141,7 +144,8 @@ export default function GitHubCLI() {
         <h2 className="section-title">◈ Profile → gh Account</h2>
         <p className="settings-hint">
           Profiles whose label, user name or SSH alias (<code>github.com-&lt;account&gt;</code>) matches a gh account
-          are linked automatically. Pick the rest by hand.
+          are linked automatically. Pick the rest by hand. The account applies inside git repositories under the
+          profile's folders; elsewhere gh uses the global profile's account.
         </p>
         {status.autoLinkError && <p className="pixel-card__info">✕ {status.autoLinkError}</p>}
         {autoLinked.length > 0 && (
@@ -207,7 +211,7 @@ export default function GitHubCLI() {
           </div>
         ))}
         <div className="btn-row mt-md mb-0">
-          <button className="btn btn--primary btn--sm" disabled={!ready || busy || !agents.some(a => a.detected && !a.blocked)}
+          <button className="btn btn--primary btn--sm" disabled={!ready || busy || !agents.some(a => a.detected && !a.blocked && !a.manualSnippet)}
             onClick={() => run(() => window.api.agents.apply('all'))}>
             ➕ Apply to all detected
           </button>

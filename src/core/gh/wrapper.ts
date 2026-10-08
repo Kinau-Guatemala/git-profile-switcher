@@ -1,6 +1,6 @@
-import { execa } from 'execa'
 import { chmod, mkdir, open, readFile, rm, stat, writeFile } from 'node:fs/promises'
 import { posix, win32 } from 'node:path'
+import { expandWinEnv } from './windowsPath'
 
 export const WRAPPER_MARKER = 'Managed by Git Profile Switcher'
 
@@ -54,6 +54,8 @@ case "$1:$2" in
   # These refuse to run while GH_TOKEN is set; everything else, including
   # \`auth token\` and \`auth status\`, answers as the linked account.
   auth:login|auth:logout|auth:switch|auth:refresh) ;;
+  # No account needed: skip the git config + keyring lookup on every keystroke.
+  __complete*|completion:*|help:*|version:*|--version:*|--help:*|-h:*) ;;
   *)
     if [ -z "$GH_TOKEN$GITHUB_TOKEN" ]; then
       u=$(git config --get profileswitcher.ghUser 2>/dev/null)
@@ -80,6 +82,13 @@ export function cmdWrapper(realGh: string): string {
     'if /i "%~1"=="auth" if /i "%~2"=="logout" goto run',
     'if /i "%~1"=="auth" if /i "%~2"=="switch" goto run',
     'if /i "%~1"=="auth" if /i "%~2"=="refresh" goto run',
+    // No account needed.
+    'if /i "%~1"=="__complete" goto run',
+    'if /i "%~1"=="completion" goto run',
+    'if /i "%~1"=="help" goto run',
+    'if /i "%~1"=="version" goto run',
+    'if /i "%~1"=="--version" goto run',
+    'if /i "%~1"=="--help" goto run',
     `for /f "delims=" %%u in ('git config --get profileswitcher.ghUser 2^>nul') do set "GPS_GH_USER=%%u"`,
     'if not defined GPS_GH_USER goto run',
     // `call` keeps cmd from stripping the quotes around a path with spaces.
@@ -105,19 +114,50 @@ export function pickRealGh(candidates: string[], wrapperDir: string, platform: N
   return (platform === 'win32' ? outside.find(c => /\.exe$/i.test(c)) : outside[0]) ?? null
 }
 
+/**
+ * Every gh on PATH, in PATH order (gh.exe on Windows, an executable file
+ * elsewhere). Walked in Node: `where` prints in the console code page, which
+ * mangles C:\Users\José, and `which` isn't always installed.
+ */
 export async function findGhCandidates(env: NodeJS.ProcessEnv, platform: NodeJS.Platform): Promise<string[]> {
-  try {
-    const { stdout } = platform === 'win32'
-      ? await execa('where', ['gh'], { env })
-      : await execa('which', ['-a', 'gh'], { env })
-    return stdout.split(/\r?\n/).map(s => s.trim()).filter(Boolean)
-  } catch {
-    return []
+  const p = platform === 'win32' ? win32 : posix
+  const key = Object.keys(env).find(k => k.toUpperCase() === 'PATH')
+  const dirs = (key ? env[key] ?? '' : '').split(p.delimiter).map(d => d.replace(/^"(.*)"$/, '$1')).filter(Boolean)
+  const found: string[] = []
+  for (const dir of dirs) {
+    const candidate = p.join(dir, platform === 'win32' ? 'gh.exe' : 'gh')
+    const runnable = await stat(candidate).then(
+      s => s.isFile() && (platform === 'win32' || (s.mode & 0o111) !== 0),
+      () => false
+    )
+    if (runnable) found.push(candidate)
   }
+  return found
+}
+
+/**
+ * cmd reads .cmd files in the OEM code page, so a non-ASCII path baked into
+ * gh.cmd (C:\Users\José\…) would be misread and every gh call would fail. Swap
+ * the profile folder for its %VAR%, which cmd expands at run time; refuse what
+ * is still non-ASCII.
+ */
+export function cmdSafePath(realGh: string, env: NodeJS.ProcessEnv): string {
+  const nonAscii = /[^\x00-\x7f]/
+  if (!nonAscii.test(realGh)) return realGh
+  const vars = ['LOCALAPPDATA', 'APPDATA', 'USERPROFILE']
+    .map(name => ({ name, value: env[Object.keys(env).find(k => k.toUpperCase() === name) ?? '']?.replace(/[\\/]+$/, '') }))
+    .filter((v): v is { name: string; value: string } => !!v.value)
+    .sort((a, b) => b.value.length - a.value.length) // most specific folder first
+  const hit = vars.find(v => realGh.toLowerCase().startsWith(v.value.toLowerCase() + '\\'))
+  const out = hit ? `%${hit.name}%${realGh.slice(hit.value.length)}` : realGh
+  if (nonAscii.test(out)) {
+    throw new Error(`gh is installed under a non-ASCII path cmd can't read (${realGh}). Install gh under an ASCII path to use the wrapper from cmd and PowerShell.`)
+  }
+  return out
 }
 
 /** True when the file is one of our wrappers, whatever path it was reached through. */
-async function isWrapperFile(path: string): Promise<boolean> {
+export async function isWrapperFile(path: string): Promise<boolean> {
   let fh
   try {
     fh = await open(path, 'r')
@@ -183,7 +223,9 @@ export async function wrapperStatus(
       foreignFile ??= f.path
     }
   }
-  const realGh = installed && primary ? readBakedRealGh(primary) : null
+  const baked = installed && primary ? readBakedRealGh(primary) : null
+  // gh.cmd may hold %USERPROFILE%-style prefixes (see cmdSafePath).
+  const realGh = baked && platform === 'win32' ? expandWinEnv(baked, env) : baked
   const firstGh = platform === 'win32' ? null : (await findGhCandidates(env, platform))[0] ?? null
   return { dir: layout.dir, installed, foreignFile, realGh, realGhExists: realGh ? await exists(realGh) : false, firstGh }
 }
@@ -200,12 +242,13 @@ export async function installWrapper(
   const realGh = await findRealGh(env, layout.dir, platform)
   if (!realGh) throw new Error('gh was not found on PATH.')
 
+  // Build every file first so a refused path (cmdSafePath) writes nothing.
+  const contents = layout.files.map(f => f.kind === 'cmd'
+    ? cmdWrapper(cmdSafePath(realGh, env))
+    : posixWrapper(platform === 'win32' ? toMsysPath(realGh) : realGh))
   await mkdir(layout.dir, { recursive: true })
-  for (const f of layout.files) {
-    const content = f.kind === 'cmd'
-      ? cmdWrapper(realGh)
-      : posixWrapper(platform === 'win32' ? toMsysPath(realGh) : realGh)
-    await writeFile(f.path, content, 'utf-8')
+  for (const [i, f] of layout.files.entries()) {
+    await writeFile(f.path, contents[i], 'utf-8')
     if (f.kind === 'sh') await chmod(f.path, 0o755)
   }
   return realGh

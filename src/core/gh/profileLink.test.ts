@@ -132,7 +132,13 @@ describe('autoLinkAndSync', () => {
   it('rolls the save back when the sync fails, so the next load retries', async () => {
     dir = await mkdtemp(join(tmpdir(), 'gps-autolink-'))
     await saveProfiles(dir, [fresh()])
-    const out = await autoLinkAndSync(dir, LOGINS, now, async () => { throw new Error('.gitconfig is locked') })
+    let calls = 0
+    const out = await autoLinkAndSync(dir, LOGINS, now, async () => {
+      if (++calls === 1) throw new Error('.gitconfig is locked')
+    })
+    // A second sync rewrites the managed files from the restored profiles, so
+    // files written before the failure don't keep the rolled-back link.
+    expect(calls).toBe(2)
     expect(out.linked).toEqual([])
     expect(out.error).toMatch(/locked/)
     expect((await loadProfiles(dir))[0].advanced?.ghUser).toBeUndefined()

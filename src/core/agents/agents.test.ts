@@ -119,6 +119,29 @@ describe('agents', () => {
     expect(await readFile(file, 'utf-8')).toBe(original)
   })
 
+  it('leaves a config that already has the rule byte-for-byte alone', async () => {
+    const env = await setup()
+    await mkdir(join(home, '.claude'))
+    const file = join(home, '.claude', 'settings.json')
+    const compact = `{"permissions":{"deny":["Bash(rm:*)","${CLAUDE_DENY}"]}}`
+    await writeFile(file, compact)
+    await applyAgentRule('claude', env)
+    expect(await readFile(file, 'utf-8')).toBe(compact)
+  })
+
+  it('follows CODEX_HOME, COPILOT_HOME and CLAUDE_CONFIG_DIR when set', async () => {
+    const env = await setup()
+    const custom = join(home, 'custom')
+    const withVars: AgentEnv = {
+      ...env,
+      vars: { CODEX_HOME: join(custom, 'codex'), COPILOT_HOME: join(custom, 'copilot'), CLAUDE_CONFIG_DIR: join(custom, 'claude') }
+    }
+    const files = Object.fromEntries((await agentStatuses(withVars)).map(s => [s.id, s.file]))
+    expect(files.codex).toBe(join(custom, 'codex', 'rules', 'git-profile-switcher.rules'))
+    expect(files.copilot).toBe(join(custom, 'copilot', 'hooks', 'git-profile-switcher.json'))
+    expect(files.claude).toBe(join(custom, 'claude', 'settings.json'))
+  })
+
   it('rejects unknown agent ids', () => {
     expect(() => assertAgentId('vim')).toThrow()
   })

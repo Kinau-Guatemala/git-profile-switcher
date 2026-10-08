@@ -6,7 +6,7 @@ import { syncManagedGitconfig } from '../core/git/folderConfigs'
 import { setProfileGhUser, autoLinkAndSync, suggestGhAccount } from '../core/gh/profileLink'
 import { userShellEnv } from '../core/gh/shellEnv'
 import { getGhStatus, GhStatus } from '../core/gh/ghStatus'
-import { wrapperLayout, wrapperStatus, installWrapper, removeWrapper, pathHint, findRealGh, WrapperStatus } from '../core/gh/wrapper'
+import { wrapperLayout, wrapperStatus, installWrapper, removeWrapper, pathHint, findRealGh, isWrapperFile, WrapperStatus } from '../core/gh/wrapper'
 import { readRegistryPath, writeRegistryPath, hasPathEntry, prependPathEntry, removePathEntry } from '../core/gh/windowsPath'
 import { agentStatuses, applyAgentRule, removeAgentRule, assertAgentId, AgentEnv, AgentId } from '../core/agents/agents'
 
@@ -16,7 +16,7 @@ export interface GhTabStatus {
   wrapper: WrapperStatus
   resolvesToWrapper: boolean
   pathHint: string | null
-  windows: { userPathHasDir: boolean; machinePathHasDir: boolean; realGhOnMachinePath: boolean } | null
+  windows: { pathReadable: boolean; userPathHasDir: boolean; machinePathHasDir: boolean; realGhOnMachinePath: boolean } | null
   /** Profiles linked by name during this status call. */
   autoLinked: { label: string; login: string }[]
   autoLinkError: string | null
@@ -38,7 +38,7 @@ function handle(channel: string, fn: (...args: any[]) => Promise<unknown>): void
 export function registerGhIpc(userDataPath: string): void {
   const platform = process.platform
   const layout = wrapperLayout(platform, homedir(), process.env.LOCALAPPDATA)
-  const agentEnv: AgentEnv = { home: homedir(), platform, hookDir: join(userDataPath, 'agent-hooks') }
+  const agentEnv: AgentEnv = { home: homedir(), platform, hookDir: join(userDataPath, 'agent-hooks'), vars: process.env }
 
   // Always ask the real gh: the wrapper may be broken, and in a linked folder it
   // would answer as a single account.
@@ -69,17 +69,23 @@ export function registerGhIpc(userDataPath: string): void {
     let resolvesToWrapper: boolean
     if (platform === 'win32') {
       // process.env.PATH is frozen at launch; the registry is the truth for new terminals.
-      const [user, machine] = await Promise.all([readRegistryPath('User'), readRegistryPath('Machine')])
+      // A failed read (PowerShell blocked or missing) only costs the PATH check, not the tab.
+      const [user, machine] = await Promise.all([
+        readRegistryPath('User').catch(() => null),
+        readRegistryPath('Machine').catch(() => null)
+      ])
       const realDir = wrapper.realGh ? win32.dirname(wrapper.realGh) : null
       windows = {
-        userPathHasDir: hasPathEntry(user, layout.dir),
-        machinePathHasDir: hasPathEntry(machine, layout.dir),
-        realGhOnMachinePath: realDir ? hasPathEntry(machine, realDir) : false
+        pathReadable: user !== null && machine !== null,
+        userPathHasDir: user !== null && hasPathEntry(user, layout.dir),
+        machinePathHasDir: machine !== null && hasPathEntry(machine, layout.dir),
+        realGhOnMachinePath: machine !== null && realDir !== null && hasPathEntry(machine, realDir)
       }
       resolvesToWrapper = wrapper.installed &&
         (windows.machinePathHasDir || (windows.userPathHasDir && !windows.realGhOnMachinePath))
     } else {
-      resolvesToWrapper = wrapper.installed && wrapper.firstGh === layout.files[0].path
+      // By marker, not path string: a symlinked dir or home still counts as the wrapper.
+      resolvesToWrapper = wrapper.installed && !!wrapper.firstGh && await isWrapperFile(wrapper.firstGh)
     }
 
     return {
@@ -140,7 +146,8 @@ export function registerGhIpc(userDataPath: string): void {
   handle('agents:apply', async (id: string) => {
     await requireMultiAccount()
     const ids: AgentId[] = id === 'all'
-      ? (await agentStatuses(agentEnv)).filter(s => s.detected).map(s => s.id)
+      // Skip what's already blocked or needs a manual edit, so "all" doesn't end in an error.
+      ? (await agentStatuses(agentEnv)).filter(s => s.detected && !s.blocked && !s.manualSnippet).map(s => s.id)
       : [assertAgentId(id)]
     // Apply every agent even if one fails, then report all failures together.
     const errors: string[] = []

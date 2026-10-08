@@ -5,7 +5,13 @@ import * as r from './rules'
 export type AgentId = 'claude' | 'codex' | 'cursor' | 'copilot' | 'gemini' | 'opencode'
 export const AGENT_IDS: AgentId[] = ['claude', 'codex', 'cursor', 'copilot', 'gemini', 'opencode']
 
-export interface AgentEnv { home: string; platform: NodeJS.Platform; hookDir: string }
+export interface AgentEnv {
+  home: string
+  platform: NodeJS.Platform
+  hookDir: string
+  /** Environment holding CLAUDE_CONFIG_DIR / CODEX_HOME / COPILOT_HOME overrides. */
+  vars?: NodeJS.ProcessEnv
+}
 
 export interface AgentStatus {
   id: AgentId
@@ -31,12 +37,15 @@ const exists = (p: string) => stat(p).then(() => true, () => false)
 
 async function resolveAgent(id: AgentId, env: AgentEnv): Promise<Agent> {
   const h = env.home
+  const claudeDir = env.vars?.CLAUDE_CONFIG_DIR || join(h, '.claude')
+  const codexDir = env.vars?.CODEX_HOME || join(h, '.codex')
+  const copilotDir = env.vars?.COPILOT_HOME || join(h, '.copilot')
   switch (id) {
     case 'claude':
-      return { kind: 'json', name: 'Claude Code', dir: join(h, '.claude'), file: join(h, '.claude', 'settings.json'),
+      return { kind: 'json', name: 'Claude Code', dir: claudeDir, file: join(claudeDir, 'settings.json'),
         has: r.hasClaudeRule, add: r.addClaudeRule, remove: r.removeClaudeRule }
     case 'codex':
-      return { kind: 'own', name: 'Codex', dir: join(h, '.codex'), file: join(h, '.codex', 'rules', 'git-profile-switcher.rules'),
+      return { kind: 'own', name: 'Codex', dir: codexDir, file: join(codexDir, 'rules', 'git-profile-switcher.rules'),
         content: r.codexRules }
     case 'cursor': {
       const command = r.guardCommand(env.hookDir, env.platform, 'cursor')
@@ -45,7 +54,7 @@ async function resolveAgent(id: AgentId, env: AgentEnv): Promise<Agent> {
     }
     case 'copilot': {
       const command = r.guardCommand(env.hookDir, env.platform, 'copilot')
-      return { kind: 'own', name: 'GitHub Copilot CLI', dir: join(h, '.copilot'), file: join(h, '.copilot', 'hooks', 'git-profile-switcher.json'),
+      return { kind: 'own', name: 'GitHub Copilot CLI', dir: copilotDir, file: join(copilotDir, 'hooks', 'git-profile-switcher.json'),
         content: () => r.copilotHooks(command, env.platform) }
     }
     case 'gemini':
@@ -129,6 +138,8 @@ export async function applyAgentRule(id: AgentId, env: AgentEnv): Promise<void> 
 
   const j = await readJson(a.file)
   if (j.kind === 'invalid') throw byHand(a, 'it is not plain JSON')
+  // Already there: don't reformat the user's file (dotfile repos would see churn).
+  if (j.kind === 'ok' && a.has(j.value)) return
   let next: Json
   try {
     next = a.add(j.kind === 'ok' ? j.value : {})

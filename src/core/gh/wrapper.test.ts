@@ -5,7 +5,7 @@ import { join } from 'node:path'
 import { execa } from 'execa'
 import {
   wrapperLayout, posixWrapper, cmdWrapper, readBakedRealGh, toMsysPath, pickRealGh,
-  installWrapper, removeWrapper, pathHint, findRealGh, WRAPPER_MARKER
+  installWrapper, removeWrapper, pathHint, findRealGh, findGhCandidates, cmdSafePath, WRAPPER_MARKER
 } from './wrapper'
 
 describe('wrapperLayout', () => {
@@ -139,6 +139,66 @@ describe.skipIf(process.platform === 'win32')('sh wrapper behaviour', () => {
     const { stdout } = await execa(wrapper, ['auth', 'status'], { cwd: repo, env, extendEnv: false })
     expect(stdout).toBe('GH_TOKEN=token-for-alice ARGS=auth status')
   })
+
+  it('skips the token lookup for shell completion and help', async () => {
+    const { wrapper, repo, env } = await setup()
+    for (const args of [['__complete', 'pr', ''], ['completion', '-s', 'bash'], ['help'], ['--version']]) {
+      const { stdout } = await execa(wrapper, args, { cwd: repo, env, extendEnv: false })
+      expect(stdout).toBe(`GH_TOKEN= ARGS=${args.join(' ')}`)
+    }
+  })
+
+  // Documents a known limit: includeIf gitdir only applies inside a repo, so a
+  // mapped folder that isn't itself a repo falls back to the global profile.
+  it('follows the global profile in a mapped folder that is not a git repo', async () => {
+    const { wrapper, env } = await setup()
+    const work = join(root, 'work')
+    await mkdir(join(work, 'repo'), { recursive: true })
+    await execa('git', ['init', '-q'], { cwd: join(work, 'repo') })
+    const workConfig = join(root, 'work.gitconfig')
+    const globalConfig = join(root, 'global.gitconfig')
+    await writeFile(workConfig, '[profileswitcher]\n\tghUser = work-acct\n')
+    await writeFile(globalConfig, `[profileswitcher]\n\tghUser = personal-acct\n[includeIf "gitdir:${work}/"]\n\tpath = ${workConfig}\n`)
+    const withGlobal = { ...env, GIT_CONFIG_GLOBAL: globalConfig }
+
+    const inRepo = await execa(wrapper, ['api', 'user'], { cwd: join(work, 'repo'), env: withGlobal, extendEnv: false })
+    expect(inRepo.stdout).toBe('GH_TOKEN=token-for-work-acct ARGS=api user')
+    const inFolder = await execa(wrapper, ['api', 'user'], { cwd: work, env: withGlobal, extendEnv: false })
+    expect(inFolder.stdout).toBe('GH_TOKEN=token-for-personal-acct ARGS=api user')
+  })
+})
+
+describe.skipIf(process.platform === 'win32')('findGhCandidates', () => {
+  let root: string
+  afterEach(async () => { if (root) await rm(root, { recursive: true, force: true }) })
+
+  it('walks PATH itself (no `which`), keeping only executable gh files', async () => {
+    root = await mkdtemp(join(tmpdir(), 'gps-path-'))
+    const [accented, plain, other] = ['José bin', 'plain', 'other'].map(d => join(root, d))
+    for (const d of [accented, plain, other]) await mkdir(d)
+    await writeFile(join(accented, 'gh'), '#!/bin/sh\n')
+    await chmod(join(accented, 'gh'), 0o755)
+    await writeFile(join(plain, 'gh'), 'not executable')
+    await writeFile(join(other, 'gh'), '#!/bin/sh\n')
+    await chmod(join(other, 'gh'), 0o755)
+
+    // No /usr/bin on PATH, so `which` itself can't be found.
+    expect(await findGhCandidates({ PATH: [accented, plain, join(root, 'missing'), other].join(':') }, 'linux'))
+      .toEqual([join(accented, 'gh'), join(other, 'gh')])
+  })
+})
+
+describe('cmdSafePath', () => {
+  it('bakes non-ASCII profile folders as variables cmd expands at run time', () => {
+    const env = { USERPROFILE: 'C:\\Users\\José', LOCALAPPDATA: 'C:\\Users\\José\\AppData\\Local' }
+    expect(cmdSafePath('C:\\Users\\José\\scoop\\shims\\gh.exe', env)).toBe('%USERPROFILE%\\scoop\\shims\\gh.exe')
+    expect(cmdSafePath('c:\\users\\josé\\appdata\\local\\Programs\\gh.exe', env)).toBe('%LOCALAPPDATA%\\Programs\\gh.exe')
+  })
+
+  it('leaves ASCII paths alone and refuses what cmd would misread', () => {
+    expect(cmdSafePath('C:\\Program Files\\GitHub CLI\\gh.exe', {})).toBe('C:\\Program Files\\GitHub CLI\\gh.exe')
+    expect(() => cmdSafePath('D:\\Herramientas\\Año\\gh.exe', {})).toThrow(/non-ASCII/)
+  })
 })
 
 describe.skipIf(process.platform === 'win32')('findRealGh', () => {
@@ -169,6 +229,7 @@ describe('cmd wrapper text', () => {
     expect(text).toContain('set "GPS_GH_USER="')
     expect(text).not.toMatch(/if \/i "%~1"=="auth" goto run/)
     expect(text).toContain('if /i "%~2"=="switch" goto run')
+    expect(text).toContain('if /i "%~1"=="__complete" goto run')
   })
 })
 
@@ -206,5 +267,31 @@ describe.skipIf(process.platform !== 'win32')('cmd wrapper behaviour (Windows)',
     const { wrapper, env } = await setup()
     const { stdout } = await execa('cmd', ['/c', wrapper, 'api', 'user'], { cwd: root, env: { ...env, GPS_GH_USER: 'mallory' } })
     expect(stdout.trim()).toBe('GH_TOKEN= ARGS=api user')
+  })
+
+  it('runs a real gh under a non-ASCII user profile', async () => {
+    const { repo, env } = await setup()
+    const profile = join(root, 'José')
+    await mkdir(join(profile, 'scoop'), { recursive: true })
+    const fakeGh = join(profile, 'scoop', 'gh.cmd')
+    await writeFile(fakeGh, [
+      '@echo off',
+      'if "%~1 %~2"=="auth token" (echo token-for-%~4& exit /b 0)',
+      'echo GH_TOKEN=%GH_TOKEN% ARGS=%*'
+    ].join('\r\n'))
+    const profileEnv = { ...env, USERPROFILE: profile }
+    const wrapper = join(root, 'gh-jose.cmd')
+    await writeFile(wrapper, cmdWrapper(cmdSafePath(fakeGh, profileEnv)))
+
+    const { stdout } = await execa('cmd', ['/c', wrapper, 'api', 'user'], { cwd: repo, env: profileEnv })
+    expect(stdout.trim()).toBe('GH_TOKEN=token-for-alice ARGS=api user')
+  })
+
+  it('finds gh.exe in a non-ASCII PATH directory', async () => {
+    await setup()
+    const dir = join(root, 'José', 'bin')
+    await mkdir(dir, { recursive: true })
+    await writeFile(join(dir, 'gh.exe'), '')
+    expect(await findGhCandidates({ Path: dir }, 'win32')).toEqual([join(dir, 'gh.exe')])
   })
 })
