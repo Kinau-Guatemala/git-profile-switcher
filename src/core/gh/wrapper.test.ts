@@ -63,7 +63,8 @@ describe('pickRealGh', () => {
 
 describe('pathHint', () => {
   it('speaks the user shell', () => {
-    expect(pathHint('/usr/bin/fish', '/home/u/.local/bin', 'linux')).toBe('fish_add_path -m /home/u/.local/bin')
+    expect(pathHint('/usr/bin/fish', '/home/u/.local/bin', 'linux')).toBe("fish_add_path -m '/home/u/.local/bin'")
+    expect(pathHint('/usr/bin/fish', '/home/a b/.local/bin', 'linux')).toBe("fish_add_path -m '/home/a b/.local/bin'")
     expect(pathHint('/bin/zsh', '/Users/u/.local/bin', 'darwin')).toBe(`echo 'export PATH="/Users/u/.local/bin:$PATH"' >> ~/.zshrc`)
     expect(pathHint('/bin/bash', '/Users/u/.local/bin', 'darwin')).toContain('~/.bash_profile')
   })
@@ -94,7 +95,8 @@ describe.skipIf(process.platform === 'win32')('sh wrapper behaviour', () => {
     const fakeGh = join(root, 'real gh')
     await writeFile(fakeGh, [
       '#!/bin/sh',
-      'if [ "$1 $2" = "auth token" ]; then echo "token-for-$4"; exit 0; fi',
+      // Only github.com tokens: the wrapper must pin the host (GH_HOST may point elsewhere).
+      'if [ "$1 $2" = "auth token" ]; then [ "$5 $6" = "--hostname github.com" ] || exit 1; echo "token-for-$4"; exit 0; fi',
       'echo "GH_TOKEN=$GH_TOKEN ARGS=$*"'
     ].join('\n'))
     await chmod(fakeGh, 0o755)
@@ -139,6 +141,12 @@ describe.skipIf(process.platform === 'win32')('sh wrapper behaviour', () => {
     const { wrapper, repo, env } = await setup()
     const { stdout } = await execa(wrapper, ['auth', 'status'], { cwd: repo, env, extendEnv: false })
     expect(stdout).toBe('GH_TOKEN=token-for-alice ARGS=auth status')
+  })
+
+  it('looks the token up on github.com even when GH_HOST points elsewhere', async () => {
+    const { wrapper, repo, env } = await setup()
+    const { stdout } = await execa(wrapper, ['api', 'user'], { cwd: repo, env: { ...env, GH_HOST: 'ghe.example.com' }, extendEnv: false })
+    expect(stdout).toBe('GH_TOKEN=token-for-alice ARGS=api user')
   })
 
   it('skips the token lookup for shell completion and help', async () => {
@@ -267,7 +275,8 @@ describe.skipIf(process.platform !== 'win32')('cmd wrapper behaviour (Windows)',
     const fakeGh = join(realDir, 'gh.cmd')
     await writeFile(fakeGh, [
       '@echo off',
-      'if "%~1 %~2"=="auth token" (echo token-for-%~4& exit /b 0)',
+      'if "%~1 %~2"=="auth token" if "%~5 %~6"=="--hostname github.com" (echo token-for-%~4& exit /b 0)',
+      'if "%~1 %~2"=="auth token" exit /b 1',
       'echo GH_TOKEN=%GH_TOKEN% ARGS=%*'
     ].join('\r\n'))
     const wrapper = join(root, 'gh.cmd')
@@ -299,7 +308,8 @@ describe.skipIf(process.platform !== 'win32')('cmd wrapper behaviour (Windows)',
     const fakeGh = join(profile, 'scoop', 'gh.cmd')
     await writeFile(fakeGh, [
       '@echo off',
-      'if "%~1 %~2"=="auth token" (echo token-for-%~4& exit /b 0)',
+      'if "%~1 %~2"=="auth token" if "%~5 %~6"=="--hostname github.com" (echo token-for-%~4& exit /b 0)',
+      'if "%~1 %~2"=="auth token" exit /b 1',
       'echo GH_TOKEN=%GH_TOKEN% ARGS=%*'
     ].join('\r\n'))
     const profileEnv = { ...env, USERPROFILE: profile }

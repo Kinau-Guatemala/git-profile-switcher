@@ -82,7 +82,7 @@ case "$1:$2" in
     if [ -z "$GH_TOKEN$GITHUB_TOKEN" ]; then
       u=$(gps_user)
       if [ -n "$u" ]; then
-        t=$("$REAL_GH" auth token --user "$u" 2>/dev/null) && [ -n "$t" ] && GH_TOKEN=$t && export GH_TOKEN
+        t=$("$REAL_GH" auth token --user "$u" --hostname github.com 2>/dev/null) && [ -n "$t" ] && GH_TOKEN=$t && export GH_TOKEN
       fi
     fi
     ;;
@@ -122,7 +122,7 @@ export function cmdWrapper(realGh: string): string {
     ':gpshave',
     'if not defined GPS_GH_USER goto run',
     // `call` keeps cmd from stripping the quotes around a path with spaces.
-    `for /f "delims=" %%t in ('call "%REAL_GH%" auth token --user "%GPS_GH_USER%" 2^>nul') do set "GH_TOKEN=%%t"`,
+    `for /f "delims=" %%t in ('call "%REAL_GH%" auth token --user "%GPS_GH_USER%" --hostname github.com 2^>nul') do set "GH_TOKEN=%%t"`,
     ':run',
     '"%REAL_GH%" %*',
     'exit /b %ERRORLEVEL%',
@@ -311,7 +311,7 @@ export async function removeWrapper(layout: WrapperLayout): Promise<void> {
 
 export function pathHint(shell: string | undefined, dir: string, platform: NodeJS.Platform): string {
   const name = posix.basename(shell ?? '')
-  if (name === 'fish') return `fish_add_path -m ${dir}`
+  if (name === 'fish') return `fish_add_path -m ${shQuote(dir)}`
   const rc = name === 'zsh' ? '~/.zshrc'
     : name === 'bash' ? (platform === 'darwin' ? '~/.bash_profile' : '~/.bashrc')
     : '~/.profile'

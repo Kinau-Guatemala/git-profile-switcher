@@ -115,12 +115,29 @@ async function writeGuardScripts(hookDir: string): Promise<void> {
   await writeFile(join(hookDir, `${r.GUARD_BASENAME}.ps1`), r.GUARD_PS1, 'utf-8')
 }
 
+/**
+ * State of an own-file agent's file: absent, written by this app (it carries the
+ * marker, or the guard script path for Copilot's JSON), or someone else's file
+ * that happens to have the same name — never overwritten or deleted.
+ */
+async function ownFileState(file: string): Promise<'missing' | 'ours' | 'foreign'> {
+  let text: string
+  try {
+    text = await readFile(file, 'utf-8')
+  } catch (e: any) {
+    if (e.code === 'ENOENT') return 'missing'
+    throw e
+  }
+  return text.includes('Managed by Git Profile Switcher') || text.includes(r.GUARD_BASENAME) ? 'ours' : 'foreign'
+}
+
 export async function agentStatuses(env: AgentEnv): Promise<AgentStatus[]> {
   return Promise.all(AGENT_IDS.map(async id => {
     const a = await resolveAgent(id, env)
     const detected = await exists(a.dir)
     if (a.kind === 'own') {
-      return { id, name: a.name, detected, blocked: await exists(a.file), file: a.file, manualSnippet: null }
+      const state = await ownFileState(a.file)
+      return { id, name: a.name, detected, blocked: state === 'ours', file: a.file, manualSnippet: state === 'foreign' ? a.content() : null }
     }
     const j = await readJson(a.file)
     return {
@@ -134,7 +151,12 @@ export async function agentStatuses(env: AgentEnv): Promise<AgentStatus[]> {
 export async function applyAgentRule(id: AgentId, env: AgentEnv): Promise<void> {
   const a = await resolveAgent(id, env)
   if (id === 'cursor' || id === 'copilot') await writeGuardScripts(env.hookDir)
-  if (a.kind === 'own') return writeAtomic(a.file, a.content())
+  if (a.kind === 'own') {
+    if ((await ownFileState(a.file)) === 'foreign') {
+      throw new Error(`${a.name}: ${a.file} already exists and wasn't created by Git Profile Switcher. Add this by hand:\n${a.content()}`)
+    }
+    return writeAtomic(a.file, a.content())
+  }
 
   const j = await readJson(a.file)
   if (j.kind === 'invalid') throw byHand(a, 'it is not plain JSON')
@@ -152,7 +174,10 @@ export async function applyAgentRule(id: AgentId, env: AgentEnv): Promise<void> 
 
 export async function removeAgentRule(id: AgentId, env: AgentEnv): Promise<void> {
   const a = await resolveAgent(id, env)
-  if (a.kind === 'own') return rm(a.file, { force: true })
+  if (a.kind === 'own') {
+    if ((await ownFileState(a.file)) === 'ours') await rm(a.file, { force: true })
+    return
+  }
   const j = await readJson(a.file)
   if (j.kind !== 'ok' || !a.has(j.value)) return
   const next = a.remove(j.value)

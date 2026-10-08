@@ -46,6 +46,20 @@ describe('parseGhAccounts', () => {
     ])
   })
 
+  it('leaves out accounts whose token is broken (state error or timeout)', () => {
+    const json = JSON.stringify({
+      hosts: {
+        'github.com': [
+          { state: 'success', active: true, login: 'ok' },
+          { state: 'error', active: false, login: 'expired' },
+          { state: 'timeout', active: false, login: 'slow' },
+          { active: false, login: 'older-gh-without-state' }
+        ]
+      }
+    })
+    expect(parseGhAccounts(json).map(a => a.login)).toEqual(['ok', 'older-gh-without-state'])
+  })
+
   it('returns no accounts when github.com is absent', () => {
     expect(parseGhAccounts('{"hosts":{}}')).toEqual([])
   })

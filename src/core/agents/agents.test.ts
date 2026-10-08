@@ -142,6 +142,20 @@ describe('agents', () => {
     expect(files.claude).toBe(join(custom, 'claude', 'settings.json'))
   })
 
+  it('never overwrites or deletes a same-named file it did not create', async () => {
+    const env = await setup()
+    const file = join(home, '.codex', 'rules', 'git-profile-switcher.rules')
+    await mkdir(join(home, '.codex', 'rules'), { recursive: true })
+    await writeFile(file, 'prefix_rule(pattern = ["rm"], decision = "forbidden")\n')
+
+    const status = (await agentStatuses(env)).find(a => a.id === 'codex')!
+    expect(status.blocked).toBe(false)
+    expect(status.manualSnippet).toContain('decision = "forbidden"')
+    await expect(applyAgentRule('codex', env)).rejects.toThrow(/wasn't created by Git Profile Switcher/)
+    await removeAgentRule('codex', env)
+    expect(await readFile(file, 'utf-8')).toBe('prefix_rule(pattern = ["rm"], decision = "forbidden")\n')
+  })
+
   it('rejects unknown agent ids', () => {
     expect(() => assertAgentId('vim')).toThrow()
   })

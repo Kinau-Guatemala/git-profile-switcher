@@ -7,7 +7,8 @@ import { setProfileGhUser, autoLinkAndSync, suggestGhAccount } from '../core/gh/
 import { userShellEnv } from '../core/gh/shellEnv'
 import { getGhStatus, GhStatus } from '../core/gh/ghStatus'
 import { wrapperLayout, wrapperStatus, installWrapper, removeWrapper, pathHint, findRealGh, isWrapperFile, WrapperStatus } from '../core/gh/wrapper'
-import { readRegistryPath, writeRegistryPath, hasPathEntry, prependPathEntry, removePathEntry } from '../core/gh/windowsPath'
+import { readRegistryPath, writeRegistryPath, hasPathEntry, prependPathEntry, removePathEntry, PathScope } from '../core/gh/windowsPath'
+import { loadPathScopes, savePathScopes } from '../core/gh/pathScopes'
 import { agentStatuses, applyAgentRule, removeAgentRule, assertAgentId, AgentEnv, AgentId } from '../core/agents/agents'
 
 export interface GhTabStatus {
@@ -115,29 +116,41 @@ export function registerGhIpc(userDataPath: string): void {
     return { ok: true as const }
   })
 
+  /** Put the wrapper dir first in a Windows PATH scope, remembering if the app is the one that added it. */
+  async function addToPath(scope: PathScope) {
+    const raw = await readRegistryPath(scope)
+    const wasThere = hasPathEntry(raw, layout.dir)
+    await writeRegistryPath(scope, prependPathEntry(raw, layout.dir))
+    if (!wasThere) await savePathScopes(userDataPath, { ...(await loadPathScopes(userDataPath)), [scope]: true })
+  }
+
   handle('gh:installWrapper', async () => {
     await requireMultiAccount()
     await installWrapper(layout, await userShellEnv(), platform)
-    if (platform === 'win32') {
-      await writeRegistryPath('User', prependPathEntry(await readRegistryPath('User'), layout.dir))
-    }
+    if (platform === 'win32') await addToPath('User')
     return status()
   })
 
   handle('gh:removeWrapper', async () => {
-    await removeWrapper(layout)
     if (platform === 'win32') {
-      const user = await readRegistryPath('User')
-      if (hasPathEntry(user, layout.dir)) await writeRegistryPath('User', removePathEntry(user, layout.dir))
-      const machine = await readRegistryPath('Machine')
-      if (hasPathEntry(machine, layout.dir)) await writeRegistryPath('Machine', removePathEntry(machine, layout.dir))
+      // Undo only the PATH entries this app added, system first: if the UAC
+      // prompt is declined the wrapper is still installed, so Remove can be retried.
+      const scopes = await loadPathScopes(userDataPath)
+      for (const scope of ['Machine', 'User'] as const) {
+        if (!scopes[scope]) continue
+        const raw = await readRegistryPath(scope)
+        if (hasPathEntry(raw, layout.dir)) await writeRegistryPath(scope, removePathEntry(raw, layout.dir))
+        scopes[scope] = false
+        await savePathScopes(userDataPath, scopes)
+      }
     }
+    await removeWrapper(layout)
     return status()
   })
 
   handle('gh:elevateSystemPath', async () => {
     if (platform !== 'win32') throw new Error('Only needed on Windows.')
-    await writeRegistryPath('Machine', prependPathEntry(await readRegistryPath('Machine'), layout.dir))
+    await addToPath('Machine')
     return status()
   })
 

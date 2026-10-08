@@ -197,7 +197,7 @@ export default function GitHubCLI() {
             </p>
             {a.manualSnippet && (
               <>
-                <p className="settings-hint"><code>{a.file}</code> isn't plain JSON, so it won't be edited. Add this by hand:</p>
+                <p className="settings-hint"><code>{a.file}</code> can't be edited automatically (not plain JSON, or not created by this app). Add this by hand:</p>
                 <pre className="settings-hint">{a.manualSnippet}</pre>
               </>
             )}

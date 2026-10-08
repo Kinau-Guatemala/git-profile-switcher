@@ -18,7 +18,9 @@ export function parseGhAccounts(json: string): GhAccount[] {
   const entries: unknown = JSON.parse(json)?.hosts?.['github.com']
   if (!Array.isArray(entries)) return []
   return entries
-    .filter((e): e is { login: string; active?: boolean } => typeof e?.login === 'string')
+    // 'error' / 'timeout' entries have no working token; older gh omits state.
+    .filter((e): e is { login: string; active?: boolean } =>
+      typeof e?.login === 'string' && (e.state === undefined || e.state === 'success'))
     .map(e => ({ login: e.login, active: e.active === true }))
 }
 
