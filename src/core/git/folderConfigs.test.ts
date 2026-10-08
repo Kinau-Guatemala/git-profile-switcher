@@ -7,6 +7,7 @@ import { saveState, AppState } from '../profiles/state'
 import { Profile } from '../profiles/schema'
 import { syncManagedGitconfig, folderConfigPath, folderConfigDir } from './folderConfigs'
 import { REGION_START } from './managedInclude'
+import { GH_FOLDER_MAP } from '../gh/folderMap'
 
 const PERSONAL_ID = '11111111-1111-1111-1111-111111111111'
 const WORK_ID = '22222222-2222-2222-2222-222222222222'
@@ -98,6 +99,21 @@ describe('syncManagedGitconfig', () => {
     await syncManagedGitconfig(userData, { home })
 
     await expect(access(stale)).rejects.toThrow()
+  })
+
+  it("writes the gh folder map with each folder's account", async () => {
+    home = await mkdtemp(join(tmpdir(), 'gps-home-'))
+    userData = await mkdtemp(join(tmpdir(), 'gps-data-'))
+    const [personal, work] = profiles
+    await saveProfiles(userData, [
+      { ...personal, advanced: { ...personal.advanced, ghUser: 'me' } },
+      { ...work, advanced: { ...work.advanced, ghUser: 'me-work' } }
+    ])
+    await saveState(userData, state({ folderMappings: [{ path: '/tmp/gps-map-work', profileId: WORK_ID }] }))
+
+    await syncManagedGitconfig(userData, { home, platform: 'linux' })
+
+    expect(await readFile(join(home, GH_FOLDER_MAP), 'utf-8')).toBe('me-work\t/tmp/gps-map-work\n')
   })
 
   it('ignores folder mappings whose profile was deleted', async () => {

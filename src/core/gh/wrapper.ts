@@ -3,6 +3,9 @@ import { posix, win32 } from 'node:path'
 import { expandWinEnv } from './windowsPath'
 
 export const WRAPPER_MARKER = 'Managed by Git Profile Switcher'
+// Folder → gh account maps in $HOME (written by folderMap.ts, read by the wrappers).
+export const GH_FOLDER_MAP = '.git-profile-switcher-gh-folders'
+export const GH_FOLDER_MAP_CMD = '.git-profile-switcher-gh-folders-cmd.txt'
 
 export interface WrapperFile { path: string; kind: 'sh' | 'cmd' }
 export interface WrapperLayout { dir: string; files: WrapperFile[] }
@@ -50,6 +53,25 @@ export function posixWrapper(realGh: string): string {
 # Runs gh as the account linked to the profile for the current folder
 # (git config profileswitcher.ghUser). A token already in the env always wins.
 REAL_GH=${shQuote(realGh)}
+# The account for this folder. Inside a repo git's includeIf decides; outside
+# one (where includeIf can't apply) the app's folder map does, most specific
+# folder first ("-" = no account); elsewhere the global profile's account.
+gps_user() {
+  if ! git rev-parse --git-dir >/dev/null 2>&1 && [ -f "$HOME/${GH_FOLDER_MAP}" ]; then
+    here="$(pwd -P)/"
+    best=; bestlen=0; found=
+    while IFS='\t' read -r login dir; do
+      case "$here" in
+        "$dir"/*) if [ "\${#dir}" -gt "$bestlen" ]; then best=$login; bestlen=\${#dir}; found=1; fi ;;
+      esac
+    done < "$HOME/${GH_FOLDER_MAP}"
+    if [ -n "$found" ]; then
+      [ "$best" = - ] || printf '%s' "$best"
+      return
+    fi
+  fi
+  git config --get profileswitcher.ghUser 2>/dev/null
+}
 case "$1:$2" in
   # These refuse to run while GH_TOKEN is set; everything else, including
   # \`auth token\` and \`auth status\`, answers as the linked account.
@@ -58,7 +80,7 @@ case "$1:$2" in
   __complete*|completion:*|help:*|version:*|--version:*|--help:*|-h:*) ;;
   *)
     if [ -z "$GH_TOKEN$GITHUB_TOKEN" ]; then
-      u=$(git config --get profileswitcher.ghUser 2>/dev/null)
+      u=$(gps_user)
       if [ -n "$u" ]; then
         t=$("$REAL_GH" auth token --user "$u" 2>/dev/null) && [ -n "$t" ] && GH_TOKEN=$t && export GH_TOKEN
       fi
@@ -76,6 +98,7 @@ export function cmdWrapper(realGh: string): string {
     'setlocal',
     `set "REAL_GH=${realGh}"`,
     'set "GPS_GH_USER="',
+    'set "GPS_MATCHED="',
     'if not "%GH_TOKEN%%GITHUB_TOKEN%"=="" goto run',
     // These refuse to run while GH_TOKEN is set.
     'if /i "%~1"=="auth" if /i "%~2"=="login" goto run',
@@ -89,13 +112,38 @@ export function cmdWrapper(realGh: string): string {
     'if /i "%~1"=="version" goto run',
     'if /i "%~1"=="--version" goto run',
     'if /i "%~1"=="--help" goto run',
+    // Inside a repo git's includeIf decides; outside one, the app's folder map.
+    'git rev-parse --git-dir >nul 2>&1',
+    'if not errorlevel 1 goto gpsgit',
+    `if exist "%USERPROFILE%\\${GH_FOLDER_MAP_CMD}" call :gpsfolder`,
+    'if defined GPS_MATCHED goto gpshave',
+    ':gpsgit',
     `for /f "delims=" %%u in ('git config --get profileswitcher.ghUser 2^>nul') do set "GPS_GH_USER=%%u"`,
+    ':gpshave',
     'if not defined GPS_GH_USER goto run',
     // `call` keeps cmd from stripping the quotes around a path with spaces.
     `for /f "delims=" %%t in ('call "%REAL_GH%" auth token --user "%GPS_GH_USER%" 2^>nul') do set "GH_TOKEN=%%t"`,
     ':run',
     '"%REAL_GH%" %*',
     'exit /b %ERRORLEVEL%',
+    '',
+    // Map lines: length of "folder\" <TAB> login or "-" <TAB> folder (may hold %USERPROFILE%).
+    // Batch has no strlen, so the length is precomputed and the longest prefix wins.
+    ':gpsfolder',
+    'set "GPS_HERE=%CD%\\"',
+    'set "GPS_BESTLEN=0"',
+    `for /f "usebackq tokens=1,2* delims=\t" %%a in ("%USERPROFILE%\\${GH_FOLDER_MAP_CMD}") do call :gpstry %%a "%%b" "%%c"`,
+    'exit /b 0',
+    ':gpstry',
+    'if %1 LEQ %GPS_BESTLEN% exit /b 0',
+    'call set "GPS_DIR=%~3\\"',
+    'call set "GPS_PFX=%%GPS_HERE:~0,%1%%"',
+    'if /i not "%GPS_PFX%"=="%GPS_DIR%" exit /b 0',
+    'set "GPS_BESTLEN=%1"',
+    'set "GPS_MATCHED=1"',
+    'set "GPS_GH_USER=%~2"',
+    'if "%GPS_GH_USER%"=="-" set "GPS_GH_USER="',
+    'exit /b 0',
     ''
   ].join('\r\n')
 }

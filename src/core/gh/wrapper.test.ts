@@ -7,6 +7,7 @@ import {
   wrapperLayout, posixWrapper, cmdWrapper, readBakedRealGh, toMsysPath, pickRealGh,
   installWrapper, removeWrapper, pathHint, findRealGh, findGhCandidates, cmdSafePath, WRAPPER_MARKER
 } from './wrapper'
+import { GH_FOLDER_MAP, GH_FOLDER_MAP_CMD, cmdFolderMap } from './folderMap'
 
 describe('wrapperLayout', () => {
   it('uses ~/.local/bin/gh on posix', () => {
@@ -148,24 +149,45 @@ describe.skipIf(process.platform === 'win32')('sh wrapper behaviour', () => {
     }
   })
 
-  // Documents a known limit: includeIf gitdir only applies inside a repo, so a
-  // mapped folder that isn't itself a repo falls back to the global profile.
-  it('follows the global profile in a mapped folder that is not a git repo', async () => {
-    const { wrapper, env } = await setup()
-    const work = join(root, 'work')
-    await mkdir(join(work, 'repo'), { recursive: true })
+  // includeIf gitdir: only applies inside a repo; outside one the wrapper reads
+  // the folder map the app writes to $HOME.
+  async function mappedFolders() {
+    const ctx = await setup()
+    const real = await realpath(root) // macOS tmp is /var → /private/var; git and `pwd -P` resolve it
+    const work = join(real, 'work')
+    const nested = join(work, 'client')
+    const unlinked = join(real, 'oss')
+    for (const d of [join(work, 'repo'), nested, unlinked, join(real, 'elsewhere')]) await mkdir(d, { recursive: true })
     await execa('git', ['init', '-q'], { cwd: join(work, 'repo') })
-    const workConfig = join(root, 'work.gitconfig')
-    const globalConfig = join(root, 'global.gitconfig')
+    const workConfig = join(real, 'work.gitconfig')
+    const globalConfig = join(real, 'global.gitconfig')
     await writeFile(workConfig, '[profileswitcher]\n\tghUser = work-acct\n')
-    // git matches includeIf against the resolved gitdir (macOS tmp is /var → /private/var).
-    await writeFile(globalConfig, `[profileswitcher]\n\tghUser = personal-acct\n[includeIf "gitdir:${await realpath(work)}/"]\n\tpath = ${workConfig}\n`)
-    const withGlobal = { ...env, GIT_CONFIG_GLOBAL: globalConfig }
+    await writeFile(globalConfig, `[profileswitcher]\n\tghUser = personal-acct\n[includeIf "gitdir:${work}/"]\n\tpath = ${workConfig}\n`)
+    await writeFile(join(root, GH_FOLDER_MAP), `work-acct\t${work}\nclient-acct\t${nested}\n-\t${unlinked}\n`)
+    const run = async (cwd: string) =>
+      (await execa(ctx.wrapper, ['api', 'user'], { cwd, env: { ...ctx.env, GIT_CONFIG_GLOBAL: globalConfig }, extendEnv: false })).stdout
+    return { real, work, nested, unlinked, run }
+  }
 
-    const inRepo = await execa(wrapper, ['api', 'user'], { cwd: join(work, 'repo'), env: withGlobal, extendEnv: false })
-    expect(inRepo.stdout).toBe('GH_TOKEN=token-for-work-acct ARGS=api user')
-    const inFolder = await execa(wrapper, ['api', 'user'], { cwd: work, env: withGlobal, extendEnv: false })
-    expect(inFolder.stdout).toBe('GH_TOKEN=token-for-personal-acct ARGS=api user')
+  it('uses the mapped folder account outside a git repo too', async () => {
+    const { work, run } = await mappedFolders()
+    expect(await run(join(work, 'repo'))).toBe('GH_TOKEN=token-for-work-acct ARGS=api user')
+    expect(await run(work)).toBe('GH_TOKEN=token-for-work-acct ARGS=api user')
+  })
+
+  it('picks the most specific mapped folder', async () => {
+    const { nested, run } = await mappedFolders()
+    expect(await run(join(nested))).toBe('GH_TOKEN=token-for-client-acct ARGS=api user')
+  })
+
+  it('passes through in a mapped folder whose profile has no account, even with a linked global', async () => {
+    const { unlinked, run } = await mappedFolders()
+    expect(await run(unlinked)).toBe('GH_TOKEN= ARGS=api user')
+  })
+
+  it('falls back to the global profile outside every mapped folder', async () => {
+    const { real, run } = await mappedFolders()
+    expect(await run(join(real, 'elsewhere'))).toBe('GH_TOKEN=token-for-personal-acct ARGS=api user')
   })
 })
 
@@ -286,6 +308,25 @@ describe.skipIf(process.platform !== 'win32')('cmd wrapper behaviour (Windows)',
 
     const { stdout } = await execa('cmd', ['/c', wrapper, 'api', 'user'], { cwd: repo, env: profileEnv })
     expect(stdout.trim()).toBe('GH_TOKEN=token-for-alice ARGS=api user')
+  })
+
+  it('uses the mapped folder account outside a git repo, most specific folder first', async () => {
+    const { wrapper, env } = await setup()
+    // A non-ASCII user folder: the map holds %USERPROFILE%\work dir, expanded by cmd.
+    const profile = join(root, 'José')
+    const work = join(profile, 'work dir')
+    const nested = join(work, 'client')
+    await mkdir(nested, { recursive: true })
+    const mapEnv = { ...env, USERPROFILE: profile }
+    await writeFile(join(profile, GH_FOLDER_MAP_CMD), cmdFolderMap([
+      { dir: work, login: 'work-acct' },
+      { dir: nested, login: '' }
+    ], mapEnv))
+
+    const inWork = await execa('cmd', ['/c', wrapper, 'api', 'user'], { cwd: work, env: mapEnv })
+    expect(inWork.stdout.trim()).toBe('GH_TOKEN=token-for-work-acct ARGS=api user')
+    const inNested = await execa('cmd', ['/c', wrapper, 'api', 'user'], { cwd: nested, env: mapEnv })
+    expect(inNested.stdout.trim()).toBe('GH_TOKEN= ARGS=api user')
   })
 
   it('finds gh.exe in a non-ASCII PATH directory', async () => {

@@ -167,11 +167,11 @@ Requires gh with two or more accounts (`gh auth login`). Only github.com is
 supported. Git over HTTPS through `gh auth git-credential` is not routed through
 the wrapper; SSH remotes (what this app manages) are unaffected.
 
-The folder's account applies **inside a git repository** under a mapped folder,
-because that's where git's `includeIf gitdir:` applies. In the mapped folder
-itself, or any other directory that isn't a repo, gh uses the global profile's
-account — so run `gh repo create` or `gh repo clone` for a work account from
-inside a work repo, or pass `GH_TOKEN` explicitly.
+Inside a git repository the account comes from git (`includeIf gitdir:`). In a
+mapped folder that isn't a repository — where you'd run `gh repo clone` — git
+can't tell, so the app also writes `~/.git-profile-switcher-gh-folders` and the
+wrapper uses the most specific mapped folder that contains the current
+directory. Outside every mapped folder gh uses the global profile's account.
 
 On Windows, cmd.exe and PowerShell reach gh through a `gh.cmd` shim, and cmd
 re-parses arguments: a multi-line argument is cut at the first line break, and
@@ -179,7 +179,8 @@ unquoted `&`, `|`, `^` or `%` are interpreted by cmd. Pass long text through a
 file (`gh pr create --body-file body.md`). cmd can't use a UNC path
 (`\\wsl.localhost\…`, network shares) as its working directory, so gh run from
 cmd or PowerShell there doesn't see the repo. gh is refused at install if it
-lives under a non-ASCII path outside your user folders. Git Bash uses the sh
+lives under a non-ASCII path outside your user folders, and from cmd a mapped
+folder with such a path only applies inside its repositories. Git Bash uses the sh
 wrapper and is not affected by any of these.
 
 ---
