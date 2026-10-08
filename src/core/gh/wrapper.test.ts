@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from 'vitest'
-import { mkdtemp, mkdir, readFile, rm, writeFile, chmod, symlink } from 'node:fs/promises'
+import { mkdtemp, mkdir, readFile, realpath, rm, writeFile, chmod, symlink } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { execa } from 'execa'
@@ -158,7 +158,8 @@ describe.skipIf(process.platform === 'win32')('sh wrapper behaviour', () => {
     const workConfig = join(root, 'work.gitconfig')
     const globalConfig = join(root, 'global.gitconfig')
     await writeFile(workConfig, '[profileswitcher]\n\tghUser = work-acct\n')
-    await writeFile(globalConfig, `[profileswitcher]\n\tghUser = personal-acct\n[includeIf "gitdir:${work}/"]\n\tpath = ${workConfig}\n`)
+    // git matches includeIf against the resolved gitdir (macOS tmp is /var → /private/var).
+    await writeFile(globalConfig, `[profileswitcher]\n\tghUser = personal-acct\n[includeIf "gitdir:${await realpath(work)}/"]\n\tpath = ${workConfig}\n`)
     const withGlobal = { ...env, GIT_CONFIG_GLOBAL: globalConfig }
 
     const inRepo = await execa(wrapper, ['api', 'user'], { cwd: join(work, 'repo'), env: withGlobal, extendEnv: false })
