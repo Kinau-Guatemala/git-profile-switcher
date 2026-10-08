@@ -44,11 +44,12 @@ describe('writeGhFolderMaps', () => {
     home = await mkdtemp(join(tmpdir(), 'gps-map-'))
     const work = join(home, 'work')
     await mkdir(work)
-    await writeGhFolderMaps(home, [{ dir: work, login: 'w' }], 'linux', {})
+    await writeGhFolderMaps(home, [{ dir: work, login: 'w' }], process.platform, {})
     const text = await readFile(join(home, GH_FOLDER_MAP), 'utf-8')
-    // Resolved like `pwd -P`, so a symlinked tmp (macOS /var → /private/var) still matches.
+    // Resolved like `pwd -P`, so a symlinked tmp (macOS /var → /private/var) still
+    // matches; Git Bash paths (/c/…) on Windows, which also gets the cmd twin.
     expect(text).toMatch(/^w\t\/.*\/work\n$/)
-    expect(await exists(join(home, GH_FOLDER_MAP_CMD))).toBe(false) // Windows only
+    expect(await exists(join(home, GH_FOLDER_MAP_CMD))).toBe(process.platform === 'win32')
   })
 
   it('removes the maps when no folder has an account', async () => {
