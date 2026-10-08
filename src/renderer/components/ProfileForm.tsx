@@ -11,7 +11,10 @@ export default function ProfileForm({ initial, onSave, onCancel }: Props) {
   const [label, setLabel] = useState(initial?.label ?? '')
   const [userName, setUserName] = useState(initial?.userName ?? '')
   const [userEmail, setUserEmail] = useState(initial?.userEmail ?? '')
-  const [showAdvanced, setShowAdvanced] = useState(Boolean(initial?.advanced))
+  // Open only for settings this form edits; `advanced` also carries the gh link.
+  const [showAdvanced, setShowAdvanced] = useState(
+    Boolean(initial?.advanced?.gpgSign || initial?.advanced?.signingKey || initial?.advanced?.sshHost)
+  )
   const [gpgSign, setGpgSign] = useState(initial?.advanced?.gpgSign ?? false)
   const [signingKey, setSigningKey] = useState(initial?.advanced?.signingKey ?? '')
   const [sshHost, setSSHHost] = useState(initial?.advanced?.sshHost ?? '')

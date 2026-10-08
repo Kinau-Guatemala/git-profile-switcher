@@ -1,6 +1,12 @@
-import { describe, it, expect } from 'vitest'
-import { keepGhUser, setProfileGhUser, matchGhAccount, autoLinkGhAccounts } from './profileLink'
+import { describe, it, expect, afterEach } from 'vitest'
+import { mkdtemp, rm } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+import {
+  keepGhUser, setProfileGhUser, matchGhAccount, autoLinkGhAccounts, suggestGhAccount, autoLinkAndSync
+} from './profileLink'
 import { Profile } from '../profiles/schema'
+import { loadProfiles, saveProfiles } from '../profiles/storage'
 
 const base: Profile = {
   id: '00000000-0000-0000-0000-000000000001',
@@ -78,6 +84,58 @@ describe('matchGhAccount', () => {
 
   it('returns null when nothing matches', () => {
     expect(matchGhAccount(profile({ advanced: { sshHost: 'github.com' } }), LOGINS)).toBeNull()
+  })
+})
+
+describe('matchGhAccount edge cases', () => {
+  it('only reads the account out of a github.com alias', () => {
+    expect(matchGhAccount(profile({ advanced: { sshHost: 'gitlab.com-diegoauyon' } }), LOGINS)).toBeNull()
+  })
+
+  it('ignores user.name when another profile shares it', () => {
+    const personal = profile({ id: '00000000-0000-0000-0000-0000000000a1', userName: 'diegoauyon' })
+    const work = profile({ id: '00000000-0000-0000-0000-0000000000a2', label: 'Work', userName: 'diegoauyon' })
+    expect(matchGhAccount(work, LOGINS, [personal, work])).toBeNull()
+    // Alone, the user name is still a fair signal.
+    expect(matchGhAccount(work, LOGINS, [work])).toBe('diegoauyon')
+  })
+})
+
+describe('suggestGhAccount', () => {
+  const p = (ghUser?: string) => profile({ advanced: { sshHost: 'github.com-diegoauyon', ghUser } })
+
+  it('suggests only when the profile is linked to a different account', () => {
+    expect(suggestGhAccount(p('diegoauyon-styleseat'), LOGINS, [])).toBe('diegoauyon')
+    expect(suggestGhAccount(p('diegoauyon'), LOGINS, [])).toBeNull()
+    expect(suggestGhAccount(p(''), LOGINS, [])).toBeNull() // explicit "none" is respected silently
+    expect(suggestGhAccount(p(undefined), LOGINS, [])).toBeNull()
+  })
+})
+
+describe('autoLinkAndSync', () => {
+  let dir: string
+  afterEach(async () => { if (dir) await rm(dir, { recursive: true, force: true }) })
+  const now = '2026-10-07T00:00:00.000Z'
+  const fresh = () => profile({ advanced: { sshHost: 'github.com-diegoauyon' } })
+
+  it('saves the links and syncs the gitconfig files', async () => {
+    dir = await mkdtemp(join(tmpdir(), 'gps-autolink-'))
+    await saveProfiles(dir, [fresh()])
+    let synced = 0
+    const out = await autoLinkAndSync(dir, LOGINS, now, async () => { synced++ })
+    expect(out.linked).toEqual([{ label: 'Imported Profile 1', login: 'diegoauyon' }])
+    expect(out.error).toBeNull()
+    expect(synced).toBe(1)
+    expect((await loadProfiles(dir))[0].advanced?.ghUser).toBe('diegoauyon')
+  })
+
+  it('rolls the save back when the sync fails, so the next load retries', async () => {
+    dir = await mkdtemp(join(tmpdir(), 'gps-autolink-'))
+    await saveProfiles(dir, [fresh()])
+    const out = await autoLinkAndSync(dir, LOGINS, now, async () => { throw new Error('.gitconfig is locked') })
+    expect(out.linked).toEqual([])
+    expect(out.error).toMatch(/locked/)
+    expect((await loadProfiles(dir))[0].advanced?.ghUser).toBeUndefined()
   })
 })
 

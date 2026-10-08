@@ -143,6 +143,7 @@ export default function GitHubCLI() {
           Profiles whose label, user name or SSH alias (<code>github.com-&lt;account&gt;</code>) matches a gh account
           are linked automatically. Pick the rest by hand.
         </p>
+        {status.autoLinkError && <p className="pixel-card__info">✕ {status.autoLinkError}</p>}
         {autoLinked.length > 0 && (
           <p className="pixel-card__info">
             ● Linked automatically by name: {autoLinked.map(l => `${l.label} → ${l.login}`).join(', ')}

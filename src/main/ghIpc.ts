@@ -3,7 +3,7 @@ import { homedir } from 'node:os'
 import { join, win32 } from 'node:path'
 import { loadProfiles, saveProfiles } from '../core/profiles/storage'
 import { syncManagedGitconfig } from '../core/git/folderConfigs'
-import { setProfileGhUser, autoLinkGhAccounts, matchGhAccount } from '../core/gh/profileLink'
+import { setProfileGhUser, autoLinkAndSync, suggestGhAccount } from '../core/gh/profileLink'
 import { userShellEnv } from '../core/gh/shellEnv'
 import { getGhStatus, GhStatus } from '../core/gh/ghStatus'
 import { wrapperLayout, wrapperStatus, installWrapper, removeWrapper, pathHint, findRealGh, WrapperStatus } from '../core/gh/wrapper'
@@ -19,7 +19,8 @@ export interface GhTabStatus {
   windows: { userPathHasDir: boolean; machinePathHasDir: boolean; realGhOnMachinePath: boolean } | null
   /** Profiles linked by name during this status call. */
   autoLinked: { label: string; login: string }[]
-  /** suggested: the account the profile's names match, when it differs from the link. */
+  autoLinkError: string | null
+  /** suggested: the account the profile's names match, when it's linked to a different one. */
   profiles: { id: string; label: string; ghUser: string | null; suggested: string | null }[]
 }
 
@@ -58,18 +59,11 @@ export function registerGhIpc(userDataPath: string): void {
     const [gh, wrapper] = await Promise.all([realGhStatus(env), wrapperStatus(layout, env, platform)])
     const logins = gh.kind === 'ok' && gh.accounts.length >= 2 ? gh.accounts.map(a => a.login) : []
 
-    // Profiles that never had a gh choice get linked to the account their names match.
-    let profiles = await loadProfiles(userDataPath)
-    let autoLinked: GhTabStatus['autoLinked'] = []
-    if (logins.length) {
-      const result = autoLinkGhAccounts(profiles, logins, new Date().toISOString())
-      if (result.linked.length) {
-        await saveProfiles(userDataPath, result.profiles)
-        await syncManagedGitconfig(userDataPath)
-        profiles = result.profiles
-        autoLinked = result.linked
-      }
-    }
+    // Profiles that never had a gh choice get linked to the account their names
+    // match. A failed sync is rolled back and reported, never breaking the tab.
+    const { profiles, linked: autoLinked, error: autoLinkError } = logins.length
+      ? await autoLinkAndSync(userDataPath, logins, new Date().toISOString())
+      : { profiles: await loadProfiles(userDataPath), linked: [], error: null }
 
     let windows: GhTabStatus['windows'] = null
     let resolvesToWrapper: boolean
@@ -92,11 +86,13 @@ export function registerGhIpc(userDataPath: string): void {
       platform, gh, wrapper, resolvesToWrapper, windows,
       pathHint: platform === 'win32' ? null : pathHint(process.env.SHELL, layout.dir, platform),
       autoLinked,
-      profiles: profiles.map(p => {
-        const ghUser = p.advanced?.ghUser || null // '' is an explicit "none"
-        const match = logins.length ? matchGhAccount(p, logins) : null
-        return { id: p.id, label: p.label, ghUser, suggested: match && match !== ghUser ? match : null }
-      })
+      autoLinkError,
+      profiles: profiles.map(p => ({
+        id: p.id,
+        label: p.label,
+        ghUser: p.advanced?.ghUser || null, // '' is an explicit "none"
+        suggested: suggestGhAccount(p, logins, profiles)
+      }))
     }
   }
 

@@ -5,6 +5,11 @@ import ProfileForm from '../components/ProfileForm'
 import InputModal from '../components/InputModal'
 import { GIT_HOSTING_DOMAINS } from '../../core/constants'
 
+/** Which gh account the profile uses, shown next to its title. '' (explicit none) and unset read the same. */
+export function ghLinkLabel(ghUser: string | undefined): string {
+  return ghUser ? `gh: ${ghUser}` : 'gh: not mapped'
+}
+
 export default function Profiles() {
   const [profiles, setProfiles] = useState<Profile[]>([])
   const [showForm, setShowForm] = useState(false)
@@ -332,7 +337,9 @@ export default function Profiles() {
         ) : (
           profiles.map(profile => (
             <div key={profile.id} className="pixel-card">
-              <h3 className="pixel-card__label">{profile.label}</h3>
+              <h3 className="pixel-card__label">
+                {profile.label} <span className="pixel-card__info">· {ghLinkLabel(profile.advanced?.ghUser)}</span>
+              </h3>
               <p className="pixel-card__info"><strong>Name:</strong> {profile.userName}</p>
               <p className="pixel-card__info"><strong>Email:</strong> {profile.userEmail}</p>
               {profile.advanced?.sshHost && (
