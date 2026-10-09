@@ -4,6 +4,8 @@ import { FolderMapping } from '../core/profiles/state'
 import { VerifyResult } from '../core/verify/types'
 import { SSHHost } from '../core/git/sshConfig'
 import type { SSHKeyResult } from '../core/git/sshKeyGen'
+import type { GhTabStatus } from '../main/ghIpc'
+import type { AgentId, AgentStatus } from '../core/agents/agents'
 
 export interface DetectedProfile {
   userName?: string
@@ -64,6 +66,19 @@ const api = {
   },
   shell: {
     openExternal: (url: string): Promise<void> => ipcRenderer.invoke('shell:openExternal', url)
+  },
+  gh: {
+    status: (): Promise<GhTabStatus> => ipcRenderer.invoke('gh:status'),
+    setProfileAccount: (profileId: string, login: string | null): Promise<{ ok: true }> =>
+      ipcRenderer.invoke('gh:setProfileAccount', profileId, login),
+    installWrapper: (): Promise<GhTabStatus> => ipcRenderer.invoke('gh:installWrapper'),
+    removeWrapper: (): Promise<GhTabStatus> => ipcRenderer.invoke('gh:removeWrapper'),
+    elevateSystemPath: (): Promise<GhTabStatus> => ipcRenderer.invoke('gh:elevateSystemPath')
+  },
+  agents: {
+    status: (): Promise<AgentStatus[]> => ipcRenderer.invoke('agents:status'),
+    apply: (id: AgentId | 'all'): Promise<AgentStatus[]> => ipcRenderer.invoke('agents:apply', id),
+    remove: (id: AgentId): Promise<AgentStatus[]> => ipcRenderer.invoke('agents:remove', id)
   }
 }
 

@@ -4,6 +4,7 @@ import Verify from './screens/Verify'
 import Settings from './screens/Settings'
 import SSHKeys from './screens/SSHKeys'
 import FolderConfigs from './screens/FolderConfigs'
+import GitHubCLI from './screens/GitHubCLI'
 import { useTheme } from './useTheme'
 import { ThemeContext } from './ThemeContext'
 
@@ -50,6 +51,14 @@ function App() {
               ♦ SSH Keys
             </NavLink>
             <NavLink
+              to="/gh"
+              className={({ isActive }) =>
+                `nav-bar__link${isActive ? ' nav-bar__link--active' : ''}`
+              }
+            >
+              ♦ GitHub CLI
+            </NavLink>
+            <NavLink
               to="/settings"
               className={({ isActive }) =>
                 `nav-bar__link${isActive ? ' nav-bar__link--active' : ''}`
@@ -66,6 +75,7 @@ function App() {
               <Route path="/verify" element={<Verify />} />
               <Route path="/folders" element={<FolderConfigs />} />
               <Route path="/ssh" element={<SSHKeys />} />
+              <Route path="/gh" element={<GitHubCLI />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/" element={<Navigate to="/profiles" replace />} />
             </Routes>

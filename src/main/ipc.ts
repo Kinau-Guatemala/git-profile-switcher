@@ -4,6 +4,7 @@ import { loadProfiles, saveProfiles } from '../core/profiles/storage'
 import { loadState, saveState, FolderMapping } from '../core/profiles/state'
 import { Profile, ProfileInput, ProfileInputSchema } from '../core/profiles/schema'
 import { syncManagedGitconfig } from '../core/git/folderConfigs'
+import { keepGhUser } from '../core/gh/profileLink'
 import { verifyGlobal } from '../core/verify/globalVerify'
 import { verifyInRepo } from '../core/verify/repoVerify'
 import { verifyProfile } from '../core/verify/profileVerify'
@@ -11,6 +12,7 @@ import { detectExistingProfiles, detectFolderMappings, DetectedProfile } from '.
 import { generateSSHKey, addToSSHConfig, testSSHConnection } from '../core/git/sshKeyGen'
 import { parseSSHConfig } from '../core/git/sshConfig'
 import { openProfilesWindow, openVerifyWindow } from './windows'
+import { registerGhIpc } from './ghIpc'
 
 const userDataPath = app.getPath('userData')
 
@@ -60,7 +62,7 @@ export function setupIpcHandlers(rebuildTray: () => void): void {
 
       const updated: Profile = {
         ...existing,
-        ...input,
+        ...keepGhUser(existing, input),
         id: existing.id,
         createdAt: existing.createdAt,
         updatedAt: new Date().toISOString()
@@ -355,4 +357,6 @@ export function setupIpcHandlers(rebuildTray: () => void): void {
   ipcMain.handle('ssh:test', async (_event, host: string) => {
     return await testSSHConnection(host)
   })
+
+  registerGhIpc(userDataPath)
 }

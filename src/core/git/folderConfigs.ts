@@ -4,6 +4,7 @@ import { mkdir, writeFile, readdir, rm } from 'node:fs/promises'
 import { loadProfiles } from '../profiles/storage'
 import { loadState } from '../profiles/state'
 import { applyProfile } from './identity'
+import { writeGhFolderMaps } from '../gh/folderMap'
 import {
   buildManagedRegion,
   ensureManagedFile,
@@ -31,7 +32,7 @@ export function folderConfigPath(userDataPath: string, profileId: string): strin
  */
 export async function syncManagedGitconfig(
   userDataPath: string,
-  opts?: { home?: string }
+  opts?: { home?: string; platform?: NodeJS.Platform }
 ): Promise<void> {
   const home = opts?.home ?? homedir()
   const state = await loadState(userDataPath)
@@ -81,4 +82,14 @@ export async function syncManagedGitconfig(
     entries
   })
   await writeManagedRegion(region, state.includePosition, home)
+
+  // 4. Folder → gh account map, read by the gh wrapper outside repositories
+  //    (where includeIf gitdir: doesn't apply).
+  await writeGhFolderMaps(
+    home,
+    validMappings.map(m => ({ dir: m.path, login: profiles.find(p => p.id === m.profileId)!.advanced?.ghUser ?? '' })),
+    opts?.platform ?? process.platform,
+    process.env,
+    profiles.some(p => p.advanced?.ghUser)
+  )
 }

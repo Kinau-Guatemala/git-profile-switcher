@@ -60,6 +60,7 @@ Git Profile Switcher turns that into a tray-first workflow with undo, verificati
 | **Platform-agnostic detection** | Detect aliases for GitHub, GitLab, Bitbucket, Codeberg, Azure DevOps, and more. |
 | **Auto-import** | Import existing profiles from your Git config or SSH config. |
 | **Per-profile signing** | Store GPG signing settings alongside the profile. |
+| **gh account per folder** | Link each profile to a GitHub CLI account; `gh` follows the folder's profile, and coding agents can be kept from running `gh auth switch`. |
 | **Retro themes** | Five built-in palettes: Lava, Matrix, Synthwave, Glacier, and Amber. |
 
 ---
@@ -142,6 +143,45 @@ Git Profile Switcher uses a managed include strategy that is safe and non-destru
 ### Upgrading from 1.0.0
 
 The managed file was renamed from `~/.gitconfig-switcher` to `~/.git-profile-switcher`. Nothing breaks on upgrade: the old include keeps working until you next apply a profile, at which point 1.1.0 drops the stale include and writes the new file. After that first switch you can delete `~/.gitconfig-switcher`.
+
+---
+
+## GitHub CLI Accounts
+
+`gh` keeps one active account for every terminal, so `gh auth switch` in one
+session changes it for all of them. The **GitHub CLI** tab fixes that:
+
+1. Link each profile to one of your logged-in github.com accounts. The app
+   writes it as `profileswitcher.ghUser` into the same per-folder config files
+   it already manages.
+2. Install the wrapper: a small `gh` placed ahead of the real one on your PATH
+   (`~/.local/bin/gh`, or `%LOCALAPPDATA%\git-profile-switcher\bin` on Windows).
+   It runs gh with `GH_TOKEN` for the linked account. A `GH_TOKEN` you set
+   yourself always wins. `gh auth login|logout|switch|refresh` run untouched;
+   `gh auth status` and `gh auth token` answer as the linked account.
+3. Optionally block `gh auth switch` in Claude Code, Codex, Cursor, GitHub
+   Copilot CLI, Gemini CLI and OpenCode, so an agent can't flip the account
+   another session relies on.
+
+Requires gh with two or more accounts (`gh auth login`). Only github.com is
+supported. Git over HTTPS through `gh auth git-credential` is not routed through
+the wrapper; SSH remotes (what this app manages) are unaffected.
+
+Inside a git repository the account comes from git (`includeIf gitdir:`). In a
+mapped folder that isn't a repository — where you'd run `gh repo clone` — git
+can't tell, so the app also writes `~/.git-profile-switcher-gh-folders` and the
+wrapper uses the most specific mapped folder that contains the current
+directory. Outside every mapped folder gh uses the global profile's account.
+
+On Windows, cmd.exe and PowerShell reach gh through a `gh.cmd` shim, and cmd
+re-parses arguments: a multi-line argument is cut at the first line break, and
+unquoted `&`, `|`, `^` or `%` are interpreted by cmd. Pass long text through a
+file (`gh pr create --body-file body.md`). cmd can't use a UNC path
+(`\\wsl.localhost\…`, network shares) as its working directory, so gh run from
+cmd or PowerShell there doesn't see the repo. gh is refused at install if it
+lives under a non-ASCII path outside your user folders, and from cmd a mapped
+folder with such a path only applies inside its repositories. Git Bash uses the sh
+wrapper and is not affected by any of these.
 
 ---
 

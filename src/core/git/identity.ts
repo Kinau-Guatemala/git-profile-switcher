@@ -56,6 +56,12 @@ export async function applyProfile(
   await runGit(['config', '--file', managedPath, 'user.name', profile.userName])
   await runGit(['config', '--file', managedPath, 'user.email', profile.userEmail])
 
+  // Read by the gh wrapper (git config --get profileswitcher.ghUser) so gh
+  // follows the same per-folder includes as the git identity. Written empty
+  // when unlinked, so a folder profile without a link overrides the global
+  // profile's link (git's last value wins) and the wrapper passes through.
+  await runGit(['config', '--file', managedPath, 'profileswitcher.ghUser', profile.advanced?.ghUser ?? ''])
+
   if (profile.advanced) {
     if (profile.advanced.gpgSign !== undefined) {
       await runGit(['config', '--file', managedPath, 'commit.gpgsign', String(profile.advanced.gpgSign)])
